@@ -1,0 +1,26 @@
+---
+title: Tags
+layout: default
+style: assets/pages/tags/style
+---
+{% include navigation-bar.html %}
+<main>
+  <article>
+    <h1>Tags</h1>
+
+    <div id="tag-index-wrapper">
+      <ul id="tag-index">
+        {% for tag in site.tags %}
+        <li>
+          <h2 id={{ tag[0] | slugify }}>{{ tag[0] }}</h2>
+          <ul>
+            {% for post in tag[1] %}
+            <li><a href="{{ post.url }}">{{ post.title }} </a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </article>
+</main>

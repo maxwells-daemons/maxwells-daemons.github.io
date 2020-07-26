@@ -1,0 +1,104 @@
+---
+title: Numbers in Language and the Distributional Hypothesis
+
+description: >
+  Visualizing unsupervised word embeddings for numbers tells us interesting
+  things about how people use numbers in language and how these models learn.
+
+style: assets/pages/posts/numbers-in-language/style
+image: /assets/pages/index/numbers-in-language.png
+toc: true
+
+tags:
+ - Long Read
+ - Natural Language Processing
+ - Unsupervised Learning
+
+published: false
+code: https://github.com/maxwells-daemons/number-vectors
+---
+
+<h2 id="representation-spaces">Representation Spaces</h2>
+<p>
+Deep learning is based on the idea that solving problems gets easier when you
+represent your input well. In its typical representation, your input may have
+a very complicated relationship with your output &mdash; consider the function
+from the thousands of floating-point numbers describing the pixels of an image
+to one bit telling you if it's a cat or not &mdash; but a neural network's
+final layer aims to solve the problem with only a <em>linear function</em> of
+its input. The prior layer's job is to encode its input into a good
+enough representation that this is possible. This task is made easier when
+<em>that</em> layer's input is represented well, and so on.
+A well-trained neural network transforms its input through a series of
+representations, each simpler than the last, until solving the problem is
+so easy that even a linear model can do it.
+</p>
+
+<p>
+Of course, no representation is perfect for every task. If the only information
+we cared about in a picture were whether or not it contained a cat, we could
+compress every image to one bit: 1 for cat pictures, 0 for everything else.
+But this would be a terrible representation for most tasks, like storing
+dog pictures, and anyway you'd never get to see what the cat looked like.
+Fortunately, between these two extremes &mdash; raw pixels that have all of the
+information but are hard to use, and highly-compressed representations that
+make solving one task trivial and everything else impossible &mdash; there seem
+to be many fairly general representations that work well for most problems.
+</p>
+
+<figure>
+  {% responsive_image
+      path: "assets/pages/posts/numbers-in-language/dogs-compressed.jpg"
+      alt: 'Two pictures of a dog, one of which is very low quality, and the text "My Australian Shepherd, Thor"' %}
+  <figcaption>
+    Three ways of encoding the same image.
+    Compressing images into &ldquo;descriptions&rdquo; is
+    <a href="https://arxiv.org/pdf/1604.08772.pdf">becoming closer to possible</a>.
+  </figcaption>
+</figure>
+
+<p>
+Layers of a neural network have the same kind of hierarchy, with deeper layers
+being more compressed and task-specific. It's now common to transfer
+representations from one task to another, by initializing a network's early
+layers with weights learned elsewhere. One well-known example is
+a <strong>word embedding</strong>: a collection of vectors, one for each
+word in a language, each intended to &ldquo;sum up&rdquo; what that word means.
+Word embeddings are especially useful to transfer, because they can often
+be learned ahead of time by using them to perform a <em>surrogate task</em>,
+such as filling in the missing word in a sentence, on a much larger dataset.
+
+<p>For more on representation learning and embedding spaces, I highly recommend
+<a href="https://colah.github.io/posts/2014-07-NLP-RNNs-Representations/">Chris Olah's blog post</a>.</p>
+
+<h2 id="word-embeddings-for-numbers">Word Embeddings for Numbers</h2>
+
+<p>
+In addition to regular words, these unsupervised word embedding models also
+produce representations of <em>numbers</em>. They don't know anything about
+numbers ahead of time &mdash; 57 is just the string &ldquo;57,&rdquo;
+and (before training) has no more to do with the string &ldquo;58&rdquo;
+than it does with the string &ldquo;2165&rdquo; or the string
+&ldquo;armadillo.&rdquo; Unlike words, however, numbers have an obvious
+ordering, and so we can plot how similar the model thinks various numbers are.
+The results are pretty interesting:
+</p>
+
+<!-- <figure> -->
+<!--   <div class="bk-root" id="a4af6a15-87a4-4dfe-ae94-bf3f78b5008e" data-root-id="1187"></div> -->
+<!--   <noscript> -->
+<!--     <img src="/assets/pages/posts/numbers-in-language/number-similarities.png" -->
+<!--          alt="A plot of the pairwise semantic similarities of the numbers 0 - 256." -->
+<!--          style="image-rendering: pixelated"> -->
+<!--   </noscript> -->
+<!--   <figcaption> -->
+<!--     An interactive plot of how similar numbers up to 256 are, -->
+<!--     according to <a href="https://nlp.stanford.edu/projects/glove/">GloVe</a>. -->
+<!--   </figcaption> -->
+<!-- </figure> -->
+
+<p>
+Above I've included this plot for the numbers 0 - 256, but I'm also hosting a
+<a href="https://maxwells-daemons.github.io/number-vectors">version with numbers up to 2500</a>,
+which is much cooler (warning: 32MB website!).
+</p>

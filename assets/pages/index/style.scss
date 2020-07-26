@@ -1,0 +1,155 @@
+---
+---
+
+/*
+ * Styling for the site index page.
+ */
+
+@import "default";
+
+// Header
+header {
+  text-align: center;
+  margin: 0;
+  padding: 10px 0;
+  background-color: $color-header-bg;
+  line-height: 1.25;
+}
+
+header h1, header p {
+  color: $color-header-link-main;
+  font-family: $fonts-sans-serif;
+  max-width: 75%;
+  margin: 0 auto 0 auto;
+}
+
+header a:link, header a:visited {
+  color: $color-header-link-main;
+}
+
+header a:hover {
+  color: $color-header-link-hover;
+}
+
+header a:active {
+  color: $color-link-hover;
+}
+
+// Post list
+#post-list {
+  list-style-type: none;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-top: 0;
+}
+
+#post-list p {
+  line-height: 1.15;
+  margin: 0.5rem 0;
+  max-width: 22rem;
+}
+
+.post-list-item {
+  width: 97.5%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#post-list h2 {
+  line-height: 1.25;
+  margin-top: 0.5em;
+  margin-bottom: 0.1em;
+  text-align: center;
+  max-width: 40rem;
+}
+
+#post-list a:link, #post-list a:visited {
+  text-decoration: none;
+}
+
+#post-list h2:hover {
+  text-decoration: underline;
+}
+
+.post-list-date {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  text-align: center;
+  font-style: italic;
+}
+
+#post-list img {
+  width: 100%;
+}
+
+#post-list hr {
+  margin-bottom: 1.5rem;
+}
+
+
+// Shrink text on small screens
+@media screen and (max-width: 800px) {
+  header h1 {
+    font-size: 130%;
+  }
+
+  header p {
+    font-size: 75%;
+  }
+
+  #post-list h2 {
+    font-size: 120%;
+  }
+
+  #post-list p {
+    font-size: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .post-list-date {
+    font-size: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tag-list-inline {
+    padding: 0;
+  }
+
+  .tag-list-inline li {
+    font-size: 80%;
+  }
+}
+
+// On larger screens, show the block view
+@media screen and (min-width: 800px) {
+  #post-list {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pi-flex {
+    display: flex;
+    justify-content: center;
+  }
+
+  .pi-flex div {
+    flex: 50%;
+  }
+
+  #post-list img {
+    width: 100%;
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  #post-list h2, .post-list-date {
+    text-align: left;
+  }
+
+  ul.tag-list-inline {
+    justify-content: start;
+    padding: 0;
+  }
+}

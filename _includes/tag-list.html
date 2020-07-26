@@ -1,0 +1,34 @@
+<ul class="tag-list-inline">
+  {% for tag in include.tags %}
+    <li class="tag-default">
+      <a href="/tags#{{ tag | slugify }}">
+        <i class="fa fa-tag" aria-hidden="true"></i> {{ tag }}
+      </a>
+    </li>
+  {% endfor %}
+
+
+  {% if include.poster %}
+  <li class="tag-poster">
+    <a href="{{ include.poster }}">
+      <i class="fa fa-area-chart" aria-hidden="true"></i> Poster
+    </a>
+  </li>
+  {% endif %}
+
+  {% if include.paper %}
+  <li class="tag-paper">
+    <a href="{{ include.paper }}">
+      <i class="fa fa-file-text" aria-hidden="true"></i> Paper
+    </a>
+  </li>
+  {% endif %}
+
+  {% if include.code %}
+  <li class="tag-code">
+    <a href="{{ include.code }}">
+      <i class="fa fa-github" aria-hidden="true"></i> Code
+    </a>
+  </li>
+  {% endif %}
+</ul>

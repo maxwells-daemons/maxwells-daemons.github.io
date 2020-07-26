@@ -1,0 +1,46 @@
+/*
+ * Styling for the whole page and default elements.
+ */
+
+html {
+  box-sizing: border-box;
+  background-color: $color-background;
+}
+
+body {
+  margin: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+// Style centered content
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  text-align: center;
+}
+
+.center li {
+  display: inline;
+  font-size: 115%;
+}
+
+.center li + li:before {
+  content: " · ";
+}
+
+// Images and embedded content should downsize well
+img, .embedded-content {
+  max-width: 100%;
+}
+
+// Align Disqus with the article
+#disqus_thread {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin: 0 auto;
+  max-width: 40em;
+}

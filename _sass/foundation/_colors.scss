@@ -1,0 +1,35 @@
+/*
+ * Establishes the sitewide color palette.
+ */
+
+// Basics
+$color-background: #f5f5f5;
+$color-text: #111;
+
+// Links
+$color-link-main: #283593;
+$color-link-hover: #5c6bc0;
+$color-link-active: #9575cd;
+
+// Selection
+$color-select: #1a237e;
+$color-select-fg: #fff;
+
+// Header and footer
+$color-header-bg: #263238;
+$color-header-link-main: #fff;
+$color-header-link-hover: #9fa8da;
+$color-header-link-active: #7986cb;
+
+// Summary backgrounds
+$color-summary: #e8eaf6;
+
+// Tags
+$color-tag-background: #fff;
+$color-tag-default: #37474f;
+$color-tag-paper: #6a1b9a;
+$color-tag-code: #283593;
+$color-tag-poster: #b71c1c;
+
+// TOC
+$color-toc-bullet: #455a64;

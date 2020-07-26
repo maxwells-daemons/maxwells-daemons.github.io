@@ -1,0 +1,13 @@
+<header>
+  <nav>
+    <a href="/" id="nav-home">
+      {{ site.title }}
+    </a>
+
+    <ul>
+    {% for section in site.data.navigation-sections %}
+      <li><a href="{{ section.url }}">{{ section.name | escape }}</a></li>
+    {% endfor %}
+    </ul>
+  </nav>
+</header>

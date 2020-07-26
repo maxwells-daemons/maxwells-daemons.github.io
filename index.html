@@ -1,0 +1,42 @@
+---
+image: safari-pinned-tab.svg
+layout: default
+style: assets/pages/index/style
+---
+
+<header>
+  <h1 class="center">{{site.title}}</h1>
+  <p>
+    <!-- Non-breaking dashes and spaces ensure the middle line is not too narrow -->
+    Machine&nbsp;learning projects and
+    long&#8209;form&nbsp;articles by
+    <a href="about">Aidan&nbsp;Swope</a>
+  </p>
+</header>
+
+<main>
+  <ul id="post-list">
+    {% for post in site.posts %}
+    <li class="post-list-item">
+      <div class="pi-flex">
+        <div class="pi-flex-left">
+          <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+          <p class="post-list-date">{{ post.date | date_to_long_string }}</p>
+          <p>{{ post.description }}</p>
+          {% include tag-list.html
+              tags=post.tags
+              paper=post.paper
+              code=post.code
+              poster=post.poster %}
+        </div>
+        <div class="pi-flex-right">
+          <a href="{{ post.url }}">
+            <img src="{{ post.image }}" alt="A preview image for {{ post.title }}."/>
+          </a>
+        </div>
+      </div>
+    {% if forloop.last == false %} <hr> {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</main>

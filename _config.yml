@@ -1,0 +1,72 @@
+# Global Jekyll settings
+title: Aidan's Research Blog
+description: A machine learning research blog with projects and long-form articles.
+author: Aidan Swope
+baseurl: ""
+url: aidanswope.com
+timezone: America/Los_Angeles
+lang: en-US
+permalink: none
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      comments: true
+      toc: true
+  - scope:
+      path: "assets/pdf/resume.pdf"
+    values:
+      sitemap: false
+
+
+social:
+  name: Aidan Swope
+  links:
+    - https://github.com/maxwells-daemons
+    - https://www.linkedin.com/in/aidan-swope/
+
+logo: /assets/icons/android-chrome-512x512.png
+
+sass:
+  style: compressed
+
+plugins:
+  - jekyll-mathjax-csp
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-responsive-image
+
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+
+# Responsive image size list from:
+# https://medium.com/hceverything/applying-srcset-choosing-the-right-sizes-for-responsive-images-at-different-breakpoints-a0433450a4a3
+# (computed for full-width images, plus a small half-width image size)
+responsive_image:
+  template: _includes/responsive-image.html
+  sizes:
+    - width: 1920
+    - width: 1600
+    - width: 1366
+    - width: 1024
+    - width: 768
+    - width: 640
+    - width: 320
+
+# Github Pages required settings
+lsi: false
+safe: true
+source: .
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge

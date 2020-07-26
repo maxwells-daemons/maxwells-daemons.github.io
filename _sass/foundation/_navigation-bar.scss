@@ -1,0 +1,66 @@
+/*
+ * Styling for the top navigation bar.
+ */
+
+header nav {
+  background-color: $color-header-bg;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
+header nav ul {
+  margin: 0;
+  padding: 0 .5rem 0 0;
+}
+
+header nav li {
+  font-family: $fonts-sans-serif;
+  font-size: 110%;
+  display: inline;
+  color: $color-header-link-main;
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+header nav a:link, header nav a:visited {
+  color: $color-header-link-main;
+  text-decoration: inherit;
+}
+
+header nav a:hover {
+  color: $color-header-link-hover;
+}
+
+header nav a:active {
+  color: $color-header-link-active;
+}
+
+#nav-home {
+  font-family: $fonts-sans-serif;
+  font-size: 150%;
+}
+
+// On small screens, use a 2-line header
+@media screen and (max-width: 600px) {
+  header nav {
+    display: block;
+  }
+
+  #nav-home {
+    display: block;
+    text-align: center;
+    width: 100%
+  }
+
+  header nav ul {
+    display: flex;
+    justify-content: center;
+  }
+
+  header nav li {
+    font-size: 90%;
+    margin-right: 0.25rem;
+  }
+}

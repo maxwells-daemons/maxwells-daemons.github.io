@@ -1,0 +1,56 @@
+/*
+ * Styling for displaying lists of post tags.
+ */
+
+.tag-list-inline {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0 auto;
+  max-width: 35em;
+  padding: 0 1rem;
+}
+
+.tag-list-inline li {
+  display: inline;
+  margin: 0 1px;
+}
+
+@mixin tag-button($color) {
+  li {
+    display: inline;
+    margin: 0 2px;
+  }
+
+  a {
+    text-decoration: none;
+    font-family: $fonts-sans-serif;
+    font-size: 80%;
+    color: $color;
+    border-radius: 3px;
+    padding: 2px 5px;
+  }
+
+  a:hover {
+    background-color: $color;
+    color: $color-tag-background;
+  }
+}
+
+.tag-default {
+  @include tag-button($color-tag-default)
+}
+
+.tag-paper {
+  @include tag-button($color-tag-paper)
+}
+
+.tag-code {
+  @include tag-button($color-tag-code)
+}
+
+.tag-poster {
+  @include tag-button($color-tag-poster)
+}

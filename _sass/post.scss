@@ -1,0 +1,83 @@
+/*
+ * Base stylesheet for posts.
+ */
+
+@import "default";
+
+#writing-date {
+  margin: -1em auto 1em auto;
+  text-align: center;
+  font-style: italic;
+}
+
+#writing-summary {
+  margin: 0 1.5rem;
+}
+
+#writing-summary p {
+  display: block;
+  margin: 0 auto 1em auto;
+  padding: 0 1rem;
+  font-family: $fonts-serif;
+  font-size: 115%;
+  max-width: 30rem;
+}
+
+// Table of contents
+#toc-nav {
+  margin-top: 0.25rem;
+}
+
+@media screen and (min-width: 1260px) {
+  #toc-nav {
+    margin-left: -13rem;
+    max-width: 11rem;
+    float: left;
+  }
+}
+
+#table-of-contents, #table-of-contents ul {
+  margin-top: 0;
+  list-style-type: none;
+}
+
+#table-of-contents {
+  padding-left: 0;
+  font-weight: bold;
+}
+
+#table-of-contents ul {
+  padding-left: 1rem;
+  font-weight: normal;
+}
+
+
+#table-of-contents li {
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  line-height: 0.80rem;
+  font-size: 0.75rem;
+  font-family: $fonts-sans-serif;
+}
+
+#table-of-contents a:link, #table-of-contents a:visited {
+  text-decoration: none;
+}
+
+#table-of-contents a:hover {
+  text-decoration: underline;
+}
+
+#toc-header {
+  font-family: $fonts-sans-serif;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+// Enable centered images wider than the frame
+main article img {
+  display: block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
