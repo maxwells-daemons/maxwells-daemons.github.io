@@ -1,0 +1,39 @@
+---
+---
+
+/*
+ * Styling for /tags
+ */
+
+@import "default";
+
+#tag-index-wrapper {
+  text-align: center;
+}
+
+#tag-index {
+  list-style-type: none;
+  display: inline-block;
+  text-align: left;
+  margin: 0 1rem 3rem 1rem;
+}
+
+#tag-index ul {
+  list-style-type: disc;
+}
+
+#tag-index h2 {
+  margin-bottom: 0;
+}
+
+#tag-index li {
+  font-family: $fonts-sans-serif;
+}
+
+#tag-index a:link, #tag-index a:visited {
+  text-decoration: none;
+}
+
+#tag-index a:hover{
+  text-decoration: underline;
+}
