@@ -44,6 +44,7 @@ exclude:
   - node_modules
   - package.json
   - package-lock.json
+  - build-production.sh
 
 # Responsive image size list from:
 # https://medium.com/hceverything/applying-srcset-choosing-the-right-sizes-for-responsive-images-at-different-breakpoints-a0433450a4a3
