@@ -1,1 +1,3 @@
-Sitemap: aidanswope.com/sitemap.xml
+User-agent: *
+
+Sitemap: https://aidanswope.com/sitemap.xml
