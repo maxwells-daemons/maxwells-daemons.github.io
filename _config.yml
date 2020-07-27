@@ -36,9 +36,9 @@ sass:
 plugins:
   - jekyll-mathjax-csp
   - jekyll-feed
-  - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-responsive-image
+  - jekyll-sitemap
 
 exclude:
   - node_modules
@@ -59,14 +59,10 @@ responsive_image:
     - width: 640
     - width: 320
 
-# Github Pages required settings
 lsi: false
-safe: true
+safe: false
 source: .
 incremental: false
 highlighter: rouge
 gist:
   noscript: false
-kramdown:
-  math_engine: mathjax
-  syntax_highlighter: rouge
