@@ -6,7 +6,7 @@ baseurl: ""
 url: aidanswope.com
 timezone: America/Los_Angeles
 lang: en-US
-permalink: none
+permalink: /:title
 
 defaults:
   - scope:
