@@ -81,3 +81,8 @@ main article img {
   margin-left: 50%;
   transform: translateX(-50%);
 }
+
+// Citation
+#citation {
+  border: 1px solid $color-citation-border;
+}

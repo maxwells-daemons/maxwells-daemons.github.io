@@ -28,9 +28,17 @@ layout: default
     {% endif %}
 
       {% include anchor_headings.html html=content %}
+
+
+    {% if page.citation %}
+    {% include citation.html
+          citation=page.citation
+          title=page.title
+          date=page.date
+          url=page.url %}
+    {% endif %}
     </div>
   </article>
-
 
   <!-- Disqus embed code -->
   {% if page.comments %}

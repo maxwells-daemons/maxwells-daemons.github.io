@@ -1,0 +1,13 @@
+<hr>
+<p>Cite as:</p>
+<div id="citation">
+{% highlight language-plaintext %}
+@misc{‎{{include.citation }},
+  title   = "{{ include.title }}",
+  author  = "Swope, Aidan",
+  journal = "aidanswope.com",
+  year    = "{{ include.date | date: "%Y" }}",
+  url     = "{{site.url}}{{include.url}}"
+}
+{% endhighlight %}
+</div>
