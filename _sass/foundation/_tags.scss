@@ -30,7 +30,7 @@
     font-size: 80%;
     color: $color;
     border-radius: 3px;
-    padding: 2px 5px;
+    padding: 2px 5px 3px 5px;
   }
 
   a:hover {
@@ -53,4 +53,10 @@
 
 .tag-poster {
   @include tag-button($color-tag-poster)
+}
+
+.tag-list-inline svg {
+  width: 1em;
+  vertical-align: middle;
+  padding-bottom: 3px;
 }
