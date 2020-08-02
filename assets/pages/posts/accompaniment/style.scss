@@ -1,0 +1,29 @@
+---
+---
+
+@import "post";
+
+.song-title {
+  text-align: center;
+  margin: 0 0 -5px 0;
+  font-family: $fonts-sans-serif;
+  font-weight: bold;
+}
+
+.song-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.sample-wrapper audio {
+  outline: none;
+}
+
+.sample-wrapper p {
+  text-align: center;
+  margin: -8px 0 0 0;
+  font-size: 80%;
+  font-style: italic;
+}
