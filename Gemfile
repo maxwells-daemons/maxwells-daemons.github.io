@@ -8,4 +8,5 @@ group :jekyll_plugins do
   gem 'jekyll-seo-tag'
   gem 'jekyll-responsive-image'
   gem 'jekyll-mathjax-csp'
+  gem 'jekyll-gzip'
 end

@@ -39,6 +39,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-responsive-image
   - jekyll-sitemap
+  - jekyll-gzip
 
 exclude:
   - node_modules
