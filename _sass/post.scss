@@ -87,3 +87,32 @@ main article img {
   border: 1px solid $color-citation-border;
   overflow: scroll;
 }
+
+// Footnotes
+// CSS-only footnotes borrowed from: https://codepen.io/WilliamRobertson/pen/ONpWRJ
+span.footnote > a {
+   text-decoration: none;
+   color: $color-link-main;
+   padding-right: 2px;
+   margin-right: 2px;
+}
+
+span.footnote span {
+   z-index: -1;
+   opacity: 0;
+   position: absolute;
+   margin-left: 0px;
+   margin-right: 18px;
+   padding:7px 10px;
+   border-radius:3px;
+   box-shadow: 5px 5px 8px #CCC;
+   max-width: 25em;
+   border:1px solid $color-tag-default;
+   background-color: #eaeaea;
+   color: $color-text;
+}
+
+span.footnote:hover span {
+   z-index: 9;
+   opacity: 1;
+}

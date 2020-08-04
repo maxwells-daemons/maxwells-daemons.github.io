@@ -4,7 +4,7 @@
 {% highlight language-plaintext %}
 @misc{‎{{include.citation }},
   title   = "{{ include.title }}",
-  author  = "Swope, Aidan",
+  {% if include.citation-authors %}author  = "{{ include.citation-authors }}",{% else %}author  = "Swope, Aidan",{% endif %}
   journal = "aidanswope.com",
   year    = "{{ include.date | date: "%Y" }}",
   url     = "{{site.url}}{{include.url}}"
