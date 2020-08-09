@@ -15,7 +15,9 @@ style: assets/pages/tags/style
           <h2 id={{ tag[0] | slugify }}>{{ tag[0] }}</h2>
           <ul>
             {% for post in tag[1] %}
+            {% if post.listed %}
             <li><a href="{{ post.url }}">{{ post.title }} </a></li>
+            {% endif %}
             {% endfor %}
           </ul>
         </li>

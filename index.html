@@ -17,6 +17,7 @@ style: assets/pages/index/style
 <main>
   <ul id="post-list">
     {% for post in site.posts %}
+    {% if post.listed %}
     <li class="post-list-item">
       <div class="pi-flex">
         <div class="pi-flex-left">
@@ -37,6 +38,7 @@ style: assets/pages/index/style
       </div>
     {% if forloop.last == false %} <hr> {% endif %}
     </li>
+    {% endif %}
     {% endfor %}
   </ul>
 </main>

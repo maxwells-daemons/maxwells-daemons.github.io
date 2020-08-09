@@ -5,6 +5,7 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//www.google-analytics.com">
     <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="preconnect" href="//cdn.jsdelivr.net">
     <link rel="preconnect" href="//disqus.com">
     <link rel="preconnect" href="//referrer.disqus.com">
     <link rel="preconnect" href="//a.disquscdn.com">
@@ -51,5 +52,11 @@
       {{ content }}
       {% include footer.html %}
     </div>
+
+  <!-- Lazy-load below-the-fold content with vanilla-lazyload -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+  <script>
+    var lazyLoadInstance = new LazyLoad({});
+  </script>
   </body>
 </html>
