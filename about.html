@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
+    <!-- Preconnect to resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="preconnect" href="//cdn.jsdelivr.net">
+    <link rel="preconnect" href="//disqus.com">
+    <link rel="preconnect" href="//referrer.disqus.com">
+    <link rel="preconnect" href="//a.disquscdn.com">
+    <link rel="preconnect" href="//c.disquscdn.com">
+
     
      <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-173593414-1"></script>
@@ -25,9 +35,6 @@
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
 
-    <!-- FontAwesome from the bootstrap CDN -->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
     <!-- Metadata for Atom/RSS feed -->
     <link type="application/atom+xml" rel="alternate" href="aidanswope.com/feed.xml" title="Aidan's Research Blog" />
 
@@ -38,14 +45,14 @@
 <meta property="og:title" content="About me" />
 <meta name="author" content="Aidan Swope" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Aidan is a machine learning researcher working at Caltech on models of attention and memory and compositional neural networks." />
-<meta property="og:description" content="Aidan is a machine learning researcher working at Caltech on models of attention and memory and compositional neural networks." />
-<link rel="canonical" href="aidanswope.com/about.html" />
-<meta property="og:url" content="aidanswope.com/about.html" />
+<meta name="description" content="Aidan is a machine learning researcher working at Caltech on models of attention and memory, and neural networks that learn to reason in a structured way." />
+<meta property="og:description" content="Aidan is a machine learning researcher working at Caltech on models of attention and memory, and neural networks that learn to reason in a structured way." />
+<link rel="canonical" href="aidanswope.com/about" />
+<meta property="og:url" content="aidanswope.com/about" />
 <meta property="og:site_name" content="Aidan’s Research Blog" />
 <meta property="og:image" content="aidanswope.com/assets/pages/about/portrait-mural.jpg" />
 <script type="application/ld+json">
-{"description":"Aidan is a machine learning researcher working at Caltech on models of attention and memory and compositional neural networks.","url":"aidanswope.com/about.html","@type":"WebPage","headline":"About me","image":"aidanswope.com/assets/pages/about/portrait-mural.jpg","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"author":{"@type":"Person","name":"Aidan Swope"},"@context":"https://schema.org"}</script>
+{"description":"Aidan is a machine learning researcher working at Caltech on models of attention and memory, and neural networks that learn to reason in a structured way.","headline":"About me","@type":"WebPage","image":"aidanswope.com/assets/pages/about/portrait-mural.jpg","url":"aidanswope.com/about","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"author":{"@type":"Person","name":"Aidan Swope"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -54,7 +61,6 @@
     
       <link rel="stylesheet" href="/assets/pages/about/style.css" async>
     
-  </head>
 
   <body>
     <div class="page-wrapper">
@@ -95,14 +101,14 @@
     <div class="content-wrapper">
       <p>
       I&#39;m a machine learning researcher interested in models of attention
-      and memory, as well as compositional neural networks. I&#39;m also
+      and memory, as well as neural networks that learn to reason in a structured way. I&#39;m also
       curious about exploration and multi-agent cooperation in reinforcement learning.
       </p>
 
       <p>
       Right now, I&#39;m working in
       <a href="http://tensorlab.cms.caltech.edu/users/anima/">Anima Anandkumar&#39;s lab</a>
-      on recurrent neural networks that learn to allocate and use scratch space.
+      on improving the abilities of neural networks to systematically generalize.
       In the past, I&#39;ve worked with
       <a href="https://www.descarteslabs.com/">Descartes Labs</a>
        to understand satellite imagery with computer vision. I was recently
@@ -125,5 +131,11 @@
 </footer>
 
     </div>
+
+  <!-- Lazy-load below-the-fold content with vanilla-lazyload -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+  <script>
+    var lazyLoadInstance = new LazyLoad({});
+  </script>
   </body>
 </html>

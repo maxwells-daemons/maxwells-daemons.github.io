@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
+    <!-- Preconnect to resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="preconnect" href="//cdn.jsdelivr.net">
+    <link rel="preconnect" href="//disqus.com">
+    <link rel="preconnect" href="//referrer.disqus.com">
+    <link rel="preconnect" href="//a.disquscdn.com">
+    <link rel="preconnect" href="//c.disquscdn.com">
+
     
      <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-173593414-1"></script>
@@ -25,9 +35,6 @@
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
 
-    <!-- FontAwesome from the bootstrap CDN -->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
     <!-- Metadata for Atom/RSS feed -->
     <link type="application/atom+xml" rel="alternate" href="aidanswope.com/feed.xml" title="Aidan's Research Blog" />
 
@@ -40,11 +47,11 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A machine learning research blog with projects and long-form articles." />
 <meta property="og:description" content="A machine learning research blog with projects and long-form articles." />
-<link rel="canonical" href="aidanswope.com/tags.html" />
-<meta property="og:url" content="aidanswope.com/tags.html" />
+<link rel="canonical" href="aidanswope.com/tags" />
+<meta property="og:url" content="aidanswope.com/tags" />
 <meta property="og:site_name" content="Aidan’s Research Blog" />
 <script type="application/ld+json">
-{"description":"A machine learning research blog with projects and long-form articles.","url":"aidanswope.com/tags.html","@type":"WebPage","headline":"Tags","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"author":{"@type":"Person","name":"Aidan Swope"},"@context":"https://schema.org"}</script>
+{"description":"A machine learning research blog with projects and long-form articles.","headline":"Tags","@type":"WebPage","url":"aidanswope.com/tags","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"author":{"@type":"Person","name":"Aidan Swope"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -53,7 +60,6 @@
     
       <link rel="stylesheet" href="/assets/pages/tags/style.css" async>
     
-  </head>
 
   <body>
     <div class="page-wrapper">
@@ -80,6 +86,24 @@
     <div id="tag-index-wrapper">
       <ul id="tag-index">
         
+        <li>
+          <h2 id=project>Project</h2>
+          <ul>
+            
+            
+            
+          </ul>
+        </li>
+        
+        <li>
+          <h2 id=generative-models>Generative Models</h2>
+          <ul>
+            
+            
+            
+          </ul>
+        </li>
+        
       </ul>
     </div>
   </article>
@@ -90,5 +114,11 @@
 </footer>
 
     </div>
+
+  <!-- Lazy-load below-the-fold content with vanilla-lazyload -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+  <script>
+    var lazyLoadInstance = new LazyLoad({});
+  </script>
   </body>
 </html>

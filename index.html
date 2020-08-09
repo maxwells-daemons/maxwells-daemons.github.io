@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
+    <!-- Preconnect to resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="preconnect" href="//cdn.jsdelivr.net">
+    <link rel="preconnect" href="//disqus.com">
+    <link rel="preconnect" href="//referrer.disqus.com">
+    <link rel="preconnect" href="//a.disquscdn.com">
+    <link rel="preconnect" href="//c.disquscdn.com">
+
     
      <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-173593414-1"></script>
@@ -25,9 +35,6 @@
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#ffffff">
 
-    <!-- FontAwesome from the bootstrap CDN -->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
     <!-- Metadata for Atom/RSS feed -->
     <link type="application/atom+xml" rel="alternate" href="aidanswope.com/feed.xml" title="Aidan's Research Blog" />
 
@@ -45,7 +52,7 @@
 <meta property="og:site_name" content="Aidan’s Research Blog" />
 <meta property="og:image" content="aidanswope.com/safari-pinned-tab.svg" />
 <script type="application/ld+json">
-{"description":"A machine learning research blog with projects and long-form articles.","url":"aidanswope.com/","@type":"WebSite","headline":"Aidan’s Research Blog","sameAs":["https://github.com/maxwells-daemons","https://www.linkedin.com/in/aidan-swope/"],"image":"aidanswope.com/safari-pinned-tab.svg","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"author":{"@type":"Person","name":"Aidan Swope"},"name":"Aidan Swope","@context":"https://schema.org"}</script>
+{"description":"A machine learning research blog with projects and long-form articles.","headline":"Aidan’s Research Blog","@type":"WebSite","sameAs":["https://github.com/maxwells-daemons","https://www.linkedin.com/in/aidan-swope/"],"image":"aidanswope.com/safari-pinned-tab.svg","url":"aidanswope.com/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"author":{"@type":"Person","name":"Aidan Swope"},"name":"Aidan Swope","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -54,7 +61,6 @@
     
       <link rel="stylesheet" href="/assets/pages/index/style.css" async>
     
-  </head>
 
   <body>
     <div class="page-wrapper">
@@ -71,6 +77,8 @@
 <main>
   <ul id="post-list">
     
+    
+    
   </ul>
 </main>
 
@@ -79,5 +87,11 @@
 </footer>
 
     </div>
+
+  <!-- Lazy-load below-the-fold content with vanilla-lazyload -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+  <script>
+    var lazyLoadInstance = new LazyLoad({});
+  </script>
   </body>
 </html>
