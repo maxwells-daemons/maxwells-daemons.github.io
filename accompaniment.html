@@ -150,7 +150,7 @@
     </nav>
     
 
-      <p>
+    <p>
 <em>
 This was the final project for
 <a href="https://sites.google.com/view/cs-159-spring-2019">an undergraduate class on deep probabilistic models</a>, and was built with
@@ -236,13 +236,8 @@ we believe that this approach would scale well to larger,
 more sophisticated latent variable models, such as
 <a href="">OpenAI's Jukebox</a>.
 </p>
-      <h2 id="overview">
-        
-        
-          Model Overview <a href="#overview"></a>
-        
-        
-      </h2>
+
+<h2 id="overview">Model Overview</h2>
 <p>
 Before getting into the details, here's a brief overview of how the model works at a high level.
 </p>
@@ -266,14 +261,8 @@ Because we want to generate the accompaniment given a new melody, we train a &ld
 Given a dataset of three-track music, we use the MusicVAE encoder to produce a latent representation for each song, then strip out the drums and bass and train the surrogate encoder to predict the latent variables from the melody alone.
 Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody's (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.
 </p>
-    
-      <h2 id="latents-and-vaes">
-        
-        
-          Variational Autoencoders and Latent Space <a href="#latents-and-vaes"></a>
-        
-        
-      </h2>
+
+<h2 id="latents-and-vaes">Variational Autoencoders and Latent Space</h2>
 <p>
 MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outside of the scope of this project writeup, but for an introduction I recommend <a href="https://jaan.io/what-is-variational-autoencoder-vae-tutorial/">Jaan Altosaar's tutorial</a>.
 For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler and smaller way, as a collection of latent variables.
@@ -304,14 +293,8 @@ By randomly sampling points in latent space and pushing them through a good deco
 What is most remarkable is that variational autoencoders are trained <em>unsupervised</em>.
 Given a dataset of media, the encoder and decoder learn to create this very special latent space with no additional supervision.
 </p>
-    
-      <h2 id="predicting-latents">
-        
-        
-          Predicting Latent Variables from a Melody <a href="#predicting-latents"></a>
-        
-        
-      </h2>
+
+<h2 id="predicting-latents">Predicting Latent Variables from a Melody</h2>
 
 <p>
 A lot of the things we want our latent variables to capture &mdash; what the song's genre is, when solos start and end, etc. &mdash; are present in all three parts of the original music.
@@ -335,14 +318,8 @@ The model certainly can't predict the original accompaniment, and it doesn't eve
 However, it has correctly inferred a swing beat for the drums, works around important timings in the song, and plays the bass in key.
 This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.
 </p>
-    
-      <h2 id="conclusion">
-        
-        
-          Conclusion <a href="#conclusion"></a>
-        
-        
-      </h2>
+
+<h2 id="conclusion">Conclusion</h2>
 <p>
 Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative tasks.
 However, with some impressive recent results generating <a href="https://arxiv.org/pdf/1906.00446.pdf">high-resolution images</a> and <a href="https://openai.com/blog/jukebox/">raw audio</a> with more sophisticated VAEs, variational methods are making something of a comeback.
@@ -353,14 +330,8 @@ Hopefully this post illustrates some of the cool things you can do with an expli
 If you like, check out the code and some additional samples on <a href="https://github.com/maxwells-daemons/accompany-music-vae">the GitHub repo</a>.
 And if you find any mistakes, errors, or points of confusion, please let me know!
 </p>
-    
-      <h2 id="footnotes">
-        
-        
-          Footnotes <a href="#footnotes"></a>
-        
-        
-      </h2>
+
+<h2 id="footnotes">Footnotes</h2>
 <ol>
   <li>
   <span id="footnote-1">A <a href='https://distill.pub/2017/aia/'>really cool article</a> by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &ldquo;artificial intelligence augmentation&rdquo; through interacting with generative models.</span> <a href="#footnote-1-inline">↩</a>
