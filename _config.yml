@@ -3,7 +3,7 @@ title: Aidan's Research Blog
 description: A machine learning research blog with projects and long-form articles.
 author: Aidan Swope
 baseurl: ""
-url: aidanswope.com
+url: "https://aidanswope.com"
 timezone: America/Los_Angeles
 lang: en-US
 permalink: /:title
