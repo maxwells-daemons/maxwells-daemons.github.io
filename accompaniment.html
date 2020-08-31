@@ -161,7 +161,7 @@ This was the final project for
 </p>
 
 <p>
-Generative machine learning models have famously been used to create new media from scratch, but an even more exciting possibility involves humans collaborating with algorithms throughout the creative process.<span class="footnote" id="footnote-1-inline"><a href="#footnote-1"><sup>1</sup></a><span>A <a href='https://distill.pub/2017/aia/'>really cool article</a> by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &ldquo;artificial intelligence augmentation&rdquo; through interacting with generative models.</span></span>
+Generative machine learning models have famously been used to create new media from scratch, but an even more exciting possibility involves humans collaborating with algorithms throughout the creative process.<span class="footnote" id="footnote-1-inline"><a href="#footnote-1"><sup>1</sup></a><span class="footnote-inner">A <a href='https://distill.pub/2017/aia/'>really cool article</a> by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &ldquo;artificial intelligence augmentation&rdquo; through interacting with generative models.</span></span>
 
 While generative models are increasingly able to generate convincing images, audio, and text, human input is valuable to choose properties we want the final result to have and to incorporate parts of the human experience we haven't (yet) been able to train our models to understand.
 </p>
@@ -252,7 +252,7 @@ Before getting into the details, here's a brief overview of how the model works 
 <p>
 The core of the model is <a href="https://magenta.tensorflow.org/music-vae">MusicVAE</a>, a pretrained model created by <a href="https://magenta.tensorflow.org/">Magenta</a>.
 MusicVAE consists of an encoder, which transforms pieces of music into latent variables which capture properties of that music in a simpler compressed form, and a decoder which transforms latent variables back into music.
-Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums, and bass, with extra features like time signature changes stripped.<span class="footnote" id="footnote-2-inline"><a href="#footnote-2"><sup>2</sup></a><span>As a result, the model doesn't work very well on music using these features.</span></span>
+Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums, and bass, with extra features like time signature changes stripped.<span class="footnote" id="footnote-2-inline"><a href="#footnote-2"><sup>2</sup></a><span class="footnote-inner">As a result, the model doesn't work very well on music using these features.</span></span>
 
 </p>
 
@@ -273,13 +273,13 @@ This is possible because music has patterns that enable it to be described succi
 
 <p>
 Furthermore, latent representations are presumed to live in some &ldquo;latent space,&rdquo; about which we make some very strong assumptions.
-The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent two songs that sound very similar.<span class="footnote" id="footnote-3-inline"><a href="#footnote-3"><sup>3</sup></a><span>The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space.</span></span>
+The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent two songs that sound very similar.<span class="footnote" id="footnote-3-inline"><a href="#footnote-3"><sup>3</sup></a><span class="footnote-inner">The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space.</span></span>
 
 Directions are often meaningful in latent space; the authors of MusicVAE found that <a href="https://magenta.tensorflow.org/music-vae#long-term-structure">they could move songs in an &ldquo;add note density&rdquo; direction</a> to maintain the character of a song but with more notes.
 </p>
 
 <p>
-Most importantly, the latent space has a squished and twisted shape (relative to the data's shape) such that real music appears Gaussian-distributed in this space.<span class="footnote" id="footnote-4-inline"><a href="#footnote-4"><sup>4</sup></a><span>This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space.</span></span>
+Most importantly, the latent space has a squished and twisted shape (relative to the data's shape) such that real music appears Gaussian-distributed in this space.<span class="footnote" id="footnote-4-inline"><a href="#footnote-4"><sup>4</sup></a><span class="footnote-inner">This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space.</span></span>
 
 This means that when you sample latent vectors from a Gaussian, they likely correspond to songs that sound reasonable, and conversely real songs frequently map to vectors near the origin.
 If you were to pick any direction in latent space, find the latent vector corresponding to every popular song and project those vectors onto this direction, then plot a histogram of the resulting values, that histogram should form a standard normal bell curve.
@@ -333,19 +333,19 @@ And if you find any mistakes, errors, or points of confusion, please let me know
 
 <h2 id="footnotes">Footnotes</h2>
 <ol>
-  <li>
+  <li class="footnote-bottom">
   <span id="footnote-1">A <a href='https://distill.pub/2017/aia/'>really cool article</a> by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &ldquo;artificial intelligence augmentation&rdquo; through interacting with generative models.</span> <a href="#footnote-1-inline">↩</a>
 </li>
 
-  <li>
+  <li class="footnote-bottom">
   <span id="footnote-2">As a result, the model doesn't work very well on music using these features.</span> <a href="#footnote-2-inline">↩</a>
 </li>
 
-  <li>
+  <li class="footnote-bottom">
   <span id="footnote-3">The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space.</span> <a href="#footnote-3-inline">↩</a>
 </li>
 
-  <li>
+  <li class="footnote-bottom">
   <span id="footnote-4">This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space.</span> <a href="#footnote-4-inline">↩</a>
 </li>
 
