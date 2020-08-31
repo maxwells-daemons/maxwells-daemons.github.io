@@ -47,6 +47,9 @@ exclude:
   - package-lock.json
   - build-production.sh
 
+mathjax_csp:
+  extensions: "TeX/AMSmath.js,TeX/AMSsymbols.js"
+
 # Responsive image size list from:
 # https://medium.com/hceverything/applying-srcset-choosing-the-right-sizes-for-responsive-images-at-different-breakpoints-a0433450a4a3
 # (computed for full-width images, plus a small half-width image size)

@@ -13,7 +13,9 @@ $fonts-sans-serif: Lato, Roboto, sans-serif;
 
 // Heading sizes based on a golden-ratio modular scale
 $header-ratio: 1.618;
+$header-sqrt: 1.272;
 $header-ratio-small: 1.4;
+$header-sqrt-small: 1.183;
 
 // Base font size scaled up to ~18px default
 html {
@@ -38,16 +40,28 @@ p {
   margin-bottom: $vertical-rhythm;
 }
 
-h1, h2 {
+h1, h2, h3 {
   font-family: $fonts-sans-serif;
   font-weight: 700;
+}
+
+h1, h2 {
   margin-bottom: $vertical-rhythm;
 }
 
-// Double the vertical space between a paragraph and a heading
+h3 {
+  margin-bottom: 0;
+}
+
+// Increase the vertical space between a paragraph and a heading
 p + h1, p + h2 {
   margin-top: 2 * $vertical-rhythm;
 }
+
+p + h3 {
+  margin-top: 1.5 * $vertical-rhythm;
+}
+
 
 // Heading sizes based on a golden-ratio modular scale
 h1 {
@@ -62,6 +76,10 @@ h2 {
   font-size: $base-font-size * $header-ratio;
 }
 
+h3 {
+  font-size: $base-font-size * $header-sqrt;
+}
+
 // Use a lower header size ratio and smaller text for small screens
 @media screen and (max-width: 700px) {
   html {
@@ -74,6 +92,10 @@ h2 {
 
   h2 {
     font-size: $base-font-size * $header-ratio-small;
+  }
+
+  h3 {
+    font-size: $base-font-size * $header-sqrt-small;
   }
 }
 
@@ -98,6 +120,8 @@ a:active {
 figcaption {
   text-align: center;
   font-size: 80%;
+  font-family: $fonts-serif;
+  font-style: italic;
 }
 
 // Prevents <em> from changing line spacing, for some reason
@@ -106,11 +130,36 @@ em {
 }
 
 // Mathjax
-span.mjpage {
-  zoom: 3;
-  -moz-transform: scale(3);
+span.mjpage svg {
+  font-size: 325%;
 }
 
 span.mjpage__block {
   margin: 0;
+}
+
+.math-mobile {
+  display: none;
+  padding: none;
+}
+
+// Fix math scaling on mobile
+// .math-mobile svg {
+//   margin-top: 0.5rem;
+//   max-width: 100%;
+// }
+
+// .math-mobile .mjpage {
+//   transform: scale(1.5);
+// }
+
+// Show multi-line versions of long equations on mobile
+@media only screen and (max-width: 768px) {
+  .math-wide {
+    display: none;
+  }
+
+  .math-mobile {
+    display: initial;
+  }
 }

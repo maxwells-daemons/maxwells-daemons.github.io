@@ -33,7 +33,7 @@ body {
 }
 
 // Images and embedded content should downsize well
-img, .embedded-content {
+img, .embedded-content, video {
   max-width: 100%;
 }
 
