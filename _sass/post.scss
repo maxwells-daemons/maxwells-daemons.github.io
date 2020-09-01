@@ -120,3 +120,10 @@ span.footnote:hover span.footnote-inner {
 li.footnote-bottom {
   margin-top: 1rem;
 }
+
+// Because of sizing issues, footnotes become tap-only on mobile
+@media only screen and (max-width: 768px) {
+  span.footnote-inner {
+    display: none;
+  }
+}

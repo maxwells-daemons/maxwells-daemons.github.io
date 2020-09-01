@@ -8,7 +8,7 @@ $base-font-size: 1rem;
 $base-line-height: 1.5;
 $vertical-rhythm: $base-line-height * $base-font-size;
 
-$fonts-serif: 'Crimson Text', Georgia, serif;
+$fonts-serif: 'Crimson Pro', Georgia, serif;
 $fonts-sans-serif: Lato, Roboto, sans-serif;
 
 // Heading sizes based on a golden-ratio modular scale
@@ -130,28 +130,9 @@ em {
 }
 
 // Mathjax
-span.mjpage svg {
-  font-size: 325%;
-}
-
-span.mjpage__block {
-  margin: 0;
-}
-
 .math-mobile {
   display: none;
-  padding: none;
 }
-
-// Fix math scaling on mobile
-// .math-mobile svg {
-//   margin-top: 0.5rem;
-//   max-width: 100%;
-// }
-
-// .math-mobile .mjpage {
-//   transform: scale(1.5);
-// }
 
 // Show multi-line versions of long equations on mobile
 @media only screen and (max-width: 768px) {
