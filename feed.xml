@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-08-31T22:48:48-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Compute-Efficient Reinforcement Learning with Binary Evolution Strategies</title><link href="http://localhost:4000/binary-evolution" rel="alternate" type="text/html" title="Compute-Efficient Reinforcement Learning with Binary Evolution Strategies" /><published>2020-08-31T00:00:00-07:00</published><updated>2020-08-31T00:00:00-07:00</updated><id>http://localhost:4000/binary-evolution</id><content type="html" xml:base="http://localhost:4000/binary-evolution">&lt;figure&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-09-03T21:59:29-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Compute-Efficient Reinforcement Learning with Binary Evolution Strategies</title><link href="http://localhost:4000/binary-evolution" rel="alternate" type="text/html" title="Compute-Efficient Reinforcement Learning with Binary Evolution Strategies" /><published>2020-08-31T00:00:00-07:00</published><updated>2020-08-31T00:00:00-07:00</updated><id>http://localhost:4000/binary-evolution</id><content type="html" xml:base="http://localhost:4000/binary-evolution">&lt;figure&gt;
   &lt;video controls autoplay loop&gt;
     &lt;source src=&quot;/assets/pages/posts/binary-evolution/cartpole.mp4&quot; type=&quot;video/mp4&quot;&gt;
   &lt;/video&gt;
   &lt;figcaption&gt;
-    This neural network is 600 bytes and runs at 500,000 forward passes per second on my laptop's CPU.
+    The neural network balancing this pole is 600 bytes and runs at 500,000 forward passes per second on CPU.
   &lt;/figcaption&gt;
 &lt;/figure&gt;
 
@@ -11,7 +11,7 @@
 Today, reinforcement learning is slow and expensive.
 Poor sample efficiency, stemming from issues like high-variance
 gradient estimates and the difficulty of credit assignment, means that agents
-can take years of experience in an environment to match human performance.
+can require years of experience in an environment to match human performance.
 &lt;/p&gt;
 
 &lt;p&gt;
@@ -20,22 +20,31 @@ reinforcement learning. For each frame of experience, we must run a forward
 pass through the model. In real-world problems, this leads to large,
 expensive, and energy-inefficient systems for generating rollouts &amp;mdash;
 &lt;a href=&quot;https://openai.com/blog/openai-five/&quot;&gt;OpenAI Five&lt;/a&gt;
-used 128,000 CPU cores for gathering
-experience and running evaluation, and 256 GPUs for optimization.
+used 128,000 CPU cores for gathering experience in the environment and running
+evaluation, and 256 GPUs for optimization.
 &lt;/p&gt;
 
+&lt;!-- &lt;p&gt; --&gt;
+&lt;!-- One upshot of this is that improving the efficiency of inference in RL-friendly --&gt;
+&lt;!-- ways directly translates to reinforcement learning models that are easier, --&gt;
+&lt;!-- faster, and cheaper to train. This post explores using binary neural networks --&gt;
+&lt;!-- as a potential way to speed up training in reinforcement learning. --&gt;
+&lt;!-- &lt;/p&gt; --&gt;
+
 &lt;p&gt;
-One upshot of this is that improving the efficiency of inference in RL-friendly
-ways directly translates to reinforcement learning models that are easier,
-faster, and cheaper to train. This post explores using binary neural networks
-as a potential way to speed up training in reinforcement learning.
+Because inference is such a important part of RL, efficiency improvements
+to the forward pass directly translate to RL models that are easier, faster,
+and cheaper to train. In this project, I combine binary neural networks, which
+are very fast but not differentiable, with evolution strategies, a type of
+gradient-free optimizer that neatly sidesteps the difficulties of training
+binary models while offering its own advantages for reinforcement learning.
 &lt;/p&gt;
 
 
 &lt;h2 id=&quot;binary-neural-networks&quot;&gt;Binary Neural Networks&lt;/h2&gt;
 
 &lt;p&gt;
-Binary neural networks have weights and activations constrained to being ±1.&lt;span class=&quot;footnote&quot; id=&quot;footnote-1-inline&quot;&gt;&lt;a href=&quot;#footnote-1&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. &lt;a href='https://arxiv.org/pdf/1603.05279.pdf'&gt;XNOR-Net&lt;/a&gt; is a good
+Binary neural networks have weights and activations constrained to values +1 or -1.&lt;span class=&quot;footnote&quot; id=&quot;footnote-1-inline&quot;&gt;&lt;a href=&quot;#footnote-1&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. &lt;a href='https://arxiv.org/pdf/1603.05279.pdf'&gt;XNOR-Net&lt;/a&gt; is a good
 paper for getting an overview of this kind of work.&lt;/span&gt;&lt;/span&gt;
 
 Each layer uses the sign function as its activation and computes the function \(f(x; W, b) = \text{sign}(Wx + b)\), where \(x\) is a binary
@@ -48,7 +57,7 @@ vector of &lt;em&gt;integer&lt;/em&gt; biases.
 The weights, inputs, and outputs of a layer are binary in the sense
 of having two possible values, ±1, but to run the model on standard
 computing hardware we encode them as the more familiar 0/1 binary numbers by
-representing -1 as 0 (and 1 as itself). With this encoding, we can stuff an entire
+representing -1 as 0 (and 1 as itself). With this encoding, we can fit an entire
 64-vector into a single 64-bit quadword.
 SIMD instructions can operate very
 efficiently on &amp;ldquo;packed&amp;rdquo; vectors of this kind.
@@ -59,11 +68,11 @@ efficiently on &amp;ldquo;packed&amp;rdquo; vectors of this kind.
 
 &lt;p&gt;
 There's a clever trick introduced by &lt;a href=&quot;https://arxiv.org/abs/1602.02830&quot;&gt;Courbariaux et
-  al.&lt;/a&gt; that enables binary neural networks to
-be extremely fast and power-efficient by using only bitwise operations.
+  al.&lt;/a&gt; that enables much faster and more power-efficient neural networks
+by performing almost all of the required computation with bitwise operations.
 Let's say we want to take the dot product of two \(N\)-bit binary vectors,
 \(\vec{a} \cdot \vec{b} = \sum_i^N a_i b_i\). Since each \(a_i\) and
-\(b_i\) are ±1, their product is 1 if \(a_i = b_i\) and -1 otherwise. So, the
+\(b_i\) are ±1, their product is 1 if \(a_i = b_i\) and -1 otherwise. So the
 dot product is the total count of how many bit places match, minus how many
 places don't. Because the two counts must sum to \(N\), we have
 \(\vec{a} \cdot \vec{b} = 2 \left(\text{# places where a = b}\right) - N\).&lt;span class=&quot;footnote&quot; id=&quot;footnote-2-inline&quot;&gt;&lt;a href=&quot;#footnote-2&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;In notation:
@@ -121,39 +130,57 @@ directly, without gradient approximation or backpropagation. To do this, I used
 evolution strategies, a type of optimizer that does not require gradients.
 &lt;/p&gt;
 
-&lt;h2 id=&quot;natural-evolution-strategies-for-binary-neural-networks&quot;&gt;Natural Evolution Strategies for Binary Neural Networks&lt;/h2&gt;
+&lt;h2 id=&quot;evolution-strategies-for-binary-neural-networks&quot;&gt;Evolution Strategies for Binary Neural Networks&lt;/h2&gt;
 
 &lt;p&gt;
-Evolution strategies (ES) are a family of derivative-free optimizers which
-work by maintaining a probability distribution over possible solutions to some problem.&lt;span class=&quot;footnote&quot; id=&quot;footnote-4-inline&quot;&gt;&lt;a href=&quot;#footnote-4&quot;&gt;&lt;sup&gt;4&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;This section only briefly covers how evolution strategies work at a
+Evolution strategies (ES) are a family of derivative-free optimizers that
+maintain a &lt;em&gt;search distribution&lt;/em&gt;:
+a probability distribution over possible solutions.&lt;span class=&quot;footnote&quot; id=&quot;footnote-4-inline&quot;&gt;&lt;a href=&quot;#footnote-4&quot;&gt;&lt;sup&gt;4&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;This section only briefly covers how evolution strategies work at a
 high level. For dedicated explanations of the theory and popular variants of the algorithm, I
 recommend the excellent posts by
 &lt;a href='https://blog.otoro.net/2017/10/29/visual-evolution-strategies/'&gt;hardmaru&lt;/a&gt;
 and
 &lt;a href='https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html'&gt;Lilian Weng&lt;/a&gt;.&lt;/span&gt;&lt;/span&gt;
 
-The general strategy for optimization with ES involves sampling some candidate
-solutions from the search distribution, trying out each candidate to see
-how well it works, and updating the search distribution towards samples that did well.
+ES improves the search distribution over time by repeatedly sampling some candidate
+solutions, then trying out each candidate to see
+how well it works, and finally updating the search distribution towards samples that did well.
+Unlike the typical approach of training neural networks by gradient descent,
+this does not require backpropagation, so we're free to use nondifferentiable
+models like binary neural networks.
 &lt;/p&gt;
 
 &lt;p&gt;
-Evolution strategies are appealing because, unlike typical reinforcement
-learning algorithms, they do not train model parameters using
-backpropagation, so we're free to use nondifferentiable models like binary
-neural networks. Additionally, OpenAI found that when scaled up,
-&lt;a href=&quot;https://openai.com/blog/evolution-strategies/&quot;&gt;ES can be faster than state-of-the-art policy optimization algorithms&lt;/a&gt;.
+&lt;a href=&quot;https://openai.com/blog/evolution-strategies/&quot;&gt;An OpenAI project&lt;/a&gt;
+found that ES has a number of other appealing properties in RL. It does not require
+assigning credit to individual actions, but rather attributes the total reward
+for an episode directly to the model parameters.&lt;span class=&quot;footnote&quot; id=&quot;footnote-5-inline&quot;&gt;&lt;a href=&quot;#footnote-5&quot;&gt;&lt;sup&gt;5&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;I'm not actually so sure this is a good thing. While the authors argue
+that this helps reduce variance when actions have long-term consequences,
+I do think  there's plenty of training signal available if we can figure
+out which actions lead to which consequences.&lt;/span&gt;&lt;/span&gt;
+
+Additionally, by sharing a table of
+random numbers across multiple worker machines, the authors were able to
+train ES in a distributed setting while only synchronizing rewards across
+machines instead of full parameter vectors.  This trick makes ES very
+parallelizable, and when scaled up it can achieve much faster wall-clock times
+than modern RL algorithms.
+While this post focuses on single-machine performance, it's worth noting
+that distributed RL and efficient inference are a particularly potent combination.
 &lt;/p&gt;
 
 &lt;p&gt;
 In this project, I used &lt;a href=&quot;https://www.jmlr.org/papers/volume15/wierstra14a/wierstra14a.pdf&quot;&gt;natural evolution strategies&lt;/a&gt;, a variant
 of ES which tries to maximize the expected value of return for samples
-drawn from the search distribution. To do this, it estimates the natural gradient&lt;span class=&quot;footnote&quot; id=&quot;footnote-5-inline&quot;&gt;&lt;a href=&quot;#footnote-5&quot;&gt;&lt;sup&gt;5&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Intuitively, the natural gradient is like the regular gradient, but where
+drawn from the search distribution. To do this, it estimates the natural gradient&lt;span class=&quot;footnote&quot; id=&quot;footnote-6-inline&quot;&gt;&lt;a href=&quot;#footnote-6&quot;&gt;&lt;sup&gt;6&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
 they change the resulting probability distribution over solutions.&lt;/span&gt;&lt;/span&gt;
 
-of expected return with respect to the parameters of the search distribution,&lt;span class=&quot;footnote&quot; id=&quot;footnote-6-inline&quot;&gt;&lt;a href=&quot;#footnote-6&quot;&gt;&lt;sup&gt;6&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Note that these are parameters that define the distribution, &lt;em&gt;not&lt;/em&gt;
-parameters of a neural network (which we sample from that distribution).&lt;/span&gt;&lt;/span&gt;
+of expected return with respect to the parameters of the search distribution,&lt;span class=&quot;footnote&quot; id=&quot;footnote-7-inline&quot;&gt;&lt;a href=&quot;#footnote-7&quot;&gt;&lt;sup&gt;7&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Note that these are parameters that define the distribution, &lt;em&gt;not&lt;/em&gt;
+parameters of a neural network (which we sample from that distribution).
+We'll be taking gradients with respect to \(\phi\), the parameters of the
+search distribution, but our original model parameterized by \(\theta\) can
+still be nondifferentiable.&lt;/span&gt;&lt;/span&gt;
 
 and then performs gradient ascent on these parameters.
 &lt;/p&gt;
@@ -161,7 +188,7 @@ and then performs gradient ascent on these parameters.
 &lt;h3 id=&quot;a-distribution-over-binary-neural-networks&quot;&gt;A Distribution Over Binary Neural Networks&lt;/h3&gt;
 
 &lt;p&gt;
-In this case, the search distribution is a distribution over the weights of binary neural networks.
+In this project, the search distribution is a distribution over the weights of binary neural networks.
 To keep things simple, I modeled each binary weight as an independent Bernoulli random variable.
 That is, for each weight \(i\) in the binary network we maintain a parameter \(p_i\), the probability of that weight being 1.
 &lt;/p&gt;
@@ -170,19 +197,19 @@ That is, for each weight \(i\) in the binary network we maintain a parameter \(p
 To ensure that these probabilities remain valid (\(0 \leq p_i \leq 1\)) as the parameters are adjusted by
 the optimization algorithm, I reparameterized them as \(p_i = \sigma(x_i) \),
 where \(\sigma\) is the sigmoid function and the parameters \(x_i\) may be any real number.
-I tried a few schemes for initializing these parameters, but I found that in general initializing each \(x_i\) to 0,
-such that every bit is initially 0 or 1 with equal probability, worked best.
+I tried a few schemes for initializing these parameters, but in general
+the best solution was to initialize each \(x_i\) to 0 such that every bit
+is initially 0 or 1 with equal probability.
 &lt;/p&gt;
 
 &lt;p&gt;
 For the biases, which are integers, I used a factorized Gaussian distribution,
 with parameters \(\mu_i\) and \(\sigma_i\) for the mean and standard deviation of the
-\(i\)-th bias.&lt;span class=&quot;footnote&quot; id=&quot;footnote-7-inline&quot;&gt;&lt;a href=&quot;#footnote-7&quot;&gt;&lt;sup&gt;7&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Beware one possible point of confusion: I'm using \( \sigma \) for both
+\(i\)-th bias.&lt;span class=&quot;footnote&quot; id=&quot;footnote-8-inline&quot;&gt;&lt;a href=&quot;#footnote-8&quot;&gt;&lt;sup&gt;8&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Beware one possible point of confusion: I'm using \( \sigma \) for both
 the sigmoid function and standard deviation parameters.&lt;/span&gt;&lt;/span&gt;
  This produces real-valued samples, so I rounded to the nearest
 integer and used the &lt;a href='https://arxiv.org/abs/1308.3432'&gt;straight-through gradient estimator&lt;/a&gt;
-(basically, ignoring the rounding operation)
-when computing gradients using these quantities.
+(basically, ignoring the rounding operation when computing gradients).
 I initialized all of the bias means \(\mu_i\) to 0, and the standard deviations \(\sigma_i\) to 1.
 &lt;/p&gt;
 
@@ -283,22 +310,52 @@ In summary, one iteration proceeds as follows:
 &lt;/ul&gt;
 &lt;/p&gt;
 
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
+
+&lt;h3 id=&quot;fast-learning-on-easy-problems&quot;&gt;Fast Learning on Easy Problems&lt;/h3&gt;
+
 &lt;p&gt;
-With this algorithm, I was able to train the binary network demonstrated
-at the start of this post in less than a minute on a single CPU core.
+I was consistently surprised by just how fast binary neural networks are in practice.
+A two-layer, 64-unit-wide binary network clocked
+in at 500,000 forward passes per second on my laptop's CPU, 25 times faster
+than an equivalent model in PyTorch. Training on easy problems like CartPole
+was quick too &amp;mdash; the model
+at the start of this article trained in under one minute on CPU.
+&lt;/p&gt;
+
+&lt;p&gt;
+For fast learning, I found it essential to represent the observations from
+the environment in a good way. This was particularly tricky because the model
+only accepts binary vectors as input. For CartPole, it was sufficient to put
+objects' positions and velocities into one of several &amp;ldquo;bins,&amp;rdquo; but
+making progress on other environments required more careful feature engineering.
+I also tried training the model from the raw binary encodings of the positions
+and velocities, but that didn't work at all.
+&lt;/p&gt;
+
+&lt;h3 id=&quot;failure-to-converge-on-hard-problems&quot;&gt;Failure to Converge on Hard Problems&lt;/h3&gt;
+
+&lt;figure&gt;
+  &lt;video controls&gt;
+    &lt;source src=&quot;/assets/pages/posts/binary-evolution/lunar-lander.mp4&quot; type=&quot;video/mp4&quot;&gt;
+  &lt;/video&gt;
+  &lt;figcaption&gt;
+    Let's not let it fly the spaceships quite yet.
+  &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+
+&lt;p&gt;
+However, although this approach made some progress on all of the environments I
+tried it on, it wasn't able to completely solve any environment harder than
+CartPole. Below, I discuss some problems that I think are responsible
+for this.
 &lt;/p&gt;
 
 
 &lt;h2 id=&quot;limitations&quot;&gt;Limitations&lt;/h2&gt;
-&lt;p&gt;
-Although this approach makes some progress on all of the environments I've
-tried it on, it was not able to completely solve any environment harder
-than CartPole. Below, I discuss some problems that I think are responsible
-for this.
-&lt;/p&gt;
 
 &lt;h3 id=&quot;variance-collapse&quot;&gt;Variance Collapse&lt;/h3&gt;
-
 &lt;p&gt;
 The biggest issue I noticed was that binary weights stop exploring once they learn.
 When a parameter \( x_i \) grows large, weight \( w_i \) will be the same in
@@ -329,28 +386,18 @@ towards 0.5 (or equivalently, weight decay on the \( w \) parameters) did
 a good job extending the time before learning plateaued, as did lowering the
 learning rate. I also experimented with holding the variance of the
 bias distribution constant instead of adjusting \( \sigma_i \), similar to
-OpenAI's ES work. Ultimately, though, CartPole was the only environment where
+OpenAI's work with ES. Ultimately, though, CartPole was the only environment where
 the model reliably finished training before it converged to a low-variance
 regime and stopped learning.
 &lt;/p&gt;
 
-&lt;h3 id=&quot;low-model-capacity&quot;&gt;Low Model Capacity&lt;/h3&gt;
-&lt;p&gt;
-Binary neural networks are pretty inflexible and low-capacity relative
-to their floating-ponit counterparts. Even distilling floating-point neural
-networks into binary ones leads to significant drops in accuracy.
-Due to the much smaller class of functions each layer can represent in the binary
-case, it's likely that training these models is more difficult than training
-typical neural networks.
-&lt;/p&gt;
-
 &lt;h3 id=&quot;independendence-assumptions&quot;&gt;Independence Assumptions&lt;/h3&gt;
-
 &lt;p&gt;
 The search distribution I used makes strong independendence assumptions about
-the network parameters. This is likely more problematic for the small
-networks I was using, because the space of potential high-performing
-solutions is much smaller. There are other variants of evolution strategies
+the network parameters. The parameters definitely aren't independent,
+though, leaving information on the table that the search distribution might
+be able to use to search more efficiently.
+There are other variants of evolution strategies
 that do consider covariance between the parameters, such as Covariance Matrix
 Adaptation ES, but they require second-order information that's intractible to compute for larger models.
 &lt;/p&gt;
@@ -381,8 +428,8 @@ some problems.
 For reinforcement learning in challenging environments, massively distributed
 training across thousands of computers is currently the norm. As we begin to
 tackle new and harder problems, we can only expect the computational requirements
-to grow. However, evolution strategies may provide a more computationally-tractable
-way of training RL agents.
+to grow. However, evolution strategies and binary neural networks
+may provide a more computationally-tractable way of training RL agents.
 &lt;/p&gt;
 
 &lt;p&gt;
@@ -495,22 +542,32 @@ and
 &lt;/li&gt;
 
 &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-5&quot;&gt;Intuitively, the natural gradient is like the regular gradient, but where
+  &lt;span id=&quot;footnote-5&quot;&gt;I'm not actually so sure this is a good thing. While the authors argue
+that this helps reduce variance when actions have long-term consequences,
+I do think  there's plenty of training signal available if we can figure
+out which actions lead to which consequences.&lt;/span&gt; &lt;a href=&quot;#footnote-5-inline&quot;&gt;↩&lt;/a&gt;
+&lt;/li&gt;
+
+&lt;li class=&quot;footnote-bottom&quot;&gt;
+  &lt;span id=&quot;footnote-6&quot;&gt;Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
-they change the resulting probability distribution over solutions.&lt;/span&gt; &lt;a href=&quot;#footnote-5-inline&quot;&gt;↩&lt;/a&gt;
+they change the resulting probability distribution over solutions.&lt;/span&gt; &lt;a href=&quot;#footnote-6-inline&quot;&gt;↩&lt;/a&gt;
 &lt;/li&gt;
 
 &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-6&quot;&gt;Note that these are parameters that define the distribution, &lt;em&gt;not&lt;/em&gt;
-parameters of a neural network (which we sample from that distribution).&lt;/span&gt; &lt;a href=&quot;#footnote-6-inline&quot;&gt;↩&lt;/a&gt;
+  &lt;span id=&quot;footnote-7&quot;&gt;Note that these are parameters that define the distribution, &lt;em&gt;not&lt;/em&gt;
+parameters of a neural network (which we sample from that distribution).
+We'll be taking gradients with respect to \(\phi\), the parameters of the
+search distribution, but our original model parameterized by \(\theta\) can
+still be nondifferentiable.&lt;/span&gt; &lt;a href=&quot;#footnote-7-inline&quot;&gt;↩&lt;/a&gt;
 &lt;/li&gt;
 
 &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-7&quot;&gt;Beware one possible point of confusion: I'm using \( \sigma \) for both
-the sigmoid function and standard deviation parameters.&lt;/span&gt; &lt;a href=&quot;#footnote-7-inline&quot;&gt;↩&lt;/a&gt;
+  &lt;span id=&quot;footnote-8&quot;&gt;Beware one possible point of confusion: I'm using \( \sigma \) for both
+the sigmoid function and standard deviation parameters.&lt;/span&gt; &lt;a href=&quot;#footnote-8-inline&quot;&gt;↩&lt;/a&gt;
 &lt;/li&gt;
 
-&lt;/ol&gt;</content><author><name>Aidan Swope</name></author><category term="Project" /><category term="Reinforcement Learning" /><category term="Efficient Machine Learning" /><summary type="html">This neural network is 600 bytes and runs at 500,000 forward passes per second on my laptop's CPU.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" /><media:content medium="image" url="http://localhost:4000/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Generating Musical Accompaniment with a Variational Autoencoder</title><link href="http://localhost:4000/accompaniment" rel="alternate" type="text/html" title="Generating Musical Accompaniment with a Variational Autoencoder" /><published>2020-08-09T00:00:00-07:00</published><updated>2020-08-09T00:00:00-07:00</updated><id>http://localhost:4000/accompaniment</id><content type="html" xml:base="http://localhost:4000/accompaniment">&lt;p&gt;
+&lt;/ol&gt;</content><author><name>Aidan Swope</name></author><category term="Project" /><category term="Reinforcement Learning" /><category term="Efficient Machine Learning" /><summary type="html">The neural network balancing this pole is 600 bytes and runs at 500,000 forward passes per second on CPU.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" /><media:content medium="image" url="http://localhost:4000/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Generating Musical Accompaniment with a Variational Autoencoder</title><link href="http://localhost:4000/accompaniment" rel="alternate" type="text/html" title="Generating Musical Accompaniment with a Variational Autoencoder" /><published>2020-08-09T00:00:00-07:00</published><updated>2020-08-09T00:00:00-07:00</updated><id>http://localhost:4000/accompaniment</id><content type="html" xml:base="http://localhost:4000/accompaniment">&lt;p&gt;
 &lt;em&gt;
 This was the final project for
 &lt;a href=&quot;https://sites.google.com/view/cs-159-spring-2019&quot;&gt;an undergraduate class on deep probabilistic models&lt;/a&gt;, and was built with
