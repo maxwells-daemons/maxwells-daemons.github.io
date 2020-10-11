@@ -1,8 +1,9 @@
+<hr>
 <h2 id="footnotes">Footnotes</h2>
 <ol>
 {% for content in footnote_contents %}
   <li class="footnote-bottom">
-    <span id="footnote-{{forloop.index}}">{{content}}</span> <a href="#footnote-{{forloop.index}}-inline">↩</a>
+    <span id="footnote-{{forloop.index}}">{{content}}</span> <a class="footnote-return" href="#footnote-{{forloop.index}}-inline">↩</a>
   </li>
 {% endfor %}
 </ol>

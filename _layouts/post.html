@@ -1,67 +1,22 @@
 ---
-layout: default
+layout: post_wrapper
 ---
-{% include navigation-bar.html %}
-<main>
-  <article>
-    <h1>{{ page.title }}</h1>
-    <p id="writing-date">Posted on {{ page.date | date_to_long_string }}</p>
-    <div id="writing-summary"><p>{{ page.description }}</p></div>
+{{ content | pants }}
 
-    {% include tag-list.html
-        tags=page.tags
-        paper=page.paper
-        code=page.code
-        poster=page.poster %}
+{% capture cited_count %}{% bibliography_count --cited %}{% endcapture %}
+{% if cited_count != "0" %}
+<hr>
+<h2 id="references">References</h2>
+{% bibliography --cited_in_order %}
+{% endif %}
 
-    <hr>
-
-    <div class="content-wrapper">
-    {% if page.toc %}
-    <nav id="toc-nav">
-      <h3 id="toc-header">Contents</h3>
-      {% include toc.html
-            html=content
-            sanitize=true
-            id="table-of-contents" %}
-    </nav>
-    {% endif %}
-
-    {{ content | pants }}
-
-    {% capture cited_count %}{% bibliography_count --cited %}{% endcapture %}
-    {% if cited_count != "0" %}
-    <h2 id="references">References</h2>
-    {% bibliography --cited_in_order %}
-    {% endif %}
-
-    {% if page.citation %}
-    {% include citation.html
-          citation=page.citation
-          citation-authors=page.citation-authors
-          title=page.title
-          date=page.date
-          url=page.url %}
-    {% endif %}
-    </div>
-  </article>
-
-  <!-- Disqus embed code -->
-  {% if page.comments %}
-  <div id="disqus_thread">
-  <script>
-  var disqus_config = function () {
-    this.page.url = "{{ page.url | prepend: site.url }}";
-    this.page.identifier = "{{ page.url }}";
-  };
-  (function() { // DON'T EDIT BELOW THIS LINE
-  var d = document, s = d.createElement('script');
-  s.src = 'https://aidans-research-blog.disqus.com/embed.js';
-  s.setAttribute('data-timestamp', +new Date());
-  (d.head || d.body).appendChild(s);
-  })();
-  </script>
-  </div>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  {% endif %}
-</main>
+{% if page.citation %}
+<hr>
+<p>BibTeX:</p>
+{% include citation.html
+      citation=page.citation
+      citation-authors=page.citation-authors
+      title=page.title
+      date=page.date
+      url=page.url %}
+{% endif %}

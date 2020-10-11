@@ -97,6 +97,14 @@ span.footnote > a {
    margin-right: 2px;
 }
 
+span.footnote>a:hover {
+  color: $color-link-hover;
+}
+
+span.footnote>a:active {
+  color: $color-link-active;
+}
+
 span.footnote span.footnote-inner {
    z-index: -1;
    opacity: 0;
@@ -125,11 +133,19 @@ li.footnote-bottom {
   margin-bottom: 0;
 }
 
+a.footnote-return {
+  text-decoration: none;
+}
+
 // Inline citations
 span.footnote>a.citation {
   text-decoration: none;
   padding-right: 0;
   margin-right: 0;
+}
+
+span.footnote>a.citation:hover, span.footnote>a.citation:active {
+  text-decoration: underline;
 }
 
 // Because of sizing issues, footnotes become tap-only on mobile
