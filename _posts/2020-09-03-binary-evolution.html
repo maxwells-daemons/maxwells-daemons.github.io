@@ -41,18 +41,11 @@ can require years of experience in an environment to match human performance.
 As a result, gathering experience is a key computational bottleneck in
 reinforcement learning. For each frame of experience, we must run a forward
 pass through the model. In real-world problems, this leads to large,
-expensive, and energy-inefficient systems for generating rollouts &mdash;
+expensive, and energy-inefficient systems for generating rollouts ---
 <a href="https://openai.com/blog/openai-five/">OpenAI Five</a>
 used 128,000 CPU cores for gathering experience in the environment and running
-evaluation, and 256 GPUs for optimization.
+evaluation, and 256 GPUs for optimization {% include cite-inline.html citation="OpenAI_dota" nospace=true %}.
 </p>
-
-<!-- <p> -->
-<!-- One upshot of this is that improving the efficiency of inference in RL-friendly -->
-<!-- ways directly translates to reinforcement learning models that are easier, -->
-<!-- faster, and cheaper to train. This post explores using binary neural networks -->
-<!-- as a potential way to speed up training in reinforcement learning. -->
-<!-- </p> -->
 
 <p>
 Because inference is such a important part of RL, efficiency improvements
@@ -67,7 +60,7 @@ binary models while offering its own advantages for reinforcement learning.
 <h2 id="binary-neural-networks">Binary Neural Networks</h2>
 
 <p>
-Binary neural networks have weights and activations constrained to values +1 or -1.{% include footnote-inline.html number=1 content="Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href='https://arxiv.org/pdf/1603.05279.pdf'>XNOR-Net</a> is a good
+Binary neural networks have weights and activations constrained to values +1 or -1.{% include footnote-inline.html content="Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href='#rastegari2016xnornet'>XNOR-Net</a> is a good
 paper for getting an overview of this kind of work." %}
 Each layer uses the sign function as its activation and computes the function \(f(x; W, b) = \text{sign}(Wx + b)\), where \(x\) is a binary
 vector of inputs, \(W\) is a binary matrix of weights, and \(b\) is a
@@ -82,15 +75,15 @@ computing hardware we encode them as the more familiar 0/1 binary numbers by
 representing -1 as 0 (and 1 as itself). With this encoding, we can fit an entire
 64-vector into a single 64-bit quadword.
 SIMD instructions can operate very
-efficiently on &ldquo;packed&rdquo; vectors of this kind.
+efficiently on "packed" vectors of this kind.
 </p>
 
 <h3 id="the-xnor-trick">The XNOR Trick</h3>
 
 
 <p>
-There's a clever trick introduced by <a href="https://arxiv.org/abs/1602.02830">Courbariaux et
-  al.</a> that enables much faster and more power-efficient neural networks
+There's a clever trick {% include cite-inline.html citation="courbariaux2016binarized" %}
+that enables much faster and more power-efficient neural networks
 by performing almost all of the required computation with bitwise operations.
 Let's say we want to take the dot product of two \(N\)-bit binary vectors,
 \(\vec{a} \cdot \vec{b} = \sum_i^N a_i b_i\). Since each \(a_i\) and
@@ -98,14 +91,14 @@ Let's say we want to take the dot product of two \(N\)-bit binary vectors,
 dot product is the total count of how many bit places match, minus how many
 places don't. Because the two counts must sum to \(N\), we have
 \(\vec{a} \cdot \vec{b} = 2 \left(\text{# places where a = b}\right) - N\).{%
-include footnote-inline.html number=2
+include footnote-inline.html
 content="In notation:
 \[
 \begin{align*}
 \vec{a} \cdot \vec{b}
-&= \sum_{i=1}^N a_i b_i \\
-&= \sum_{i=1}^N \textbf{1}_{a_i = b_i} + -\textbf{1}_{a_1 \neq b_i} \\
-&= \sum_{i=1}^N \textbf{1}_{a_i = b_i} -\sum_{i=1}^N \textbf{1}_{a_1 \neq b_i} \\
+&= \sum_{i=1}^N a_i b_i \\\\
+&= \sum_{i=1}^N \textbf{1}_{a_i = b_i} + -\textbf{1}_{a_1 \neq b_i} \\\\
+&= \sum_{i=1}^N \textbf{1}_{a_i = b_i} -\sum_{i=1}^N \textbf{1}_{a_1 \neq b_i} \\\\
 &= 2 \sum_{i=1}^N \textbf{1}_{a_i = b_i} - N,
 \end{align*}
 \]
@@ -136,10 +129,10 @@ up of dot products, this makes the forward pass of a binary neural network very 
 However, binary neural networks are discrete-valued, which precludes training them with gradient
 descent and backpropagation.
 One solution, used by approaches like
-<a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a>,
+XNOR-Net {% include cite-inline.html citation="rastegari2016xnornet" nospace=true %},
 is to train a model with floating-point weights that are binarized
 during the forward pass.{%
-include footnote-inline.html number=3
+include footnote-inline.html
 content="During the backward pass, the gradient of the loss with respect to the
 binarized weights is computed with standard backpropagation, and that gradient
 is applied to the floating-point weights as an approximation to the true gradient.
@@ -161,7 +154,7 @@ evolution strategies, a type of optimizer that does not require gradients.
 Evolution strategies (ES) are a family of derivative-free optimizers that
 maintain a <em>search distribution</em>:
 a probability distribution over possible solutions.{%
-include footnote-inline.html number=4
+include footnote-inline.html
 content="This section only briefly covers how evolution strategies work at a
 high level. For dedicated explanations of the theory and popular variants of the algorithm, I
 recommend the excellent posts by
@@ -178,17 +171,17 @@ models like binary neural networks.
 </p>
 
 <p>
-<a href="https://openai.com/blog/evolution-strategies/">An OpenAI project</a>
-found that ES has a number of other appealing properties in RL. It does not require
+ES has a number of other appealing properties in RL {% include cite-inline.html citation="salimans2017evolution" nospace=true %}.
+It does not require
 assigning credit to individual actions, but rather attributes the total reward
 for an episode directly to the model parameters.{%
-include footnote-inline.html number=5
+include footnote-inline.html
 content="I'm not actually so sure this is a good thing. While the authors argue
 that this helps reduce variance when actions have long-term consequences,
 I do think  there's plenty of training signal available if we can figure
 out which actions lead to which consequences." %}
 Additionally, by sharing a table of
-random numbers across multiple worker machines, the authors were able to
+random numbers across multiple worker machines, {% include cite-inline.html citation="salimans2017evolution" %} were able to
 train ES in a distributed setting while only synchronizing rewards across
 machines instead of full parameter vectors.  This trick makes ES very
 parallelizable, and when scaled up it can achieve much faster wall-clock times
@@ -198,15 +191,16 @@ that distributed RL and efficient inference are a particularly potent combinatio
 </p>
 
 <p>
-In this project, I used <a href="https://www.jmlr.org/papers/volume15/wierstra14a/wierstra14a.pdf">natural evolution strategies</a>, a variant
+In this project, I used natural evolution strategies
+{% include cite-inline.html citation="10.5555/2627435.2638566" nospace=true %}, a variant
 of ES which tries to maximize the expected value of return for samples
 drawn from the search distribution. To do this, it estimates the natural gradient{%
-include footnote-inline.html number=6
+include footnote-inline.html
 content="Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
 they change the resulting probability distribution over solutions." %}
 of expected return with respect to the parameters of the search distribution,{%
-include footnote-inline.html number=7
+include footnote-inline.html
 content="Note that these are parameters that define the distribution, <em>not</em>
 parameters of a neural network (which we sample from that distribution).
 We'll be taking gradients with respect to \(\phi\), the parameters of the
@@ -237,11 +231,12 @@ is initially 0 or 1 with equal probability.
 For the biases, which are integers, I used a factorized Gaussian distribution,
 with parameters \(\mu_i\) and \(\sigma_i\) for the mean and standard deviation of the
 \(i\)-th bias.{%
-include footnote-inline.html number=8
+include footnote-inline.html
 content="Beware one possible point of confusion: I'm using \( \sigma \) for both
 the sigmoid function and standard deviation parameters."
 %} This produces real-valued samples, so I rounded to the nearest
-integer and used the <a href='https://arxiv.org/abs/1308.3432'>straight-through gradient estimator</a>
+integer and used the straight-through gradient estimator
+{% include cite-inline.html citation="bengio2013estimating" %}
 (basically, ignoring the rounding operation when computing gradients).
 I initialized all of the bias means \(\mu_i\) to 0, and the standard deviations \(\sigma_i\) to 1.
 </p>
@@ -260,8 +255,8 @@ and the probability density for the search distribution is
 <span class="math-mobile">
 \[
 \begin{align*}
-&P(\theta \mid \phi) = \\
-&\left( \prod_{i=1}^N \sigma(x_i)^{w_i} (1 - \sigma(x_i))^{1 - w_i} \right) \\
+&P(\theta \mid \phi) = \\\\
+&\left( \prod_{i=1}^N \sigma(x_i)^{w_i} (1 - \sigma(x_i))^{1 - w_i} \right) \\\\
 &\left( \prod_{i=1}^M \frac{1}{\sigma_i \sqrt{2 \pi}} \exp \left( -\frac{1}{2} \left( \frac{b_i - \mu_i}{\sigma_i} \right)^2 \right) \right)
 \end{align*}
 .
@@ -281,7 +276,7 @@ P(\theta \mid \phi) =
 
 <p>
 Natural ES kind of acts like a policy gradient algorithm, except the
-&ldquo;policy&rdquo; is the search distribution, and the &ldquo;actions&rdquo;
+"policy" is the search distribution, and the "actions"
 it takes are parameter vectors \( \theta \) for a model we try in the environment.
 The goal is to maximize the expected value of \( R(\theta) \), a function which
 accepts the parameters of an agent as input, runs that agent in the environment,
@@ -290,12 +285,13 @@ by updating \( \phi \) through gradient ascent.
 </p>
 
 <p>
-This idea is often called <a href="https://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=A64D1AE8313A364B814998E9E245B40A?doi=10.1.1.180.7104&rep=rep1&type=pdf">Parameter-exploring Policy Gradients</a>.
+This idea is often called Parameter-exploring Policy Gradients
+{% include cite-inline.html citation="6154" nospace=true %}.
 To perform the update, we'll write
 <span class="math-mobile">
 \[
 \begin{align*}
-  &\nabla_\phi \mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta)\right] = \\
+  &\nabla_\phi \mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta)\right] = \\\\
   &\mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta ) \nabla_\phi \log P(\theta \mid \phi )\right]
 \end{align*}
 \]
@@ -309,8 +305,9 @@ To perform the update, we'll write
 using the <a href="https://andrewcharlesjones.github.io/posts/2020/02/log-derivative/">log-derivative trick</a>,
 and estimate this expectation with a finite Monte Carlo sample of models from the search distribution.
 If this looks almost identical to REINFORCE,
-that's because it is &mdash; the idea of updating a search distribution like this
-was proposed in the <a href="https://people.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf">REINFORCE paper</a>.
+that's because it is --- the idea of updating a search distribution like this
+was proposed in the original REINFORCE paper
+{% include cite-inline.html citation="10.1007/BF00992696" nospace=true %}.
 </p>
 
 <p>
@@ -318,8 +315,8 @@ Because the search distribution is totally separable, we can compute each
 parameter gradient separately. So, the gradients we need are the following:
 \[
 \begin{align*}
-&\frac{\partial}{\partial \mu_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{b_i - \mu_i}{\sigma_i^2} \\
-&\frac{\partial}{\partial \sigma_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{(b_i - \mu_i)^2 - \sigma_i^2}{\sigma_i^3} \\
+&\frac{\partial}{\partial \mu_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{b_i - \mu_i}{\sigma_i^2} \\\\
+&\frac{\partial}{\partial \sigma_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{(b_i - \mu_i)^2 - \sigma_i^2}{\sigma_i^3} \\\\
 &\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) = w_i - \sigma(x_i).
 \end{align*}
 \]
@@ -352,7 +349,7 @@ I was consistently surprised by just how fast binary neural networks are in prac
 A two-layer, 64-unit-wide binary network clocked
 in at 500,000 forward passes per second on my laptop's CPU, 25 times faster
 than an equivalent model in PyTorch. Training on easy problems like CartPole
-was quick too &mdash; the model
+was quick too --- the model
 at the start of this article trained in under one minute on CPU.
 </p>
 
@@ -360,7 +357,7 @@ at the start of this article trained in under one minute on CPU.
 For fast learning, I found it essential to represent the observations from
 the environment in a good way. This was particularly tricky because the model
 only accepts binary vectors as input. For CartPole, it was sufficient to put
-objects' positions and velocities into one of several &ldquo;bins,&rdquo; but
+objects' positions and velocities into one of several "bins," but
 making progress on other environments required more careful feature engineering.
 I also tried training the model from the raw binary encodings of the positions
 and velocities, but that didn't work at all.
@@ -441,7 +438,7 @@ Adaptation ES, but they require second-order information that's intractible to c
 High-dimensional gradients are really amazing.
 Part of deep learning's success is that even for models with millions of parameters,
 the gradient tells each of them how to change and coordinate.
-Evolution strategies don't share this scalability, though &mdash; they explore parameter space by
+Evolution strategies don't share this scalability, though --- they explore parameter space by
 testing a few random directions around the current solution.
 This leads to high-variance gradient estimates as the dimensionality of the
 search space grows.
@@ -467,8 +464,9 @@ may provide a more computationally-tractable way of training RL agents.
 
 <p>
 Building on
-<a href="https://openai.com/blog/evolution-strategies/">prior work that
-  investigates scaling ES in a distributed setting</a>, this project takes a
+prior work that investigates scaling ES in a distributed setting
+{% include cite-inline.html citation="salimans2017evolution" nospace=true %},
+this project takes a
 complementary approach: improving the efficiency of each experience-gathering agent.
 I used the derivative-free nature of ES to train binary neural networks
 without approximating backpropagated gradients. While I've only been able
@@ -492,8 +490,8 @@ If \( w_i = 1 \), then
 \[
 \begin{align*}
   \frac{\partial}{\partial x_i} \log P(w_i \mid x_i)
-  &= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\
-  &= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\\\
+  &= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &=  1 - \sigma(x_i).
 \end{align*}
 \]
@@ -501,9 +499,9 @@ If \( w_i = 1 \), then
 <span class="math-mobile">
 \[
 \begin{align*}
-  &\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\
-  &= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\
-  &= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\\\
+  &= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\\\
+  &= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &=  1 - \sigma(x_i).
 \end{align*}
 \]
@@ -513,8 +511,8 @@ If \( w_i = 0 \), then
 \[
 \begin{align*}
   \frac{\partial}{\partial x_i} \log P(w_i \mid x_i)
-  &= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\
-  &= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\\\
+  &= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &= -\sigma(x_i).
 \end{align*}
 \]
@@ -522,9 +520,9 @@ If \( w_i = 0 \), then
 <span class="math-mobile">
 \[
 \begin{align*}
-  &\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\
-  &= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\
-  &= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\\\
+  &= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\\\
+  &= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &= -\sigma(x_i).
 \end{align*}
 \]
@@ -532,60 +530,4 @@ If \( w_i = 0 \), then
 So, we can write \( \frac{\partial}{\partial x_i} \log P(w_i \mid x_i ) = w_i - \sigma(x_i). \)
 </p>
 
-
-<h2 id="footnotes">Footnotes</h2>
-<ol>
-  {% include footnote-bottom.html number=1 content="Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href='https://arxiv.org/pdf/1603.05279.pdf'>XNOR-Net</a> is a good
-paper for getting an overview of this kind of work." %}
-{% include footnote-bottom.html number=2 content="In notation:
-\[
-\begin{align*}
-\vec{a} \cdot \vec{b}
-&= \sum_{i=1}^N a_i b_i \\
-&= \sum_{i=1}^N \textbf{1}_{a_i = b_i} + -\textbf{1}_{a_1 \neq b_i} \\
-&= \sum_{i=1}^N \textbf{1}_{a_i = b_i} -\sum_{i=1}^N \textbf{1}_{a_1 \neq b_i} \\
-&= 2 \sum_{i=1}^N \textbf{1}_{a_i = b_i} - N,
-\end{align*}
-\]
-where \(\textbf{1}\) is an indicator function and the last equality holds because
-the equality condition partitions the bits.
-"%}
-{% include footnote-bottom.html number=3
-content="During the backward pass, the gradient of the loss with respect to the
-binarized weights is computed with standard backpropagation, and that gradient
-is applied to the floating-point weights as an approximation to the true gradient.
-You could think of this as the
-<a href='https://arxiv.org/abs/1308.3432'>straight-through gradient estimator</a>
-for a nondifferentiable &ldquo;binarize layer.&rdquo;"
-%}
-{% include footnote-bottom.html number=4
-content="This section only briefly covers how evolution strategies work at a
-high level. For dedicated explanations of the theory and popular variants of the algorithm, I
-recommend the excellent posts by
-<a href='https://blog.otoro.net/2017/10/29/visual-evolution-strategies/'>hardmaru</a>
-and
-<a href='https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html'>Lilian Weng</a>." %}
-{%
-include footnote-bottom.html number=5
-content="I'm not actually so sure this is a good thing. While the authors argue
-that this helps reduce variance when actions have long-term consequences,
-I do think  there's plenty of training signal available if we can figure
-out which actions lead to which consequences." %}
-{% include footnote-bottom.html number=6
-content="Intuitively, the natural gradient is like the regular gradient, but where
-the distance between two points in parameter space is measured by how much
-they change the resulting probability distribution over solutions." %}
-{%
-include footnote-bottom.html number=7
-content="Note that these are parameters that define the distribution, <em>not</em>
-parameters of a neural network (which we sample from that distribution).
-We'll be taking gradients with respect to \(\phi\), the parameters of the
-search distribution, but our original model parameterized by \(\theta\) can
-still be nondifferentiable."
-%}
-{%
-include footnote-bottom.html number=8
-content="Beware one possible point of confusion: I'm using \( \sigma \) for both
-the sigmoid function and standard deviation parameters."
-%}
-</ol>
+{% include footnotes-bottom.html %}

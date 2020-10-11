@@ -40,6 +40,8 @@ plugins:
   - jekyll-responsive-image
   - jekyll-sitemap
   - jekyll-gzip
+  - jekyll-scholar
+  - jekyll-pants
 
 exclude:
   - node_modules
@@ -49,6 +51,10 @@ exclude:
 
 mathjax_csp:
   extensions: "TeX/AMSmath.js,TeX/AMSsymbols.js"
+
+scholar:
+  bibliography_template: bibliography
+  style: apa
 
 # Responsive image size list from:
 # https://medium.com/hceverything/applying-srcset-choosing-the-right-sizes-for-responsive-images-at-different-breakpoints-a0433450a4a3

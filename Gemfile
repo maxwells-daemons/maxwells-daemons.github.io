@@ -9,4 +9,6 @@ group :jekyll_plugins do
   gem 'jekyll-responsive-image'
   gem 'jekyll-mathjax-csp'
   gem 'jekyll-gzip'
+  gem 'jekyll-scholar'
+  gem 'jekyll-pants'
 end

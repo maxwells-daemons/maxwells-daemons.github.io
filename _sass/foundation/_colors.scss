@@ -11,6 +11,11 @@ $color-link-main: #283593;
 $color-link-hover: #5c6bc0;
 $color-link-active: #9575cd;
 
+// Reference links
+$color-reference-hover: #546e7a;
+$color-reference-underline: #b0bec5;
+$color-reference-underline-hover: #cfd8dc;
+
 // Selection
 $color-select: #1a237e;
 $color-select-fg: #fff;
@@ -36,3 +41,7 @@ $color-toc-bullet: #455a64;
 
 // Citation
 $color-citation-border: #cfd8dc;
+
+// Block quotes
+$color-blockquote-background: #eeeeee;
+$color-blockquote-border: #cfd8dc;

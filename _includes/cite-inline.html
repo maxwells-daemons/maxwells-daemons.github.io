@@ -1,0 +1,5 @@
+<span class="footnote"
+  {% if include.nospace %}
+  style="margin-right: -4px"
+  {% endif %}
+>{% cite include.citation %}<span class="footnote-inner">{% reference include.citation --prefix inline %}</span></span>

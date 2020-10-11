@@ -118,7 +118,18 @@ span.footnote:hover span.footnote-inner {
 }
 
 li.footnote-bottom {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+#footnotes {
+  margin-bottom: 0;
+}
+
+// Inline citations
+span.footnote>a.citation {
+  text-decoration: none;
+  padding-right: 0;
+  margin-right: 0;
 }
 
 // Because of sizing issues, footnotes become tap-only on mobile

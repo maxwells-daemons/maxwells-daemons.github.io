@@ -11,6 +11,18 @@ style: assets/pages/tags/style
     <div id="tag-index-wrapper">
       <ul id="tag-index">
         {% for tag in site.tags %}
+
+        {% assign tag-active = false %}
+        {% for post in tag[1] %}
+          {% if post.listed %}
+            {% assign tag-active = true %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+        {% if tag-active == false %}
+          {% continue %}
+        {% endif %}
+
         <li>
           <h2 id={{ tag[0] | slugify }}>{{ tag[0] }}</h2>
           <ul>

@@ -1,0 +1,210 @@
+---
+title: Why Neural Networks are Bad&nbsp;at&nbsp;Math
+
+description: >
+  Compositionality is a defining feature of language, mathematics, and the real
+  world, but neural networks struggle to understand it. This post explores what
+  exactly compositionality is, why it&rsquo;s a critical component of reasoning,
+  and why modern learning models can&rsquo;t even do arithmetic.
+
+style: assets/pages/posts/compositionality/style
+image:
+toc: true
+
+tags:
+ - Article
+ - Generalization
+ - Neurosymbolic models
+
+listed: false
+---
+
+<blockquote>
+  <p style="margin-bottom: 0">
+  The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three:
+  </p>
+  <ol>
+    <li>Combining several simple ideas into one compound one, and thus all complex ideas are made.</li>
+    <li>The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them at once, without uniting them into one, by which it gets all its ideas of relations.</li>
+    <li>The third is separating them from all other ideas that accompany them in their real existence: this is called abstraction, and thus all its general ideas are made.</li>
+  </ol>
+  <footer>
+    John Locke, <cite>An Essay Concerning Human Understanding</cite>
+  </footer>
+</blockquote>
+
+<span class="todo">TODO: Introduction</span>
+
+<!-- <p> -->
+<!-- How is it that humans can build and understand complicated things? -->
+<!-- Why do senses evolved for finding berries and escaping predators, -->
+<!-- and <a href="http://psychclassics.yorku.ca/Miller/">brains that can only hold about seven things at once</a>, -->
+<!-- let us invent machines with thousands of parts, build subtle new mathematics upon centuries of theory, -->
+<!-- and understand economies made up of millions of other thinking people? -->
+<!-- </p> -->
+
+<!-- <p> -->
+<!-- The one-word answer that any programmer would give you is <strong>abstraction</strong>. -->
+<!-- By thinking about a collection of things as one abstract thing and intentionally -->
+<!-- forgetting the details, we can hold whole complicated systems in our heads. -->
+<!-- We work with these simplified black-boxes by giving them made-up names, like -->
+<!-- &ldquo;the memory allocator&rdquo; or &ldquo;the fundamental theorem of calculus,&rdquo; -->
+<!-- and use them as though they were as elementary as a bit-flip or the Peano axioms. -->
+<!-- </p> -->
+
+<!-- <p> -->
+<!-- Since abstraction seems so core to reasoning, and modern machine learning has shown -->
+<!-- dazzling success on diverse intellectual tasks like playing board games -->
+<!-- and generating natural language, it's natural to ask: to what extent do -->
+<!-- neural networks form abstractions? -->
+<!-- <a href="https://distill.pub/2020/circuits/zoom-in/">Research visualizing CNNs in depth</a> -->
+<!-- has presented compelling evidence that these models form visual concepts by composing -->
+<!-- other, simpler visual concepts &mdash; and, anyway, isn't hierarchical composition -->
+<!-- what distributed representations and multi-layer neural networks are all about? -->
+<!-- How do we reconcile this with the fact that -->
+<!-- <a href="https://deepmind.com/research/publications/analysing-mathematical-reasoning-abilities-neural-models">state-of-the-art language models can't consistently add six integers</a>? -->
+<!-- Do these visually-intuitive concepts generalize when they're combined in new ways? -->
+<!-- </p> -->
+
+<!-- <!-1- TODO: diagram from circuits -1-> -->
+
+<!-- <p> -->
+<!-- This post will argue three points: -->
+<!-- <ul> -->
+<!--   <li>Abstraction is a key primitive of thought, and it's possible because many problems have compositional structure.</li> -->
+<!--   <li>Systematic reasoning involves recognizing and exploiting compositional structure, by intentionally forming and decomposing abstractions.</li> -->
+<!--   <li>Current neural networks don't robustly generalize in domains like math because they don't compartmentalize knowledge in reusable ways.</li> -->
+<!-- </ul> -->
+<!-- </p> -->
+
+
+
+<h2 id="compositionality">Compositionality</h2>
+
+<p>
+<span class="todo">TODO: Intuitive explanation</span>
+</p>
+
+<span class="todo">TODO: Interactive demo</span>
+
+<p>
+<span class="todo">TODO: Why compositionality helps us simplify problems</span>
+</p>
+
+<p>
+<span class="todo">TODO: Introduce other sections</span>
+</p>
+
+
+<h3 id="linguistic-recursion">Linguistic Recursion</h3>
+
+<span class="todo">TODO: Subsection</span>
+
+
+<h3 id="formal-mathematics">Formal Mathematics</h3>
+
+<span class="todo">TODO: Subsection</span>
+
+
+
+
+
+<h2 id="recursive-neural-networks">Recursive Neural Networks</h2>
+
+<span class="todo">TODO: Section</span>
+
+
+
+
+
+<h2 id="attention">Attention</h2>
+
+<span class="todo">TODO: section</span>
+
+
+
+
+
+<h2 id="the-symbolic-ai-program">The Symbolic AI Program</h2>
+
+<span class="todo">TODO: section</span>
+
+
+
+
+<h2 id="emergence">Emergence</h2>
+
+<p>
+Finally, there&rsquo;s one important point I want to address, which I call
+&ldquo;the question of emergence&rdquo;: what abilities should we explicitly build into
+our learning models, and what should <em>emerge</em> naturally as the model
+learns to solve problems?
+</p>
+
+<p>
+For example, suppose we task a learning agent with adding integers, because
+that seems like the kind of thing a genuine artificial intelligence should
+be able to do.
+As we&rsquo;ve seen, neural networks tend to do badly at this kind of thing.
+But what if we equipped the model with a calculator? Then it would only
+need to learn which buttons to press in which order. This would certainly
+make the problem easier.
+</p>
+
+<p>
+But we&rsquo;ve lost sight of the end goal! We don&rsquo;t need a neural network
+to add integers &mdash; in fact, we provided the model with a perfectly good
+calculator. Instead, integer addition is a <em>proxy</em> for reasoning, which
+we study because directly working on the problem of building an artificial general
+intelligence is too hard. The hope is that in solving the easier problem,
+we&rsquo;ll find new techniques which will apply to the general case.
+Adding such a specific external component (a calculator) means we&rsquo;re
+overfitting to the proxy task at the expense of our end goal.
+It would be far better to instead design models that could learn addition
+on their own, because it&rsquo;s more likely that this would also let other
+desirable strategies emerge &mdash; including ones we haven&rsquo;t thought of yet.
+</p>
+
+<p>
+So, the question of what inductive biases we should build into our models,
+and what should &ldquo;emerge&rdquo; as a higher-order consequence of learning,
+is a very interesting one. It&rsquo;s clear to me that counting, arithmetic,
+and the like should be emergent rather than built-in. But, given the success
+of strong inductive biases like convolution over flexible supersets like
+fully-connected networks, it&rsquo;s hard to claim that the model should begin
+<em>tabula rasa</em>.
+</p>
+
+<p>
+I don&rsquo;t know whether compositionality should be built-in or emergent.
+On one hand, it seems like a critical component of many problems we care about.
+On the other, consider how long it takes for people just to learn to count, add, and subtract.
+It may be that a general artificial intelligence as good at dealing with
+ambiguity and nuance as humans are will need to work just as hard to learn math as we do.
+</p>
+
+
+
+
+<h2 id="conclusion">Conclusion</h2>
+
+<span class="todo">TODO: conclusion</span>
+
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>
+I&lsquo;m grateful to my colleagues and mentors at Caltech, with whom I&lsquo;ve had
+many insightful discussions, and in particular <a href="https://aypan17.github.io/">Alex Pan</a>,
+<a href="https://forougha.github.io/">Forough Arabshahi</a>, and <a href="http://tensorlab.cms.caltech.edu/users/anima/">Anima Anandkumar</a>.
+<span class="todo">TODO: list people who&lsquo;ve helped edit</span>.
+</p>
+
+<p>
+This post was heavily influenced by Yoshua Bengio&lsquo;s talk,
+&ldquo;<a href="https://slideslive.com/38922304/from-system-1-deep-learning-to-system-2-deep-learning">From System 1 Deep Learning to System 2 Deep Learning</a>,&rdquo;
+as well as Douglas Hofstadter&lsquo;s <em>Gödel, Escher, Bach: an Eternal Golden Braid</em>.
+<span class="todo">TODO: finish</span>
+</p>
+
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+</ol>

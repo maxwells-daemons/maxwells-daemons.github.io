@@ -27,8 +27,13 @@ layout: default
     </nav>
     {% endif %}
 
-    {{ content }}
+    {{ content | pants }}
 
+    {% capture cited_count %}{% bibliography_count --cited %}{% endcapture %}
+    {% if cited_count != "0" %}
+    <h2 id="references">References</h2>
+    {% bibliography --cited_in_order %}
+    {% endif %}
 
     {% if page.citation %}
     {% include citation.html

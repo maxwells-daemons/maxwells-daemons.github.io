@@ -33,7 +33,7 @@ This was the final project for
 </p>
 
 <p>
-Generative machine learning models have famously been used to create new media from scratch, but an even more exciting possibility involves humans collaborating with algorithms throughout the creative process.{% include footnote-inline.html number=1 content="A <a href='https://distill.pub/2017/aia/'>really cool article</a> by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &ldquo;artificial intelligence augmentation&rdquo; through interacting with generative models." %}
+Generative machine learning models have famously been used to create new media from scratch, but an even more exciting possibility involves humans collaborating with algorithms throughout the creative process {% include cite-inline.html citation="carter2017using" nospace=true %}.
 While generative models are increasingly able to generate convincing images, audio, and text, human input is valuable to choose properties we want the final result to have and to incorporate parts of the human experience we haven't (yet) been able to train our models to understand.
 </p>
 
@@ -105,7 +105,7 @@ While this project uses a restricted subset of MIDI
 and the samples therefore always sound a little elevator&#8209;music&#8209;y,
 we believe that this approach would scale well to larger,
 more sophisticated latent variable models, such as
-<a href="">OpenAI's Jukebox</a>.
+<a href="">OpenAI's Jukebox</a> {% include cite-inline.html citation="dhariwal2020jukebox" nospace=true %}.
 </p>
 
 <h2 id="overview">Model Overview</h2>
@@ -121,13 +121,13 @@ Before getting into the details, here's a brief overview of how the model works 
   height="auto" />
 
 <p>
-The core of the model is <a href="https://magenta.tensorflow.org/music-vae">MusicVAE</a>, a pretrained model created by <a href="https://magenta.tensorflow.org/">Magenta</a>.
+The core of the model is <a href="https://magenta.tensorflow.org/music-vae">MusicVAE</a> {% include cite-inline.html citation="roberts2019hierarchical" nospace=true %}, a pretrained model created by <a href="https://magenta.tensorflow.org/">Magenta</a>.
 MusicVAE consists of an encoder, which transforms pieces of music into latent variables which capture properties of that music in a simpler compressed form, and a decoder which transforms latent variables back into music.
-Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums, and bass, with extra features like time signature changes stripped.{% include footnote-inline.html number=2 content="As a result, the model doesn't work very well on music using these features." %}
+Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums, and bass, with extra features like time signature changes stripped.{% include footnote-inline.html content="As a result, the model doesn't work very well on music using these features." %}
 </p>
 
 <p>
-Because we want to generate the accompaniment given a new melody, we train a &ldquo;surrogate encoder&rdquo; to mimic the original MusicVAE encoder, while only having access to the melody.
+Because we want to generate the accompaniment given a new melody, we train a "surrogate encoder" to mimic the original MusicVAE encoder, while only having access to the melody.
 Given a dataset of three-track music, we use the MusicVAE encoder to produce a latent representation for each song, then strip out the drums and bass and train the surrogate encoder to predict the latent variables from the melody alone.
 Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody's (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.
 </p>
@@ -138,17 +138,17 @@ MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outsi
 For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler and smaller way, as a collection of latent variables.
 In our case, a MIDI song might take 20 KB to store, but its latent representation is a vector of 512 floating-point numbers, a compression ratio of ten.
 Despite being much smaller, the latent variables are expected to capture most of the high-level properties of the music, like genre, key, time, and timings for particular events.
-This is possible because music has patterns that enable it to be described succinctly &mdash; you could get a passable reconstruction of some drum parts by just asking a drummer to &ldquo;play a swing beat.&rdquo;
+This is possible because music has patterns that enable it to be described succinctly --- you could get a passable reconstruction of some drum parts by just asking a drummer to "play a swing beat."
 </p>
 
 <p>
-Furthermore, latent representations are presumed to live in some &ldquo;latent space,&rdquo; about which we make some very strong assumptions.
-The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent two songs that sound very similar.{% include footnote-inline.html number=3 content="The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space." %}
-Directions are often meaningful in latent space; the authors of MusicVAE found that <a href="https://magenta.tensorflow.org/music-vae#long-term-structure">they could move songs in an &ldquo;add note density&rdquo; direction</a> to maintain the character of a song but with more notes.
+Furthermore, latent representations are presumed to live in some "latent space," about which we make some very strong assumptions.
+The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent two songs that sound very similar.{% include footnote-inline.html content="The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space." %}
+Directions are often meaningful in latent space; the authors of MusicVAE found that <a href="https://magenta.tensorflow.org/music-vae#long-term-structure">they could move songs in an "add note density" direction</a> to maintain the character of a song but with more notes.
 </p>
 
 <p>
-Most importantly, the latent space has a squished and twisted shape (relative to the data's shape) such that real music appears Gaussian-distributed in this space.{% include footnote-inline.html number=4 content="This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space." %}
+Most importantly, the latent space has a squished and twisted shape (relative to the data's shape) such that real music appears Gaussian-distributed in this space.{% include footnote-inline.html content="This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space." %}
 This means that when you sample latent vectors from a Gaussian, they likely correspond to songs that sound reasonable, and conversely real songs frequently map to vectors near the origin.
 If you were to pick any direction in latent space, find the latent vector corresponding to every popular song and project those vectors onto this direction, then plot a histogram of the resulting values, that histogram should form a standard normal bell curve.
 </p>
@@ -165,7 +165,7 @@ Given a dataset of media, the encoder and decoder learn to create this very spec
 <h2 id="predicting-latents">Predicting Latent Variables from a Melody</h2>
 
 <p>
-A lot of the things we want our latent variables to capture &mdash; what the song's genre is, when solos start and end, etc. &mdash; are present in all three parts of the original music.
+A lot of the things we want our latent variables to capture --- what the song's genre is, when solos start and end, etc. --- are present in all three parts of the original music.
 When a bass solo starts, the drummer might play a simpler pattern and the melody might stop playing altogether.
 When it ends, the drummer doesn't need to know much about the details of the solo to play an appropriate fill.
 In this sense, the original music is an <em>overcomplete representation</em>, which is why we're able to compress it so much in the latent space.
@@ -180,9 +180,9 @@ In this sense, the original music is an <em>overcomplete representation</em>, wh
 
 <p>
 That also means that many properties of a full song's latent representation can be inferred from just one of the parts.
-In the plot above, the surrogate encoder and MusicVAE decoder try to reconstruct the theme from &ldquo;New York, New York&rdquo; from just Frank Sinatra's part.
+In the plot above, the surrogate encoder and MusicVAE decoder try to reconstruct the theme from "New York, New York" from just Frank Sinatra's part.
 Red bars are the melody, blue are the bass, and brown are drums.
-The model certainly can't predict the original accompaniment, and it doesn't even recreate the melody (which the surrogate encoder has access to) &mdash; that's why we stitch the original melody back in as the last step.
+The model certainly can't predict the original accompaniment, and it doesn't even recreate the melody (which the surrogate encoder has access to) --- that's why we stitch the original melody back in as the last step.
 However, it has correctly inferred a swing beat for the drums, works around important timings in the song, and plays the bass in key.
 This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.
 </p>
@@ -190,7 +190,11 @@ This means that the original MusicVAE encoder learned to encode properties like 
 <h2 id="conclusion">Conclusion</h2>
 <p>
 Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative tasks.
-However, with some impressive recent results generating <a href="https://arxiv.org/pdf/1906.00446.pdf">high-resolution images</a> and <a href="https://openai.com/blog/jukebox/">raw audio</a> with more sophisticated VAEs, variational methods are making something of a comeback.
+However, with some impressive recent results generating high-resolution images
+{% include cite-inline.html citation="razavi2019generating" %}
+and raw audio
+{% include cite-inline.html citation="dhariwal2020jukebox" %}
+with more sophisticated VAEs, variational methods are making something of a comeback.
 Hopefully this post illustrates some of the cool things you can do with an explicit and controllable latent space.
 </p>
 
@@ -199,10 +203,4 @@ If you like, check out the code and some additional samples on <a href="https://
 And if you find any mistakes, errors, or points of confusion, please let me know!
 </p>
 
-<h2 id="footnotes">Footnotes</h2>
-<ol>
-  {% include footnote-bottom.html number=1 content="A <a href='https://distill.pub/2017/aia/'>really cool article</a> by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &ldquo;artificial intelligence augmentation&rdquo; through interacting with generative models." %}
-  {% include footnote-bottom.html number=2 content="As a result, the model doesn't work very well on music using these features." %}
-  {% include footnote-bottom.html number=3 content="The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space." %}
-  {% include footnote-bottom.html number=4 content="This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space." %}
-</ol>
+{% include footnotes-bottom.html %}

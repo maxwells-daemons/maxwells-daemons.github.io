@@ -54,11 +54,11 @@ h3 {
 }
 
 // Increase the vertical space between a paragraph and a heading
-p + h1, p + h2 {
+p + h1, p + h2, ol + h1, ol + h2, ul + h1, ul + h2 {
   margin-top: 2 * $vertical-rhythm;
 }
 
-p + h3 {
+p + h3, ol + h3, ul + h3 {
   margin-top: 1.5 * $vertical-rhythm;
 }
 
@@ -124,6 +124,25 @@ figcaption {
   font-style: italic;
 }
 
+// Style bibliography links
+a.reference {
+  color: $color-text;
+  text-decoration-color: $color-reference-underline;
+}
+
+a.reference:hover {
+  color: $color-reference-hover;
+  text-decoration-color: $color-reference-underline-hover;
+}
+
+.bibliography li {
+  margin-top: 0.5rem;
+}
+
+#references {
+  margin-bottom: 0;
+}
+
 // Prevents <em> from changing line spacing, for some reason
 em {
   font-size: 98%;
@@ -143,4 +162,43 @@ em {
   .math-mobile {
     display: initial;
   }
+}
+
+// Style block quotes
+blockquote {
+  margin: 0 2rem $vertical-rhythm 3rem;
+}
+
+blockquote p, blockquote li {
+  font-style: italic;
+  font-size: 120%;
+}
+
+blockquote footer {
+  text-align: right;
+}
+
+blockquote > :first-child {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  blockquote {
+    margin: 0 0 $vertical-rhythm 0;
+    padding-left: 0.75rem;
+    border-left: 2px solid #b0bec5;
+  }
+
+  blockquote p, blockquote li {
+    font-size: 100%;
+  }
+
+  blockquote footer {
+    font-size: 80%;
+  }
+}
+
+.todo {
+  background: yellow;
 }
