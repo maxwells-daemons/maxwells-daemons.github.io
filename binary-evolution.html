@@ -55,7 +55,7 @@
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2020-09-03T00:00:00-07:00">
 <script type="application/ld+json">
-{"description":"Binary neural networks dramatically speed up inference, a key bottleneck in reinforcement learning, but are not differentiable. This project explores using evolution strategies to train binary networks directly, without approximating backpropagated gradients, for faster reinforcement learning.","headline":"Compute-Efficient Reinforcement Learning with Binary Evolution Strategies","dateModified":"2020-09-03T00:00:00-07:00","datePublished":"2020-09-03T00:00:00-07:00","@type":"BlogPosting","image":"https://aidanswope.com/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg","url":"https://aidanswope.com/binary-evolution","mainEntityOfPage":{"@type":"WebPage","@id":"https://aidanswope.com/binary-evolution"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"author":{"@type":"Person","name":"Aidan Swope"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Aidan Swope"},"description":"Binary neural networks dramatically speed up inference, a key bottleneck in reinforcement learning, but are not differentiable. This project explores using evolution strategies to train binary networks directly, without approximating backpropagated gradients, for faster reinforcement learning.","url":"https://aidanswope.com/binary-evolution","mainEntityOfPage":{"@type":"WebPage","@id":"https://aidanswope.com/binary-evolution"},"@type":"BlogPosting","image":"https://aidanswope.com/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://aidanswope.com/assets/icons/android-chrome-512x512.png"},"name":"Aidan Swope"},"headline":"Compute-Efficient Reinforcement Learning with Binary Evolution Strategies","dateModified":"2020-09-03T00:00:00-07:00","datePublished":"2020-09-03T00:00:00-07:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -277,15 +277,9 @@ pass through the model. In real-world problems, this leads to large,
 expensive, and energy-inefficient systems for generating rollouts —
 <a href="https://openai.com/blog/openai-five/">OpenAI Five</a>
 used 128,000 CPU cores for gathering experience in the environment and running
-evaluation, and 256 GPUs for optimization.
+evaluation, and 256 GPUs for optimization <span class="footnote" style="margin-right: -4px"><a class="citation" href="#OpenAI_dota">(OpenAI, 2018)</a><span class="footnote-inner"><span id="inline-OpenAI_dota">OpenAI. (2018). <i>OpenAI Five</i>. https://blog.openai.com/openai-five/</span></span></span>
+.
 </p>
-
-<!-- <p> -->
-<!-- One upshot of this is that improving the efficiency of inference in RL-friendly -->
-<!-- ways directly translates to reinforcement learning models that are easier, -->
-<!-- faster, and cheaper to train. This post explores using binary neural networks -->
-<!-- as a potential way to speed up training in reinforcement learning. -->
-<!-- </p> -->
 
 <p>
 Because inference is such a important part of RL, efficiency improvements
@@ -300,7 +294,7 @@ binary models while offering its own advantages for reinforcement learning.
 <h2 id="binary-neural-networks">Binary Neural Networks</h2>
 
 <p>
-Binary neural networks have weights and activations constrained to values +1 or -1.<span class="footnote" id="footnote-1-inline"><a href="#footnote-1"><sup>1</sup></a><span class="footnote-inner">Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href="https://arxiv.org/pdf/1603.05279.pdf">XNOR-Net</a> is a good
+Binary neural networks have weights and activations constrained to values +1 or -1.<span class="footnote" id="footnote-1-inline"><a href="#footnote-1"><sup>1</sup></a><span class="footnote-inner">Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href="#rastegari2016xnornet">XNOR-Net</a> is a good
 paper for getting an overview of this kind of work.</span></span>
 
 Each layer uses the sign function as its activation and computes the function <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="26.447ex" height="2.843ex" viewbox="0 -863.1 11386.8 1223.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-1-Title" class=" mathjax-inline-f17333b774e07e18">
@@ -363,10 +357,11 @@ efficiently on “packed” vectors of this kind.
 
 
 <p>
-There's a clever trick introduced by <a href="https://arxiv.org/abs/1602.02830">Courbariaux et
-  al.</a> that enables much faster and more power-efficient neural networks
+There’s a clever trick <span class="footnote"><a class="citation" href="#courbariaux2016binarized">(Courbariaux et al., 2016)</a><span class="footnote-inner"><span id="inline-courbariaux2016binarized">Courbariaux, M., Hubara, I., Soudry, D., El-Yaniv, R., &amp; Bengio, Y. (2016). <i>Binarized Neural Networks: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1</i>.</span></span></span>
+
+that enables much faster and more power-efficient neural networks
 by performing almost all of the required computation with bitwise operations.
-Let's say we want to take the dot product of two <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="2.064ex" height="2.176ex" viewbox="0 -791.3 888.5 936.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-5-Title" class=" mathjax-inline-bd4bdaf2678151b0">
+Let’s say we want to take the dot product of two <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="2.064ex" height="2.176ex" viewbox="0 -791.3 888.5 936.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-5-Title" class=" mathjax-inline-bd4bdaf2678151b0">
 <title id="MathJax-SVG-5-Title">N</title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-4E" x="0" y="0"></use>
@@ -423,7 +418,7 @@ Let's say we want to take the dot product of two <span class="mjpage"><svg xmlns
 </g>
 </svg></span> and -1 otherwise. So the
 dot product is the total count of how many bit places match, minus how many
-places don't. Because the two counts must sum to <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="2.064ex" height="2.176ex" viewbox="0 -791.3 888.5 936.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-10-Title" class=" mathjax-inline-bd4bdaf2678151b0">
+places don’t. Because the two counts must sum to <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="2.064ex" height="2.176ex" viewbox="0 -791.3 888.5 936.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-10-Title" class=" mathjax-inline-bd4bdaf2678151b0">
 <title id="MathJax-SVG-10-Title">N</title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-4E" x="0" y="0"></use>
@@ -642,7 +637,7 @@ the equality condition partitions the bits.
           arithmetic is the same in both cases." width="70%">
 
 <p>
-Since we're encoding these vectors as 0/1 bit vectors, <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="10.394ex" height="2.176ex" viewbox="0 -791.3 4475 936.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-14-Title" class=" mathjax-inline-bd4bdaf2678151b0">
+Since we’re encoding these vectors as 0/1 bit vectors, <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="10.394ex" height="2.176ex" viewbox="0 -791.3 4475 936.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-14-Title" class=" mathjax-inline-bd4bdaf2678151b0">
 <title id="MathJax-SVG-14-Title">a \text{ XNOR } b</title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-61" x="0" y="0"></use>
@@ -665,7 +660,7 @@ where <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-62" x="0" y="0"></use>
 </g>
-</svg></span> and 0 where it doesn't, so we can compute the dot
+</svg></span> and 0 where it doesn’t, so we can compute the dot
 product as <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="35.287ex" height="2.843ex" viewbox="0 -863.1 15192.9 1223.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-17-Title" class=" mathjax-inline-f17333b774e07e18">
 <title id="MathJax-SVG-17-Title">a \cdot b = 2 \text{ popcount}(a \text{ XNOR } b) - N</title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
@@ -710,7 +705,8 @@ up of dot products, this makes the forward pass of a binary neural network very 
 However, binary neural networks are discrete-valued, which precludes training them with gradient
 descent and backpropagation.
 One solution, used by approaches like
-<a href="https://arxiv.org/abs/1603.05279">XNOR-Net</a>,
+XNOR-Net <span class="footnote" style="margin-right: -4px"><a class="citation" href="#rastegari2016xnornet">(Rastegari et al., 2016)</a><span class="footnote-inner"><span id="inline-rastegari2016xnornet">Rastegari, M., Ordonez, V., Redmon, J., &amp; Farhadi, A. (2016). <i>XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks</i>.</span></span></span>
+,
 is to train a model with floating-point weights that are binarized
 during the forward pass.<span class="footnote" id="footnote-3-inline"><a href="#footnote-3"><sup>3</sup></a><span class="footnote-inner">During the backward pass, the gradient of the loss with respect to the
 binarized weights is computed with standard backpropagation, and that gradient
@@ -743,31 +739,35 @@ ES improves the search distribution over time by repeatedly sampling some candid
 solutions, then trying out each candidate to see
 how well it works, and finally updating the search distribution towards samples that did well.
 Unlike the typical approach of training neural networks by gradient descent,
-this does not require backpropagation, so we're free to use nondifferentiable
+this does not require backpropagation, so we’re free to use nondifferentiable
 models like binary neural networks.
 </p>
 
 <p>
-<a href="https://openai.com/blog/evolution-strategies/">An OpenAI project</a>
-found that ES has a number of other appealing properties in RL. It does not require
+ES has a number of other appealing properties in RL <span class="footnote" style="margin-right: -4px"><a class="citation" href="#salimans2017evolution">(Salimans et al., 2017)</a><span class="footnote-inner"><span id="inline-salimans2017evolution">Salimans, T., Ho, J., Chen, X., Sidor, S., &amp; Sutskever, I. (2017). <i>Evolution Strategies as a Scalable Alternative to Reinforcement Learning</i>.</span></span></span>
+.
+It does not require
 assigning credit to individual actions, but rather attributes the total reward
-for an episode directly to the model parameters.<span class="footnote" id="footnote-5-inline"><a href="#footnote-5"><sup>5</sup></a><span class="footnote-inner">I'm not actually so sure this is a good thing. While the authors argue
+for an episode directly to the model parameters.<span class="footnote" id="footnote-5-inline"><a href="#footnote-5"><sup>5</sup></a><span class="footnote-inner">I’m not actually so sure this is a good thing. While the authors argue
 that this helps reduce variance when actions have long-term consequences,
-I do think  there's plenty of training signal available if we can figure
+I do think  there’s plenty of training signal available if we can figure
 out which actions lead to which consequences.</span></span>
 
 Additionally, by sharing a table of
-random numbers across multiple worker machines, the authors were able to
+random numbers across multiple worker machines, <span class="footnote"><a class="citation" href="#salimans2017evolution">(Salimans et al., 2017)</a><span class="footnote-inner"><span id="inline-salimans2017evolution">Salimans, T., Ho, J., Chen, X., Sidor, S., &amp; Sutskever, I. (2017). <i>Evolution Strategies as a Scalable Alternative to Reinforcement Learning</i>.</span></span></span>
+ were able to
 train ES in a distributed setting while only synchronizing rewards across
 machines instead of full parameter vectors.  This trick makes ES very
 parallelizable, and when scaled up it can achieve much faster wall-clock times
 than modern RL algorithms.
-While this post focuses on single-machine performance, it's worth noting
+While this post focuses on single-machine performance, it’s worth noting
 that distributed RL and efficient inference are a particularly potent combination.
 </p>
 
 <p>
-In this project, I used <a href="https://www.jmlr.org/papers/volume15/wierstra14a/wierstra14a.pdf">natural evolution strategies</a>, a variant
+In this project, I used natural evolution strategies
+<span class="footnote" style="margin-right: -4px"><a class="citation" href="#10.5555/2627435.2638566">(Wierstra et al., 2014)</a><span class="footnote-inner"><span id="inline-10.5555/2627435.2638566">Wierstra, D., Schaul, T., Glasmachers, T., Sun, Y., Peters, J., &amp; Schmidhuber, J. (2014). Natural Evolution Strategies. <i>J. Mach. Learn. Res.</i>, <i>15</i>(1), 949–980.</span></span></span>
+, a variant
 of ES which tries to maximize the expected value of return for samples
 drawn from the search distribution. To do this, it estimates the natural gradient<span class="footnote" id="footnote-6-inline"><a href="#footnote-6"><sup>6</sup></a><span class="footnote-inner">Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
@@ -775,7 +775,7 @@ they change the resulting probability distribution over solutions.</span></span>
 
 of expected return with respect to the parameters of the search distribution,<span class="footnote" id="footnote-7-inline"><a href="#footnote-7"><sup>7</sup></a><span class="footnote-inner">Note that these are parameters that define the distribution, <em>not</em>
 parameters of a neural network (which we sample from that distribution).
-We'll be taking gradients with respect to <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.385ex" height="2.509ex" viewbox="0 -791.3 596.5 1080.4" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-18-Title" class=" mathjax-inline-f2702d65ab5f1fc9">
+We’ll be taking gradients with respect to <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.385ex" height="2.509ex" viewbox="0 -791.3 596.5 1080.4" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-18-Title" class=" mathjax-inline-f2702d65ab5f1fc9">
 <title id="MathJax-SVG-18-Title">\phi</title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-3D5" x="0" y="0"></use>
@@ -883,7 +883,7 @@ with parameters <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xl
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-69" x="0" y="0"></use>
 </g>
-</svg></span>-th bias.<span class="footnote" id="footnote-8-inline"><a href="#footnote-8"><sup>8</sup></a><span class="footnote-inner">Beware one possible point of confusion: I'm using <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.33ex" height="1.676ex" viewbox="0 -576.1 572.5 721.6" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-30-Title" class=" mathjax-inline-bd4bdaf2678151b0">
+</svg></span>-th bias.<span class="footnote" id="footnote-8-inline"><a href="#footnote-8"><sup>8</sup></a><span class="footnote-inner">Beware one possible point of confusion: I’m using <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.33ex" height="1.676ex" viewbox="0 -576.1 572.5 721.6" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-30-Title" class=" mathjax-inline-bd4bdaf2678151b0">
 <title id="MathJax-SVG-30-Title"> \sigma </title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-3C3" x="0" y="0"></use>
@@ -891,7 +891,9 @@ with parameters <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xl
 </svg></span> for both
 the sigmoid function and standard deviation parameters.</span></span>
  This produces real-valued samples, so I rounded to the nearest
-integer and used the <a href="https://arxiv.org/abs/1308.3432">straight-through gradient estimator</a>
+integer and used the straight-through gradient estimator
+<span class="footnote"><a class="citation" href="#bengio2013estimating">(Bengio et al., 2013)</a><span class="footnote-inner"><span id="inline-bengio2013estimating">Bengio, Y., Léonard, N., &amp; Courville, A. C. (2013). Estimating or Propagating Gradients Through Stochastic Neurons for Conditional Computation. <i>CoRR</i>, <i>abs/1308.3432</i>.</span></span></span>
+
 (basically, ignoring the rounding operation when computing gradients).
 I initialized all of the bias means <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="2.201ex" height="2.176ex" viewbox="0 -576.1 947.8 936.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-31-Title" class=" mathjax-inline-f17333b774e07e18">
 <title id="MathJax-SVG-31-Title">\mu_i</title>
@@ -1316,8 +1318,10 @@ by updating <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink"
 </p>
 
 <p>
-This idea is often called <a href="https://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=A64D1AE8313A364B814998E9E245B40A?doi=10.1.1.180.7104&amp;rep=rep1&amp;type=pdf">Parameter-exploring Policy Gradients</a>.
-To perform the update, we'll write
+This idea is often called Parameter-exploring Policy Gradients
+<span class="footnote" style="margin-right: -4px"><a class="citation" href="#6154">(Sehnke et al., 2010)</a><span class="footnote-inner"><span id="inline-6154">Sehnke, F., Osendorfer, C., Rückstiess, T., Graves, A., Peters, J., &amp; Schmidhuber, J. (2010). Parameter-exploring policy gradients. <i>Neural Networks</i>, <i>21</i>(4), 551–559.</span></span></span>
+.
+To perform the update, we’ll write
 <span class="math-mobile">
 <span class="mjpage mjpage__block"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="30.198ex" height="6.509ex" viewbox="0 -1652.5 13001.7 2802.6" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-40-Title" class=" mathjax-inline-ff9d57da24d6cb27">
 <title id="MathJax-SVG-40-Title">
@@ -1469,8 +1473,10 @@ To perform the update, we'll write
 using the <a href="https://andrewcharlesjones.github.io/posts/2020/02/log-derivative/">log-derivative trick</a>,
 and estimate this expectation with a finite Monte Carlo sample of models from the search distribution.
 If this looks almost identical to REINFORCE,
-that's because it is — the idea of updating a search distribution like this
-was proposed in the <a href="https://people.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf">REINFORCE paper</a>.
+that’s because it is — the idea of updating a search distribution like this
+was proposed in the original REINFORCE paper
+<span class="footnote" style="margin-right: -4px"><a class="citation" href="#10.1007/BF00992696">(Williams, 1992)</a><span class="footnote-inner"><span id="inline-10.1007/BF00992696">Williams, R. J. (1992). Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning. <i>Mach. Learn.</i>, <i>8</i>(3–4), 229–256. https://doi.org/10.1007/BF00992696</span></span></span>
+.
 </p>
 
 <p>
@@ -1791,7 +1797,7 @@ In summary, one iteration proceeds as follows:
 <p>
 I was consistently surprised by just how fast binary neural networks are in practice.
 A two-layer, 64-unit-wide binary network clocked
-in at 500,000 forward passes per second on my laptop's CPU, 25 times faster
+in at 500,000 forward passes per second on my laptop’s CPU, 25 times faster
 than an equivalent model in PyTorch. Training on easy problems like CartPole
 was quick too — the model
 at the start of this article trained in under one minute on CPU.
@@ -1801,10 +1807,10 @@ at the start of this article trained in under one minute on CPU.
 For fast learning, I found it essential to represent the observations from
 the environment in a good way. This was particularly tricky because the model
 only accepts binary vectors as input. For CartPole, it was sufficient to put
-objects' positions and velocities into one of several “bins,” but
+objects’ positions and velocities into one of several “bins,” but
 making progress on other environments required more careful feature engineering.
 I also tried training the model from the raw binary encodings of the positions
-and velocities, but that didn't work at all.
+and velocities, but that didn’t work at all.
 </p>
 
 <h3 id="failure-to-converge-on-hard-problems">Failure to Converge on Hard Problems</h3>
@@ -1814,14 +1820,14 @@ and velocities, but that didn't work at all.
     <source src="/assets/pages/posts/binary-evolution/lunar-lander.mp4" type="video/mp4">
   </source></video>
   <figcaption>
-    Let's not let it fly the spaceships quite yet.
+    Let’s not let it fly the spaceships quite yet.
   </figcaption>
 </figure>
 
 
 <p>
 However, although this approach made some progress on all of the environments I
-tried it on, it wasn't able to completely solve any environment harder than
+tried it on, it wasn’t able to completely solve any environment harder than
 CartPole. Below, I discuss some problems that I think are responsible
 for this.
 </p>
@@ -1868,7 +1874,7 @@ exploring, and performance stops improving beyond a point.
 </figure>
 
 <p>
-I've tried a few things to combat this tendency. Shrinking the bit probabilities
+I’ve tried a few things to combat this tendency. Shrinking the bit probabilities
 towards 0.5 (or equivalently, weight decay on the <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.664ex" height="1.676ex" viewbox="0 -576.1 716.5 721.6" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-52-Title" class=" mathjax-inline-bd4bdaf2678151b0">
 <title id="MathJax-SVG-52-Title"> w </title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
@@ -1884,7 +1890,7 @@ bias distribution constant instead of adjusting <span class="mjpage"><svg xmlns:
  <use transform="scale(0.707)" xlink:href="#MJMATHI-69" x="808" y="-213"></use>
 </g>
 </svg></span>, similar to
-OpenAI's work with ES. Ultimately, though, CartPole was the only environment where
+OpenAI’s work with ES. Ultimately, though, CartPole was the only environment where
 the model reliably finished training before it converged to a low-variance
 regime and stopped learning.
 </p>
@@ -1892,21 +1898,21 @@ regime and stopped learning.
 <h3 id="independendence-assumptions">Independence Assumptions</h3>
 <p>
 The search distribution I used makes strong independendence assumptions about
-the network parameters. The parameters definitely aren't independent,
+the network parameters. The parameters definitely aren’t independent,
 though, leaving information on the table that the search distribution might
 be able to use to search more efficiently.
 There are other variants of evolution strategies
 that do consider covariance between the parameters, such as Covariance Matrix
-Adaptation ES, but they require second-order information that's intractible to compute for larger models.
+Adaptation ES, but they require second-order information that’s intractible to compute for larger models.
 </p>
 
 <h3 id="high-dimensional-search-space">High-Dimensional Search Space</h3>
 
 <p>
 High-dimensional gradients are really amazing.
-Part of deep learning's success is that even for models with millions of parameters,
+Part of deep learning’s success is that even for models with millions of parameters,
 the gradient tells each of them how to change and coordinate.
-Evolution strategies don't share this scalability, though — they explore parameter space by
+Evolution strategies don’t share this scalability, though — they explore parameter space by
 testing a few random directions around the current solution.
 This leads to high-variance gradient estimates as the dimensionality of the
 search space grows.
@@ -1932,14 +1938,16 @@ may provide a more computationally-tractable way of training RL agents.
 
 <p>
 Building on
-<a href="https://openai.com/blog/evolution-strategies/">prior work that
-  investigates scaling ES in a distributed setting</a>, this project takes a
+prior work that investigates scaling ES in a distributed setting
+<span class="footnote" style="margin-right: -4px"><a class="citation" href="#salimans2017evolution">(Salimans et al., 2017)</a><span class="footnote-inner"><span id="inline-salimans2017evolution">Salimans, T., Ho, J., Chen, X., Sidor, S., &amp; Sutskever, I. (2017). <i>Evolution Strategies as a Scalable Alternative to Reinforcement Learning</i>.</span></span></span>
+,
+this project takes a
 complementary approach: improving the efficiency of each experience-gathering agent.
 I used the derivative-free nature of ES to train binary neural networks
-without approximating backpropagated gradients. While I've only been able
+without approximating backpropagated gradients. While I’ve only been able
 to solve easy RL problems with this approach so far, being able to train these
-tiny, fast neural networks is pretty cool. I'm excited to see what future
-work that combines this efficiency with ES's parallelizability could do!
+tiny, fast neural networks is pretty cool. I’m excited to see what future
+work that combines this efficiency with ES’s parallelizability could do!
 </p>
 
 <p>
@@ -2543,16 +2551,16 @@ So, we can write <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/x
 </svg></span>
 </p>
 
-
 <h2 id="footnotes">Footnotes</h2>
 <ol>
-  <li class="footnote-bottom">
-  <span id="footnote-1">Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href="https://arxiv.org/pdf/1603.05279.pdf">XNOR-Net</a> is a good
-paper for getting an overview of this kind of work.</span> <a href="#footnote-1-inline">↩</a>
-</li>
 
-<li class="footnote-bottom">
-  <span id="footnote-2">In notation:
+  <li class="footnote-bottom">
+    <span id="footnote-1">Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href="#rastegari2016xnornet">XNOR-Net</a> is a good
+paper for getting an overview of this kind of work.</span> <a href="#footnote-1-inline">↩</a>
+  </li>
+
+  <li class="footnote-bottom">
+    <span id="footnote-2">In notation:
 <span class="mjpage mjpage__block"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="29.728ex" height="29.843ex" viewbox="0 -6675.6 12799.7 12848.9" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-61-Title" class=" mathjax-inline-9fce47b3a294c720">
 <title id="MathJax-SVG-61-Title">
 \begin{align*}
@@ -2721,43 +2729,43 @@ where <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width
 </svg></span> is an indicator function and the last equality holds because
 the equality condition partitions the bits.
 </span> <a href="#footnote-2-inline">↩</a>
-</li>
+  </li>
 
-<li class="footnote-bottom">
-  <span id="footnote-3">During the backward pass, the gradient of the loss with respect to the
+  <li class="footnote-bottom">
+    <span id="footnote-3">During the backward pass, the gradient of the loss with respect to the
 binarized weights is computed with standard backpropagation, and that gradient
 is applied to the floating-point weights as an approximation to the true gradient.
 You could think of this as the
 <a href="https://arxiv.org/abs/1308.3432">straight-through gradient estimator</a>
 for a nondifferentiable “binarize layer.”</span> <a href="#footnote-3-inline">↩</a>
-</li>
+  </li>
 
-<li class="footnote-bottom">
-  <span id="footnote-4">This section only briefly covers how evolution strategies work at a
+  <li class="footnote-bottom">
+    <span id="footnote-4">This section only briefly covers how evolution strategies work at a
 high level. For dedicated explanations of the theory and popular variants of the algorithm, I
 recommend the excellent posts by
 <a href="https://blog.otoro.net/2017/10/29/visual-evolution-strategies/">hardmaru</a>
 and
 <a href="https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html">Lilian Weng</a>.</span> <a href="#footnote-4-inline">↩</a>
-</li>
+  </li>
 
-<li class="footnote-bottom">
-  <span id="footnote-5">I'm not actually so sure this is a good thing. While the authors argue
+  <li class="footnote-bottom">
+    <span id="footnote-5">I’m not actually so sure this is a good thing. While the authors argue
 that this helps reduce variance when actions have long-term consequences,
-I do think  there's plenty of training signal available if we can figure
+I do think  there’s plenty of training signal available if we can figure
 out which actions lead to which consequences.</span> <a href="#footnote-5-inline">↩</a>
-</li>
+  </li>
 
-<li class="footnote-bottom">
-  <span id="footnote-6">Intuitively, the natural gradient is like the regular gradient, but where
+  <li class="footnote-bottom">
+    <span id="footnote-6">Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
 they change the resulting probability distribution over solutions.</span> <a href="#footnote-6-inline">↩</a>
-</li>
+  </li>
 
-<li class="footnote-bottom">
-  <span id="footnote-7">Note that these are parameters that define the distribution, <em>not</em>
+  <li class="footnote-bottom">
+    <span id="footnote-7">Note that these are parameters that define the distribution, <em>not</em>
 parameters of a neural network (which we sample from that distribution).
-We'll be taking gradients with respect to <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.385ex" height="2.509ex" viewbox="0 -791.3 596.5 1080.4" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-63-Title" class=" mathjax-inline-f2702d65ab5f1fc9">
+We’ll be taking gradients with respect to <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.385ex" height="2.509ex" viewbox="0 -791.3 596.5 1080.4" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-63-Title" class=" mathjax-inline-f2702d65ab5f1fc9">
 <title id="MathJax-SVG-63-Title">\phi</title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-3D5" x="0" y="0"></use>
@@ -2770,21 +2778,92 @@ search distribution, but our original model parameterized by <span class="mjpage
 </g>
 </svg></span> can
 still be nondifferentiable.</span> <a href="#footnote-7-inline">↩</a>
-</li>
+  </li>
 
-<li class="footnote-bottom">
-  <span id="footnote-8">Beware one possible point of confusion: I'm using <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.33ex" height="1.676ex" viewbox="0 -576.1 572.5 721.6" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-65-Title" class=" mathjax-inline-bd4bdaf2678151b0">
+  <li class="footnote-bottom">
+    <span id="footnote-8">Beware one possible point of confusion: I’m using <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.33ex" height="1.676ex" viewbox="0 -576.1 572.5 721.6" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-65-Title" class=" mathjax-inline-bd4bdaf2678151b0">
 <title id="MathJax-SVG-65-Title"> \sigma </title>
 <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">
  <use xlink:href="#MJMATHI-3C3" x="0" y="0"></use>
 </g>
 </svg></span> for both
 the sigmoid function and standard deviation parameters.</span> <a href="#footnote-8-inline">↩</a>
-</li>
+  </li>
 
 </ol>
 
 
+
+    
+    
+    <h2 id="references">References</h2>
+    <ol class="bibliography">
+<li>
+<a class="reference" href="https://blog.openai.com/openai-five/">
+
+<span id="OpenAI_dota">OpenAI. (2018). <i>OpenAI Five</i>. https://blog.openai.com/openai-five/</span>
+
+</a>
+
+</li>
+<li>
+<a class="reference" href="https://arxiv.org/abs/1602.02830">
+
+<span id="courbariaux2016binarized">Courbariaux, M., Hubara, I., Soudry, D., El-Yaniv, R., &amp; Bengio, Y. (2016). <i>Binarized Neural Networks: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1</i>.</span>
+
+</a>
+
+</li>
+<li>
+<a class="reference" href="https://arxiv.org/abs/1603.05279">
+
+<span id="rastegari2016xnornet">Rastegari, M., Ordonez, V., Redmon, J., &amp; Farhadi, A. (2016). <i>XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks</i>.</span>
+
+</a>
+
+</li>
+<li>
+<a class="reference" href="https://arxiv.org/abs/1703.03864">
+
+<span id="salimans2017evolution">Salimans, T., Ho, J., Chen, X., Sidor, S., &amp; Sutskever, I. (2017). <i>Evolution Strategies as a Scalable Alternative to Reinforcement Learning</i>.</span>
+
+</a>
+
+</li>
+<li>
+<a class="reference" href="https://www.jmlr.org/papers/volume15/wierstra14a/wierstra14a.pdf">
+
+<span id="10.5555/2627435.2638566">Wierstra, D., Schaul, T., Glasmachers, T., Sun, Y., Peters, J., &amp; Schmidhuber, J. (2014). Natural Evolution Strategies. <i>J. Mach. Learn. Res.</i>, <i>15</i>(1), 949–980.</span>
+
+</a>
+
+</li>
+<li>
+<a class="reference" href="http://dblp.uni-trier.de/db/journals/corr/corr1308.html#BengioLC13">
+
+<span id="bengio2013estimating">Bengio, Y., Léonard, N., &amp; Courville, A. C. (2013). Estimating or Propagating Gradients Through Stochastic Neurons for Conditional Computation. <i>CoRR</i>, <i>abs/1308.3432</i>.</span>
+
+</a>
+
+</li>
+<li>
+<a class="reference" href="http://people.idsia.ch/%C2%A0juergen/nn2010.pdf">
+
+<span id="6154">Sehnke, F., Osendorfer, C., Rückstiess, T., Graves, A., Peters, J., &amp; Schmidhuber, J. (2010). Parameter-exploring policy gradients. <i>Neural Networks</i>, <i>21</i>(4), 551–559.</span>
+
+</a>
+
+</li>
+<li>
+<a class="reference" href="https://doi.org/10.1007/BF00992696">
+
+<span id="10.1007/BF00992696">Williams, R. J. (1992). Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning. <i>Mach. Learn.</i>, <i>8</i>(3–4), 229–256. https://doi.org/10.1007/BF00992696</span>
+
+</a>
+
+</li>
+</ol>
+    
 
     
     <hr>
@@ -2824,7 +2903,7 @@ the sigmoid function and standard deviation parameters.</span> <a href="#footnot
   
 </main>
 
-      <footer>
+      <footer id="page-footer">
   © 2020 Aidan Swope
 </footer>
 

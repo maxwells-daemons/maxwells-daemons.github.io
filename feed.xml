@@ -1,4 +1,192 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://aidanswope.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://aidanswope.com/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-09-04T04:25:12-07:00</updated><id>https://aidanswope.com/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Compute-Efficient Reinforcement Learning with Binary Evolution Strategies</title><link href="https://aidanswope.com/binary-evolution" rel="alternate" type="text/html" title="Compute-Efficient Reinforcement Learning with Binary Evolution Strategies" /><published>2020-09-03T00:00:00-07:00</published><updated>2020-09-03T00:00:00-07:00</updated><id>https://aidanswope.com/binary-evolution</id><content type="html" xml:base="https://aidanswope.com/binary-evolution">&lt;figure&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://aidanswope.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://aidanswope.com/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-10-10T22:34:53-07:00</updated><id>https://aidanswope.com/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Why Neural Networks are Bad at Math</title><link href="https://aidanswope.com/compositionality" rel="alternate" type="text/html" title="Why Neural Networks are Bad at Math" /><published>2020-10-07T00:00:00-07:00</published><updated>2020-10-07T00:00:00-07:00</updated><id>https://aidanswope.com/compositionality</id><content type="html" xml:base="https://aidanswope.com/compositionality">&lt;blockquote&gt;
+  &lt;p style=&quot;margin-bottom: 0&quot;&gt;
+  The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three:
+  &lt;/p&gt;
+  &lt;ol&gt;
+    &lt;li&gt;Combining several simple ideas into one compound one, and thus all complex ideas are made.&lt;/li&gt;
+    &lt;li&gt;The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them at once, without uniting them into one, by which it gets all its ideas of relations.&lt;/li&gt;
+    &lt;li&gt;The third is separating them from all other ideas that accompany them in their real existence: this is called abstraction, and thus all its general ideas are made.&lt;/li&gt;
+  &lt;/ol&gt;
+  &lt;footer&gt;
+    John Locke, &lt;cite&gt;An Essay Concerning Human Understanding&lt;/cite&gt;
+  &lt;/footer&gt;
+&lt;/blockquote&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: Introduction&lt;/span&gt;
+
+&lt;!-- &lt;p&gt; --&gt;
+&lt;!-- How is it that humans can build and understand complicated things? --&gt;
+&lt;!-- Why do senses evolved for finding berries and escaping predators, --&gt;
+&lt;!-- and &lt;a href=&quot;http://psychclassics.yorku.ca/Miller/&quot;&gt;brains that can only hold about seven things at once&lt;/a&gt;, --&gt;
+&lt;!-- let us invent machines with thousands of parts, build subtle new mathematics upon centuries of theory, --&gt;
+&lt;!-- and understand economies made up of millions of other thinking people? --&gt;
+&lt;!-- &lt;/p&gt; --&gt;
+
+&lt;!-- &lt;p&gt; --&gt;
+&lt;!-- The one-word answer that any programmer would give you is &lt;strong&gt;abstraction&lt;/strong&gt;. --&gt;
+&lt;!-- By thinking about a collection of things as one abstract thing and intentionally --&gt;
+&lt;!-- forgetting the details, we can hold whole complicated systems in our heads. --&gt;
+&lt;!-- We work with these simplified black-boxes by giving them made-up names, like --&gt;
+&lt;!-- &amp;ldquo;the memory allocator&amp;rdquo; or &amp;ldquo;the fundamental theorem of calculus,&amp;rdquo; --&gt;
+&lt;!-- and use them as though they were as elementary as a bit-flip or the Peano axioms. --&gt;
+&lt;!-- &lt;/p&gt; --&gt;
+
+&lt;!-- &lt;p&gt; --&gt;
+&lt;!-- Since abstraction seems so core to reasoning, and modern machine learning has shown --&gt;
+&lt;!-- dazzling success on diverse intellectual tasks like playing board games --&gt;
+&lt;!-- and generating natural language, it's natural to ask: to what extent do --&gt;
+&lt;!-- neural networks form abstractions? --&gt;
+&lt;!-- &lt;a href=&quot;https://distill.pub/2020/circuits/zoom-in/&quot;&gt;Research visualizing CNNs in depth&lt;/a&gt; --&gt;
+&lt;!-- has presented compelling evidence that these models form visual concepts by composing --&gt;
+&lt;!-- other, simpler visual concepts &amp;mdash; and, anyway, isn't hierarchical composition --&gt;
+&lt;!-- what distributed representations and multi-layer neural networks are all about? --&gt;
+&lt;!-- How do we reconcile this with the fact that --&gt;
+&lt;!-- &lt;a href=&quot;https://deepmind.com/research/publications/analysing-mathematical-reasoning-abilities-neural-models&quot;&gt;state-of-the-art language models can't consistently add six integers&lt;/a&gt;? --&gt;
+&lt;!-- Do these visually-intuitive concepts generalize when they're combined in new ways? --&gt;
+&lt;!-- &lt;/p&gt; --&gt;
+
+&lt;!-- &lt;!-1- TODO: diagram from circuits -1-&gt; --&gt;
+
+&lt;!-- &lt;p&gt; --&gt;
+&lt;!-- This post will argue three points: --&gt;
+&lt;!-- &lt;ul&gt; --&gt;
+&lt;!--   &lt;li&gt;Abstraction is a key primitive of thought, and it's possible because many problems have compositional structure.&lt;/li&gt; --&gt;
+&lt;!--   &lt;li&gt;Systematic reasoning involves recognizing and exploiting compositional structure, by intentionally forming and decomposing abstractions.&lt;/li&gt; --&gt;
+&lt;!--   &lt;li&gt;Current neural networks don't robustly generalize in domains like math because they don't compartmentalize knowledge in reusable ways.&lt;/li&gt; --&gt;
+&lt;!-- &lt;/ul&gt; --&gt;
+&lt;!-- &lt;/p&gt; --&gt;
+
+
+
+&lt;h2 id=&quot;compositionality&quot;&gt;Compositionality&lt;/h2&gt;
+
+&lt;p&gt;
+&lt;span class=&quot;todo&quot;&gt;TODO: Intuitive explanation&lt;/span&gt;
+&lt;/p&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: Interactive demo&lt;/span&gt;
+
+&lt;p&gt;
+&lt;span class=&quot;todo&quot;&gt;TODO: Why compositionality helps us simplify problems&lt;/span&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;span class=&quot;todo&quot;&gt;TODO: Introduce other sections&lt;/span&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&quot;linguistic-recursion&quot;&gt;Linguistic Recursion&lt;/h3&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: Subsection&lt;/span&gt;
+
+
+&lt;h3 id=&quot;formal-mathematics&quot;&gt;Formal Mathematics&lt;/h3&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: Subsection&lt;/span&gt;
+
+
+
+
+
+&lt;h2 id=&quot;recursive-neural-networks&quot;&gt;Recursive Neural Networks&lt;/h2&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: Section&lt;/span&gt;
+
+
+
+
+
+&lt;h2 id=&quot;attention&quot;&gt;Attention&lt;/h2&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: section&lt;/span&gt;
+
+
+
+
+
+&lt;h2 id=&quot;the-symbolic-ai-program&quot;&gt;The Symbolic AI Program&lt;/h2&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: section&lt;/span&gt;
+
+
+
+
+&lt;h2 id=&quot;emergence&quot;&gt;Emergence&lt;/h2&gt;
+
+&lt;p&gt;
+Finally, there&amp;rsquo;s one important point I want to address, which I call
+&amp;ldquo;the question of emergence&amp;rdquo;: what abilities should we explicitly build into
+our learning models, and what should &lt;em&gt;emerge&lt;/em&gt; naturally as the model
+learns to solve problems?
+&lt;/p&gt;
+
+&lt;p&gt;
+For example, suppose we task a learning agent with adding integers, because
+that seems like the kind of thing a genuine artificial intelligence should
+be able to do.
+As we&amp;rsquo;ve seen, neural networks tend to do badly at this kind of thing.
+But what if we equipped the model with a calculator? Then it would only
+need to learn which buttons to press in which order. This would certainly
+make the problem easier.
+&lt;/p&gt;
+
+&lt;p&gt;
+But we&amp;rsquo;ve lost sight of the end goal! We don&amp;rsquo;t need a neural network
+to add integers &amp;mdash; in fact, we provided the model with a perfectly good
+calculator. Instead, integer addition is a &lt;em&gt;proxy&lt;/em&gt; for reasoning, which
+we study because directly working on the problem of building an artificial general
+intelligence is too hard. The hope is that in solving the easier problem,
+we&amp;rsquo;ll find new techniques which will apply to the general case.
+Adding such a specific external component (a calculator) means we&amp;rsquo;re
+overfitting to the proxy task at the expense of our end goal.
+It would be far better to instead design models that could learn addition
+on their own, because it&amp;rsquo;s more likely that this would also let other
+desirable strategies emerge &amp;mdash; including ones we haven&amp;rsquo;t thought of yet.
+&lt;/p&gt;
+
+&lt;p&gt;
+So, the question of what inductive biases we should build into our models,
+and what should &amp;ldquo;emerge&amp;rdquo; as a higher-order consequence of learning,
+is a very interesting one. It&amp;rsquo;s clear to me that counting, arithmetic,
+and the like should be emergent rather than built-in. But, given the success
+of strong inductive biases like convolution over flexible supersets like
+fully-connected networks, it&amp;rsquo;s hard to claim that the model should begin
+&lt;em&gt;tabula rasa&lt;/em&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+I don&amp;rsquo;t know whether compositionality should be built-in or emergent.
+On one hand, it seems like a critical component of many problems we care about.
+On the other, consider how long it takes for people just to learn to count, add, and subtract.
+It may be that a general artificial intelligence as good at dealing with
+ambiguity and nuance as humans are will need to work just as hard to learn math as we do.
+&lt;/p&gt;
+
+
+
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;span class=&quot;todo&quot;&gt;TODO: conclusion&lt;/span&gt;
+
+&lt;h2 id=&quot;acknowledgments&quot;&gt;Acknowledgments&lt;/h2&gt;
+&lt;p&gt;
+I&amp;lsquo;m grateful to my colleagues and mentors at Caltech, with whom I&amp;lsquo;ve had
+many insightful discussions, and in particular &lt;a href=&quot;https://aypan17.github.io/&quot;&gt;Alex Pan&lt;/a&gt;,
+&lt;a href=&quot;https://forougha.github.io/&quot;&gt;Forough Arabshahi&lt;/a&gt;, and &lt;a href=&quot;http://tensorlab.cms.caltech.edu/users/anima/&quot;&gt;Anima Anandkumar&lt;/a&gt;.
+&lt;span class=&quot;todo&quot;&gt;TODO: list people who&amp;lsquo;ve helped edit&lt;/span&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+This post was heavily influenced by Yoshua Bengio&amp;lsquo;s talk,
+&amp;ldquo;&lt;a href=&quot;https://slideslive.com/38922304/from-system-1-deep-learning-to-system-2-deep-learning&quot;&gt;From System 1 Deep Learning to System 2 Deep Learning&lt;/a&gt;,&amp;rdquo;
+as well as Douglas Hofstadter&amp;lsquo;s &lt;em&gt;Gödel, Escher, Bach: an Eternal Golden Braid&lt;/em&gt;.
+&lt;span class=&quot;todo&quot;&gt;TODO: finish&lt;/span&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
+&lt;ol&gt;
+&lt;/ol&gt;</content><author><name>Aidan Swope</name></author><category term="Article" /><category term="Generalization" /><category term="Neurosymbolic models" /><summary type="html">The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three: Combining several simple ideas into one compound one, and thus all complex ideas are made. The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them at once, without uniting them into one, by which it gets all its ideas of relations. The third is separating them from all other ideas that accompany them in their real existence: this is called abstraction, and thus all its general ideas are made. John Locke, An Essay Concerning Human Understanding</summary></entry><entry><title type="html">Compute-Efficient Reinforcement Learning with Binary Evolution Strategies</title><link href="https://aidanswope.com/binary-evolution" rel="alternate" type="text/html" title="Compute-Efficient Reinforcement Learning with Binary Evolution Strategies" /><published>2020-09-03T00:00:00-07:00</published><updated>2020-09-03T00:00:00-07:00</updated><id>https://aidanswope.com/binary-evolution</id><content type="html" xml:base="https://aidanswope.com/binary-evolution">&lt;figure&gt;
   &lt;video controls autoplay loop&gt;
     &lt;source src=&quot;/assets/pages/posts/binary-evolution/cartpole.mp4&quot; type=&quot;video/mp4&quot;&gt;
   &lt;/video&gt;
@@ -18,18 +206,16 @@ can require years of experience in an environment to match human performance.
 As a result, gathering experience is a key computational bottleneck in
 reinforcement learning. For each frame of experience, we must run a forward
 pass through the model. In real-world problems, this leads to large,
-expensive, and energy-inefficient systems for generating rollouts &amp;mdash;
+expensive, and energy-inefficient systems for generating rollouts ---
 &lt;a href=&quot;https://openai.com/blog/openai-five/&quot;&gt;OpenAI Five&lt;/a&gt;
 used 128,000 CPU cores for gathering experience in the environment and running
-evaluation, and 256 GPUs for optimization.
+evaluation, and 256 GPUs for optimization &lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#OpenAI_dota&quot;&gt;(OpenAI, 2018)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-OpenAI_dota&quot;&gt;OpenAI. (2018). &lt;i&gt;OpenAI Five&lt;/i&gt;. https://blog.openai.com/openai-five/&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+.
 &lt;/p&gt;
-
-&lt;!-- &lt;p&gt; --&gt;
-&lt;!-- One upshot of this is that improving the efficiency of inference in RL-friendly --&gt;
-&lt;!-- ways directly translates to reinforcement learning models that are easier, --&gt;
-&lt;!-- faster, and cheaper to train. This post explores using binary neural networks --&gt;
-&lt;!-- as a potential way to speed up training in reinforcement learning. --&gt;
-&lt;!-- &lt;/p&gt; --&gt;
 
 &lt;p&gt;
 Because inference is such a important part of RL, efficiency improvements
@@ -44,7 +230,7 @@ binary models while offering its own advantages for reinforcement learning.
 &lt;h2 id=&quot;binary-neural-networks&quot;&gt;Binary Neural Networks&lt;/h2&gt;
 
 &lt;p&gt;
-Binary neural networks have weights and activations constrained to values +1 or -1.&lt;span class=&quot;footnote&quot; id=&quot;footnote-1-inline&quot;&gt;&lt;a href=&quot;#footnote-1&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. &lt;a href='https://arxiv.org/pdf/1603.05279.pdf'&gt;XNOR-Net&lt;/a&gt; is a good
+Binary neural networks have weights and activations constrained to values +1 or -1.&lt;span class=&quot;footnote&quot; id=&quot;footnote-1-inline&quot;&gt;&lt;a href=&quot;#footnote-1&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. &lt;a href='#rastegari2016xnornet'&gt;XNOR-Net&lt;/a&gt; is a good
 paper for getting an overview of this kind of work.&lt;/span&gt;&lt;/span&gt;
 
 Each layer uses the sign function as its activation and computes the function \(f(x; W, b) = \text{sign}(Wx + b)\), where \(x\) is a binary
@@ -60,15 +246,18 @@ computing hardware we encode them as the more familiar 0/1 binary numbers by
 representing -1 as 0 (and 1 as itself). With this encoding, we can fit an entire
 64-vector into a single 64-bit quadword.
 SIMD instructions can operate very
-efficiently on &amp;ldquo;packed&amp;rdquo; vectors of this kind.
+efficiently on &quot;packed&quot; vectors of this kind.
 &lt;/p&gt;
 
 &lt;h3 id=&quot;the-xnor-trick&quot;&gt;The XNOR Trick&lt;/h3&gt;
 
 
 &lt;p&gt;
-There's a clever trick introduced by &lt;a href=&quot;https://arxiv.org/abs/1602.02830&quot;&gt;Courbariaux et
-  al.&lt;/a&gt; that enables much faster and more power-efficient neural networks
+There's a clever trick &lt;span class=&quot;footnote&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#courbariaux2016binarized&quot;&gt;(Courbariaux et al., 2016)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-courbariaux2016binarized&quot;&gt;Courbariaux, M., Hubara, I., Soudry, D., El-Yaniv, R., &amp;amp; Bengio, Y. (2016). &lt;i&gt;Binarized Neural Networks: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+that enables much faster and more power-efficient neural networks
 by performing almost all of the required computation with bitwise operations.
 Let's say we want to take the dot product of two \(N\)-bit binary vectors,
 \(\vec{a} \cdot \vec{b} = \sum_i^N a_i b_i\). Since each \(a_i\) and
@@ -79,9 +268,9 @@ places don't. Because the two counts must sum to \(N\), we have
 \[
 \begin{align*}
 \vec{a} \cdot \vec{b}
-&amp;= \sum_{i=1}^N a_i b_i \\
-&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} + -\textbf{1}_{a_1 \neq b_i} \\
-&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} -\sum_{i=1}^N \textbf{1}_{a_1 \neq b_i} \\
+&amp;= \sum_{i=1}^N a_i b_i \\\\
+&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} + -\textbf{1}_{a_1 \neq b_i} \\\\
+&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} -\sum_{i=1}^N \textbf{1}_{a_1 \neq b_i} \\\\
 &amp;= 2 \sum_{i=1}^N \textbf{1}_{a_i = b_i} - N,
 \end{align*}
 \]
@@ -113,7 +302,12 @@ up of dot products, this makes the forward pass of a binary neural network very 
 However, binary neural networks are discrete-valued, which precludes training them with gradient
 descent and backpropagation.
 One solution, used by approaches like
-&lt;a href=&quot;https://arxiv.org/abs/1603.05279&quot;&gt;XNOR-Net&lt;/a&gt;,
+XNOR-Net &lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#rastegari2016xnornet&quot;&gt;(Rastegari et al., 2016)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-rastegari2016xnornet&quot;&gt;Rastegari, M., Ordonez, V., Redmon, J., &amp;amp; Farhadi, A. (2016). &lt;i&gt;XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+,
 is to train a model with floating-point weights that are binarized
 during the forward pass.&lt;span class=&quot;footnote&quot; id=&quot;footnote-3-inline&quot;&gt;&lt;a href=&quot;#footnote-3&quot;&gt;&lt;sup&gt;3&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;During the backward pass, the gradient of the loss with respect to the
 binarized weights is computed with standard backpropagation, and that gradient
@@ -151,8 +345,13 @@ models like binary neural networks.
 &lt;/p&gt;
 
 &lt;p&gt;
-&lt;a href=&quot;https://openai.com/blog/evolution-strategies/&quot;&gt;An OpenAI project&lt;/a&gt;
-found that ES has a number of other appealing properties in RL. It does not require
+ES has a number of other appealing properties in RL &lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#salimans2017evolution&quot;&gt;(Salimans et al., 2017)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-salimans2017evolution&quot;&gt;Salimans, T., Ho, J., Chen, X., Sidor, S., &amp;amp; Sutskever, I. (2017). &lt;i&gt;Evolution Strategies as a Scalable Alternative to Reinforcement Learning&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+.
+It does not require
 assigning credit to individual actions, but rather attributes the total reward
 for an episode directly to the model parameters.&lt;span class=&quot;footnote&quot; id=&quot;footnote-5-inline&quot;&gt;&lt;a href=&quot;#footnote-5&quot;&gt;&lt;sup&gt;5&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;I'm not actually so sure this is a good thing. While the authors argue
 that this helps reduce variance when actions have long-term consequences,
@@ -160,7 +359,10 @@ I do think  there's plenty of training signal available if we can figure
 out which actions lead to which consequences.&lt;/span&gt;&lt;/span&gt;
 
 Additionally, by sharing a table of
-random numbers across multiple worker machines, the authors were able to
+random numbers across multiple worker machines, &lt;span class=&quot;footnote&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#salimans2017evolution&quot;&gt;(Salimans et al., 2017)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-salimans2017evolution&quot;&gt;Salimans, T., Ho, J., Chen, X., Sidor, S., &amp;amp; Sutskever, I. (2017). &lt;i&gt;Evolution Strategies as a Scalable Alternative to Reinforcement Learning&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+ were able to
 train ES in a distributed setting while only synchronizing rewards across
 machines instead of full parameter vectors.  This trick makes ES very
 parallelizable, and when scaled up it can achieve much faster wall-clock times
@@ -170,7 +372,13 @@ that distributed RL and efficient inference are a particularly potent combinatio
 &lt;/p&gt;
 
 &lt;p&gt;
-In this project, I used &lt;a href=&quot;https://www.jmlr.org/papers/volume15/wierstra14a/wierstra14a.pdf&quot;&gt;natural evolution strategies&lt;/a&gt;, a variant
+In this project, I used natural evolution strategies
+&lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#10.5555/2627435.2638566&quot;&gt;(Wierstra et al., 2014)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-10.5555/2627435.2638566&quot;&gt;Wierstra, D., Schaul, T., Glasmachers, T., Sun, Y., Peters, J., &amp;amp; Schmidhuber, J. (2014). Natural Evolution Strategies. &lt;i&gt;J. Mach. Learn. Res.&lt;/i&gt;, &lt;i&gt;15&lt;/i&gt;(1), 949–980.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+, a variant
 of ES which tries to maximize the expected value of return for samples
 drawn from the search distribution. To do this, it estimates the natural gradient&lt;span class=&quot;footnote&quot; id=&quot;footnote-6-inline&quot;&gt;&lt;a href=&quot;#footnote-6&quot;&gt;&lt;sup&gt;6&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
@@ -208,7 +416,11 @@ with parameters \(\mu_i\) and \(\sigma_i\) for the mean and standard deviation o
 \(i\)-th bias.&lt;span class=&quot;footnote&quot; id=&quot;footnote-8-inline&quot;&gt;&lt;a href=&quot;#footnote-8&quot;&gt;&lt;sup&gt;8&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Beware one possible point of confusion: I'm using \( \sigma \) for both
 the sigmoid function and standard deviation parameters.&lt;/span&gt;&lt;/span&gt;
  This produces real-valued samples, so I rounded to the nearest
-integer and used the &lt;a href='https://arxiv.org/abs/1308.3432'&gt;straight-through gradient estimator&lt;/a&gt;
+integer and used the straight-through gradient estimator
+&lt;span class=&quot;footnote&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#bengio2013estimating&quot;&gt;(Bengio et al., 2013)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-bengio2013estimating&quot;&gt;Bengio, Y., Léonard, N., &amp;amp; Courville, A. C. (2013). Estimating or Propagating Gradients Through Stochastic Neurons for Conditional Computation. &lt;i&gt;CoRR&lt;/i&gt;, &lt;i&gt;abs/1308.3432&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
 (basically, ignoring the rounding operation when computing gradients).
 I initialized all of the bias means \(\mu_i\) to 0, and the standard deviations \(\sigma_i\) to 1.
 &lt;/p&gt;
@@ -227,8 +439,8 @@ and the probability density for the search distribution is
 &lt;span class=&quot;math-mobile&quot;&gt;
 \[
 \begin{align*}
-&amp;P(\theta \mid \phi) = \\
-&amp;\left( \prod_{i=1}^N \sigma(x_i)^{w_i} (1 - \sigma(x_i))^{1 - w_i} \right) \\
+&amp;P(\theta \mid \phi) = \\\\
+&amp;\left( \prod_{i=1}^N \sigma(x_i)^{w_i} (1 - \sigma(x_i))^{1 - w_i} \right) \\\\
 &amp;\left( \prod_{i=1}^M \frac{1}{\sigma_i \sqrt{2 \pi}} \exp \left( -\frac{1}{2} \left( \frac{b_i - \mu_i}{\sigma_i} \right)^2 \right) \right)
 \end{align*}
 .
@@ -248,7 +460,7 @@ P(\theta \mid \phi) =
 
 &lt;p&gt;
 Natural ES kind of acts like a policy gradient algorithm, except the
-&amp;ldquo;policy&amp;rdquo; is the search distribution, and the &amp;ldquo;actions&amp;rdquo;
+&quot;policy&quot; is the search distribution, and the &quot;actions&quot;
 it takes are parameter vectors \( \theta \) for a model we try in the environment.
 The goal is to maximize the expected value of \( R(\theta) \), a function which
 accepts the parameters of an agent as input, runs that agent in the environment,
@@ -257,12 +469,18 @@ by updating \( \phi \) through gradient ascent.
 &lt;/p&gt;
 
 &lt;p&gt;
-This idea is often called &lt;a href=&quot;https://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=A64D1AE8313A364B814998E9E245B40A?doi=10.1.1.180.7104&amp;rep=rep1&amp;type=pdf&quot;&gt;Parameter-exploring Policy Gradients&lt;/a&gt;.
+This idea is often called Parameter-exploring Policy Gradients
+&lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#6154&quot;&gt;(Sehnke et al., 2010)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-6154&quot;&gt;Sehnke, F., Osendorfer, C., Rückstiess, T., Graves, A., Peters, J., &amp;amp; Schmidhuber, J. (2010). Parameter-exploring policy gradients. &lt;i&gt;Neural Networks&lt;/i&gt;, &lt;i&gt;21&lt;/i&gt;(4), 551–559.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+.
 To perform the update, we'll write
 &lt;span class=&quot;math-mobile&quot;&gt;
 \[
 \begin{align*}
-  &amp;\nabla_\phi \mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta)\right] = \\
+  &amp;\nabla_\phi \mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta)\right] = \\\\
   &amp;\mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta ) \nabla_\phi \log P(\theta \mid \phi )\right]
 \end{align*}
 \]
@@ -276,8 +494,14 @@ To perform the update, we'll write
 using the &lt;a href=&quot;https://andrewcharlesjones.github.io/posts/2020/02/log-derivative/&quot;&gt;log-derivative trick&lt;/a&gt;,
 and estimate this expectation with a finite Monte Carlo sample of models from the search distribution.
 If this looks almost identical to REINFORCE,
-that's because it is &amp;mdash; the idea of updating a search distribution like this
-was proposed in the &lt;a href=&quot;https://people.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf&quot;&gt;REINFORCE paper&lt;/a&gt;.
+that's because it is --- the idea of updating a search distribution like this
+was proposed in the original REINFORCE paper
+&lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#10.1007/BF00992696&quot;&gt;(Williams, 1992)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-10.1007/BF00992696&quot;&gt;Williams, R. J. (1992). Simple Statistical Gradient-Following Algorithms for Connectionist Reinforcement Learning. &lt;i&gt;Mach. Learn.&lt;/i&gt;, &lt;i&gt;8&lt;/i&gt;(3–4), 229–256. https://doi.org/10.1007/BF00992696&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+.
 &lt;/p&gt;
 
 &lt;p&gt;
@@ -285,8 +509,8 @@ Because the search distribution is totally separable, we can compute each
 parameter gradient separately. So, the gradients we need are the following:
 \[
 \begin{align*}
-&amp;\frac{\partial}{\partial \mu_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{b_i - \mu_i}{\sigma_i^2} \\
-&amp;\frac{\partial}{\partial \sigma_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{(b_i - \mu_i)^2 - \sigma_i^2}{\sigma_i^3} \\
+&amp;\frac{\partial}{\partial \mu_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{b_i - \mu_i}{\sigma_i^2} \\\\
+&amp;\frac{\partial}{\partial \sigma_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{(b_i - \mu_i)^2 - \sigma_i^2}{\sigma_i^3} \\\\
 &amp;\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) = w_i - \sigma(x_i).
 \end{align*}
 \]
@@ -319,7 +543,7 @@ I was consistently surprised by just how fast binary neural networks are in prac
 A two-layer, 64-unit-wide binary network clocked
 in at 500,000 forward passes per second on my laptop's CPU, 25 times faster
 than an equivalent model in PyTorch. Training on easy problems like CartPole
-was quick too &amp;mdash; the model
+was quick too --- the model
 at the start of this article trained in under one minute on CPU.
 &lt;/p&gt;
 
@@ -327,7 +551,7 @@ at the start of this article trained in under one minute on CPU.
 For fast learning, I found it essential to represent the observations from
 the environment in a good way. This was particularly tricky because the model
 only accepts binary vectors as input. For CartPole, it was sufficient to put
-objects' positions and velocities into one of several &amp;ldquo;bins,&amp;rdquo; but
+objects' positions and velocities into one of several &quot;bins,&quot; but
 making progress on other environments required more careful feature engineering.
 I also tried training the model from the raw binary encodings of the positions
 and velocities, but that didn't work at all.
@@ -408,7 +632,7 @@ Adaptation ES, but they require second-order information that's intractible to c
 High-dimensional gradients are really amazing.
 Part of deep learning's success is that even for models with millions of parameters,
 the gradient tells each of them how to change and coordinate.
-Evolution strategies don't share this scalability, though &amp;mdash; they explore parameter space by
+Evolution strategies don't share this scalability, though --- they explore parameter space by
 testing a few random directions around the current solution.
 This leads to high-variance gradient estimates as the dimensionality of the
 search space grows.
@@ -434,8 +658,14 @@ may provide a more computationally-tractable way of training RL agents.
 
 &lt;p&gt;
 Building on
-&lt;a href=&quot;https://openai.com/blog/evolution-strategies/&quot;&gt;prior work that
-  investigates scaling ES in a distributed setting&lt;/a&gt;, this project takes a
+prior work that investigates scaling ES in a distributed setting
+&lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#salimans2017evolution&quot;&gt;(Salimans et al., 2017)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-salimans2017evolution&quot;&gt;Salimans, T., Ho, J., Chen, X., Sidor, S., &amp;amp; Sutskever, I. (2017). &lt;i&gt;Evolution Strategies as a Scalable Alternative to Reinforcement Learning&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+,
+this project takes a
 complementary approach: improving the efficiency of each experience-gathering agent.
 I used the derivative-free nature of ES to train binary neural networks
 without approximating backpropagated gradients. While I've only been able
@@ -459,8 +689,8 @@ If \( w_i = 1 \), then
 \[
 \begin{align*}
   \frac{\partial}{\partial x_i} \log P(w_i \mid x_i)
-  &amp;= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\
-  &amp;= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &amp;= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\\\
+  &amp;= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &amp;=  1 - \sigma(x_i).
 \end{align*}
 \]
@@ -468,9 +698,9 @@ If \( w_i = 1 \), then
 &lt;span class=&quot;math-mobile&quot;&gt;
 \[
 \begin{align*}
-  &amp;\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\
-  &amp;= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\
-  &amp;= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &amp;\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\\\
+  &amp;= \frac{\partial}{\partial x_i} \log \sigma(x_i) \\\\
+  &amp;= \frac{1}{\sigma(x_i)} \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &amp;=  1 - \sigma(x_i).
 \end{align*}
 \]
@@ -480,8 +710,8 @@ If \( w_i = 0 \), then
 \[
 \begin{align*}
   \frac{\partial}{\partial x_i} \log P(w_i \mid x_i)
-  &amp;= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\
-  &amp;= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &amp;= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\\\
+  &amp;= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &amp;= -\sigma(x_i).
 \end{align*}
 \]
@@ -489,9 +719,9 @@ If \( w_i = 0 \), then
 &lt;span class=&quot;math-mobile&quot;&gt;
 \[
 \begin{align*}
-  &amp;\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\
-  &amp;= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\
-  &amp;= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\
+  &amp;\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) \\\\
+  &amp;= \frac{\partial}{\partial x_i} \log (1 - \sigma(x_i)) \\\\
+  &amp;= \frac{1}{1 - \sigma(x_i)} \cdot -1 \cdot \sigma(x_i) (1 - \sigma(x_i)) \\\\
   &amp;= -\sigma(x_i).
 \end{align*}
 \]
@@ -499,73 +729,73 @@ If \( w_i = 0 \), then
 So, we can write \( \frac{\partial}{\partial x_i} \log P(w_i \mid x_i ) = w_i - \sigma(x_i). \)
 &lt;/p&gt;
 
-
 &lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
 &lt;ol&gt;
-  &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-1&quot;&gt;Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. &lt;a href='https://arxiv.org/pdf/1603.05279.pdf'&gt;XNOR-Net&lt;/a&gt; is a good
-paper for getting an overview of this kind of work.&lt;/span&gt; &lt;a href=&quot;#footnote-1-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
 
-&lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-2&quot;&gt;In notation:
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-1&quot;&gt;Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. &lt;a href='#rastegari2016xnornet'&gt;XNOR-Net&lt;/a&gt; is a good
+paper for getting an overview of this kind of work.&lt;/span&gt; &lt;a href=&quot;#footnote-1-inline&quot;&gt;↩&lt;/a&gt;
+  &lt;/li&gt;
+
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-2&quot;&gt;In notation:
 \[
 \begin{align*}
 \vec{a} \cdot \vec{b}
-&amp;= \sum_{i=1}^N a_i b_i \\
-&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} + -\textbf{1}_{a_1 \neq b_i} \\
-&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} -\sum_{i=1}^N \textbf{1}_{a_1 \neq b_i} \\
+&amp;= \sum_{i=1}^N a_i b_i \\\\
+&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} + -\textbf{1}_{a_1 \neq b_i} \\\\
+&amp;= \sum_{i=1}^N \textbf{1}_{a_i = b_i} -\sum_{i=1}^N \textbf{1}_{a_1 \neq b_i} \\\\
 &amp;= 2 \sum_{i=1}^N \textbf{1}_{a_i = b_i} - N,
 \end{align*}
 \]
 where \(\textbf{1}\) is an indicator function and the last equality holds because
 the equality condition partitions the bits.
 &lt;/span&gt; &lt;a href=&quot;#footnote-2-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+  &lt;/li&gt;
 
-&lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-3&quot;&gt;During the backward pass, the gradient of the loss with respect to the
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-3&quot;&gt;During the backward pass, the gradient of the loss with respect to the
 binarized weights is computed with standard backpropagation, and that gradient
 is applied to the floating-point weights as an approximation to the true gradient.
 You could think of this as the
 &lt;a href='https://arxiv.org/abs/1308.3432'&gt;straight-through gradient estimator&lt;/a&gt;
 for a nondifferentiable &amp;ldquo;binarize layer.&amp;rdquo;&lt;/span&gt; &lt;a href=&quot;#footnote-3-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+  &lt;/li&gt;
 
-&lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-4&quot;&gt;This section only briefly covers how evolution strategies work at a
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-4&quot;&gt;This section only briefly covers how evolution strategies work at a
 high level. For dedicated explanations of the theory and popular variants of the algorithm, I
 recommend the excellent posts by
 &lt;a href='https://blog.otoro.net/2017/10/29/visual-evolution-strategies/'&gt;hardmaru&lt;/a&gt;
 and
 &lt;a href='https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html'&gt;Lilian Weng&lt;/a&gt;.&lt;/span&gt; &lt;a href=&quot;#footnote-4-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+  &lt;/li&gt;
 
-&lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-5&quot;&gt;I'm not actually so sure this is a good thing. While the authors argue
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-5&quot;&gt;I'm not actually so sure this is a good thing. While the authors argue
 that this helps reduce variance when actions have long-term consequences,
 I do think  there's plenty of training signal available if we can figure
 out which actions lead to which consequences.&lt;/span&gt; &lt;a href=&quot;#footnote-5-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+  &lt;/li&gt;
 
-&lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-6&quot;&gt;Intuitively, the natural gradient is like the regular gradient, but where
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-6&quot;&gt;Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
 they change the resulting probability distribution over solutions.&lt;/span&gt; &lt;a href=&quot;#footnote-6-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+  &lt;/li&gt;
 
-&lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-7&quot;&gt;Note that these are parameters that define the distribution, &lt;em&gt;not&lt;/em&gt;
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-7&quot;&gt;Note that these are parameters that define the distribution, &lt;em&gt;not&lt;/em&gt;
 parameters of a neural network (which we sample from that distribution).
 We'll be taking gradients with respect to \(\phi\), the parameters of the
 search distribution, but our original model parameterized by \(\theta\) can
 still be nondifferentiable.&lt;/span&gt; &lt;a href=&quot;#footnote-7-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+  &lt;/li&gt;
 
-&lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-8&quot;&gt;Beware one possible point of confusion: I'm using \( \sigma \) for both
+  &lt;li class=&quot;footnote-bottom&quot;&gt;
+    &lt;span id=&quot;footnote-8&quot;&gt;Beware one possible point of confusion: I'm using \( \sigma \) for both
 the sigmoid function and standard deviation parameters.&lt;/span&gt; &lt;a href=&quot;#footnote-8-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+  &lt;/li&gt;
 
 &lt;/ol&gt;</content><author><name>Aidan Swope</name></author><category term="Project" /><category term="Reinforcement learning" /><category term="Efficient machine learning" /><summary type="html">The neural network balancing this pole is 600 bytes and runs at 500,000 forward passes per second on CPU.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://aidanswope.com/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" /><media:content medium="image" url="https://aidanswope.com/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Generating Musical Accompaniment with a Variational Autoencoder</title><link href="https://aidanswope.com/accompaniment" rel="alternate" type="text/html" title="Generating Musical Accompaniment with a Variational Autoencoder" /><published>2020-08-09T00:00:00-07:00</published><updated>2020-08-09T00:00:00-07:00</updated><id>https://aidanswope.com/accompaniment</id><content type="html" xml:base="https://aidanswope.com/accompaniment">&lt;p&gt;
 &lt;em&gt;
@@ -578,8 +808,12 @@ This was the final project for
 &lt;/p&gt;
 
 &lt;p&gt;
-Generative machine learning models have famously been used to create new media from scratch, but an even more exciting possibility involves humans collaborating with algorithms throughout the creative process.&lt;span class=&quot;footnote&quot; id=&quot;footnote-1-inline&quot;&gt;&lt;a href=&quot;#footnote-1&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;A &lt;a href='https://distill.pub/2017/aia/'&gt;really cool article&lt;/a&gt; by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &amp;ldquo;artificial intelligence augmentation&amp;rdquo; through interacting with generative models.&lt;/span&gt;&lt;/span&gt;
-
+Generative machine learning models have famously been used to create new media from scratch, but an even more exciting possibility involves humans collaborating with algorithms throughout the creative process &lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#carter2017using&quot;&gt;(Carter &amp;amp; Nielsen, 2017)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-carter2017using&quot;&gt;Carter, S., &amp;amp; Nielsen, M. (2017). Using Artificial Intelligence to Augment Human Intelligence. &lt;i&gt;Distill&lt;/i&gt;. https://doi.org/10.23915/distill.00009&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+.
 While generative models are increasingly able to generate convincing images, audio, and text, human input is valuable to choose properties we want the final result to have and to incorporate parts of the human experience we haven't (yet) been able to train our models to understand.
 &lt;/p&gt;
 
@@ -651,7 +885,12 @@ While this project uses a restricted subset of MIDI
 and the samples therefore always sound a little elevator&amp;#8209;music&amp;#8209;y,
 we believe that this approach would scale well to larger,
 more sophisticated latent variable models, such as
-&lt;a href=&quot;&quot;&gt;OpenAI's Jukebox&lt;/a&gt;.
+&lt;a href=&quot;&quot;&gt;OpenAI's Jukebox&lt;/a&gt; &lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#dhariwal2020jukebox&quot;&gt;(Dhariwal et al., 2020)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-dhariwal2020jukebox&quot;&gt;Dhariwal, P., Jun, H., Payne, C., Kim, J. W., Radford, A., &amp;amp; Sutskever, I. (2020). &lt;i&gt;Jukebox: A Generative Model for Music&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+.
 &lt;/p&gt;
 
 &lt;h2 id=&quot;overview&quot;&gt;Model Overview&lt;/h2&gt;
@@ -667,14 +906,19 @@ Before getting into the details, here's a brief overview of how the model works 
   height=&quot;auto&quot; /&gt;
 
 &lt;p&gt;
-The core of the model is &lt;a href=&quot;https://magenta.tensorflow.org/music-vae&quot;&gt;MusicVAE&lt;/a&gt;, a pretrained model created by &lt;a href=&quot;https://magenta.tensorflow.org/&quot;&gt;Magenta&lt;/a&gt;.
+The core of the model is &lt;a href=&quot;https://magenta.tensorflow.org/music-vae&quot;&gt;MusicVAE&lt;/a&gt; &lt;span class=&quot;footnote&quot;
+  
+  style=&quot;margin-right: -4px&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#roberts2019hierarchical&quot;&gt;(Roberts et al., 2019)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-roberts2019hierarchical&quot;&gt;Roberts, A., Engel, J., Raffel, C., Hawthorne, C., &amp;amp; Eck, D. (2019). &lt;i&gt;A Hierarchical Latent Vector Model for Learning Long-Term Structure in Music&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+, a pretrained model created by &lt;a href=&quot;https://magenta.tensorflow.org/&quot;&gt;Magenta&lt;/a&gt;.
 MusicVAE consists of an encoder, which transforms pieces of music into latent variables which capture properties of that music in a simpler compressed form, and a decoder which transforms latent variables back into music.
-Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums, and bass, with extra features like time signature changes stripped.&lt;span class=&quot;footnote&quot; id=&quot;footnote-2-inline&quot;&gt;&lt;a href=&quot;#footnote-2&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;As a result, the model doesn't work very well on music using these features.&lt;/span&gt;&lt;/span&gt;
+Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums, and bass, with extra features like time signature changes stripped.&lt;span class=&quot;footnote&quot; id=&quot;footnote-1-inline&quot;&gt;&lt;a href=&quot;#footnote-1&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;As a result, the model doesn't work very well on music using these features.&lt;/span&gt;&lt;/span&gt;
 
 &lt;/p&gt;
 
 &lt;p&gt;
-Because we want to generate the accompaniment given a new melody, we train a &amp;ldquo;surrogate encoder&amp;rdquo; to mimic the original MusicVAE encoder, while only having access to the melody.
+Because we want to generate the accompaniment given a new melody, we train a &quot;surrogate encoder&quot; to mimic the original MusicVAE encoder, while only having access to the melody.
 Given a dataset of three-track music, we use the MusicVAE encoder to produce a latent representation for each song, then strip out the drums and bass and train the surrogate encoder to predict the latent variables from the melody alone.
 Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody's (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.
 &lt;/p&gt;
@@ -685,18 +929,18 @@ MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outsi
 For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler and smaller way, as a collection of latent variables.
 In our case, a MIDI song might take 20 KB to store, but its latent representation is a vector of 512 floating-point numbers, a compression ratio of ten.
 Despite being much smaller, the latent variables are expected to capture most of the high-level properties of the music, like genre, key, time, and timings for particular events.
-This is possible because music has patterns that enable it to be described succinctly &amp;mdash; you could get a passable reconstruction of some drum parts by just asking a drummer to &amp;ldquo;play a swing beat.&amp;rdquo;
+This is possible because music has patterns that enable it to be described succinctly --- you could get a passable reconstruction of some drum parts by just asking a drummer to &quot;play a swing beat.&quot;
 &lt;/p&gt;
 
 &lt;p&gt;
-Furthermore, latent representations are presumed to live in some &amp;ldquo;latent space,&amp;rdquo; about which we make some very strong assumptions.
-The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent two songs that sound very similar.&lt;span class=&quot;footnote&quot; id=&quot;footnote-3-inline&quot;&gt;&lt;a href=&quot;#footnote-3&quot;&gt;&lt;sup&gt;3&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space.&lt;/span&gt;&lt;/span&gt;
+Furthermore, latent representations are presumed to live in some &quot;latent space,&quot; about which we make some very strong assumptions.
+The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent two songs that sound very similar.&lt;span class=&quot;footnote&quot; id=&quot;footnote-2-inline&quot;&gt;&lt;a href=&quot;#footnote-2&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space.&lt;/span&gt;&lt;/span&gt;
 
-Directions are often meaningful in latent space; the authors of MusicVAE found that &lt;a href=&quot;https://magenta.tensorflow.org/music-vae#long-term-structure&quot;&gt;they could move songs in an &amp;ldquo;add note density&amp;rdquo; direction&lt;/a&gt; to maintain the character of a song but with more notes.
+Directions are often meaningful in latent space; the authors of MusicVAE found that &lt;a href=&quot;https://magenta.tensorflow.org/music-vae#long-term-structure&quot;&gt;they could move songs in an &quot;add note density&quot; direction&lt;/a&gt; to maintain the character of a song but with more notes.
 &lt;/p&gt;
 
 &lt;p&gt;
-Most importantly, the latent space has a squished and twisted shape (relative to the data's shape) such that real music appears Gaussian-distributed in this space.&lt;span class=&quot;footnote&quot; id=&quot;footnote-4-inline&quot;&gt;&lt;a href=&quot;#footnote-4&quot;&gt;&lt;sup&gt;4&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space.&lt;/span&gt;&lt;/span&gt;
+Most importantly, the latent space has a squished and twisted shape (relative to the data's shape) such that real music appears Gaussian-distributed in this space.&lt;span class=&quot;footnote&quot; id=&quot;footnote-3-inline&quot;&gt;&lt;a href=&quot;#footnote-3&quot;&gt;&lt;sup&gt;3&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space.&lt;/span&gt;&lt;/span&gt;
 
 This means that when you sample latent vectors from a Gaussian, they likely correspond to songs that sound reasonable, and conversely real songs frequently map to vectors near the origin.
 If you were to pick any direction in latent space, find the latent vector corresponding to every popular song and project those vectors onto this direction, then plot a histogram of the resulting values, that histogram should form a standard normal bell curve.
@@ -714,7 +958,7 @@ Given a dataset of media, the encoder and decoder learn to create this very spec
 &lt;h2 id=&quot;predicting-latents&quot;&gt;Predicting Latent Variables from a Melody&lt;/h2&gt;
 
 &lt;p&gt;
-A lot of the things we want our latent variables to capture &amp;mdash; what the song's genre is, when solos start and end, etc. &amp;mdash; are present in all three parts of the original music.
+A lot of the things we want our latent variables to capture --- what the song's genre is, when solos start and end, etc. --- are present in all three parts of the original music.
 When a bass solo starts, the drummer might play a simpler pattern and the melody might stop playing altogether.
 When it ends, the drummer doesn't need to know much about the details of the solo to play an appropriate fill.
 In this sense, the original music is an &lt;em&gt;overcomplete representation&lt;/em&gt;, which is why we're able to compress it so much in the latent space.
@@ -729,9 +973,9 @@ In this sense, the original music is an &lt;em&gt;overcomplete representation&lt
 
 &lt;p&gt;
 That also means that many properties of a full song's latent representation can be inferred from just one of the parts.
-In the plot above, the surrogate encoder and MusicVAE decoder try to reconstruct the theme from &amp;ldquo;New York, New York&amp;rdquo; from just Frank Sinatra's part.
+In the plot above, the surrogate encoder and MusicVAE decoder try to reconstruct the theme from &quot;New York, New York&quot; from just Frank Sinatra's part.
 Red bars are the melody, blue are the bass, and brown are drums.
-The model certainly can't predict the original accompaniment, and it doesn't even recreate the melody (which the surrogate encoder has access to) &amp;mdash; that's why we stitch the original melody back in as the last step.
+The model certainly can't predict the original accompaniment, and it doesn't even recreate the melody (which the surrogate encoder has access to) --- that's why we stitch the original melody back in as the last step.
 However, it has correctly inferred a swing beat for the drums, works around important timings in the song, and plays the bass in key.
 This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.
 &lt;/p&gt;
@@ -739,7 +983,17 @@ This means that the original MusicVAE encoder learned to encode properties like 
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 &lt;p&gt;
 Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative tasks.
-However, with some impressive recent results generating &lt;a href=&quot;https://arxiv.org/pdf/1906.00446.pdf&quot;&gt;high-resolution images&lt;/a&gt; and &lt;a href=&quot;https://openai.com/blog/jukebox/&quot;&gt;raw audio&lt;/a&gt; with more sophisticated VAEs, variational methods are making something of a comeback.
+However, with some impressive recent results generating high-resolution images
+&lt;span class=&quot;footnote&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#razavi2019generating&quot;&gt;(Razavi et al., 2019)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-razavi2019generating&quot;&gt;Razavi, A., van den Oord, A., &amp;amp; Vinyals, O. (2019). &lt;i&gt;Generating Diverse High-Fidelity Images with VQ-VAE-2&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+and raw audio
+&lt;span class=&quot;footnote&quot;
+  
+&gt;&lt;a class=&quot;citation&quot; href=&quot;#dhariwal2020jukebox&quot;&gt;(Dhariwal et al., 2020)&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;&lt;span id=&quot;inline-dhariwal2020jukebox&quot;&gt;Dhariwal, P., Jun, H., Payne, C., Kim, J. W., Radford, A., &amp;amp; Sutskever, I. (2020). &lt;i&gt;Jukebox: A Generative Model for Music&lt;/i&gt;.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+with more sophisticated VAEs, variational methods are making something of a comeback.
 Hopefully this post illustrates some of the cool things you can do with an explicit and controllable latent space.
 &lt;/p&gt;
 
@@ -750,20 +1004,17 @@ And if you find any mistakes, errors, or points of confusion, please let me know
 
 &lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
 &lt;ol&gt;
-  &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-1&quot;&gt;A &lt;a href='https://distill.pub/2017/aia/'&gt;really cool article&lt;/a&gt; by Shan Carter and Michael Nielsen discusses in much greater depth the idea of &amp;ldquo;artificial intelligence augmentation&amp;rdquo; through interacting with generative models.&lt;/span&gt; &lt;a href=&quot;#footnote-1-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
 
   &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-2&quot;&gt;As a result, the model doesn't work very well on music using these features.&lt;/span&gt; &lt;a href=&quot;#footnote-2-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+    &lt;span id=&quot;footnote-1&quot;&gt;As a result, the model doesn't work very well on music using these features.&lt;/span&gt; &lt;a href=&quot;#footnote-1-inline&quot;&gt;↩&lt;/a&gt;
+  &lt;/li&gt;
 
   &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-3&quot;&gt;The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space.&lt;/span&gt; &lt;a href=&quot;#footnote-3-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+    &lt;span id=&quot;footnote-2&quot;&gt;The two songs may not have any notes in common, though! Distances and directions are more meaningful in latent space than they are in data space.&lt;/span&gt; &lt;a href=&quot;#footnote-2-inline&quot;&gt;↩&lt;/a&gt;
+  &lt;/li&gt;
 
   &lt;li class=&quot;footnote-bottom&quot;&gt;
-  &lt;span id=&quot;footnote-4&quot;&gt;This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space.&lt;/span&gt; &lt;a href=&quot;#footnote-4-inline&quot;&gt;↩&lt;/a&gt;
-&lt;/li&gt;
+    &lt;span id=&quot;footnote-3&quot;&gt;This is actually an oversimplification. While ours is Gaussian, VAEs often use other distributions for the latent space.&lt;/span&gt; &lt;a href=&quot;#footnote-3-inline&quot;&gt;↩&lt;/a&gt;
+  &lt;/li&gt;
 
 &lt;/ol&gt;</content><author><name>Aidan Swope</name></author><category term="Project" /><category term="Generative models" /><summary type="html">This was the final project for an undergraduate class on deep probabilistic models, and was built with Brendan Hollaway, Anthony Bao, and Hongsen Qin.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://aidanswope.com/assets/pages/posts/accompaniment/accompany-teaser.png" /><media:content medium="image" url="https://aidanswope.com/assets/pages/posts/accompaniment/accompany-teaser.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
