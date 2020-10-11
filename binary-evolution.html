@@ -202,7 +202,7 @@
     <a href="https://github.com/maxwells-daemons/genome">
       <!-- terminal icon from https://heroicons.dev/ -->
       <svg fill="currentColor" viewbox="0 0 20 20" width="1em"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
-      View code
+      Code
     </a>
   </li>
   
@@ -249,6 +249,7 @@
   <li><a href="#conclusion">Conclusion</a></li>
   <li><a href="#appendix">Appendix: Deriving the Gradient of Binary Weight Probabilities</a></li>
   <li><a href="#footnotes">Footnotes</a></li>
+  <li><a href="#references">References</a></li>
 </ul>
 
     </nav>
@@ -1958,6 +1959,8 @@ And if you notice anything about this post that could be improved,
 please let me know!
 </p>
 
+<hr>
+
 <h2 id="appendix">Appendix: Deriving the Gradient of Binary Weight Probabilities</h2>
 <p>
 If <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="6.725ex" height="2.509ex" viewbox="0 -791.3 2895.4 1080.4" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-54-Title" class=" mathjax-inline-f2702d65ab5f1fc9">
@@ -2551,12 +2554,13 @@ So, we can write <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/x
 </svg></span>
 </p>
 
+<hr>
 <h2 id="footnotes">Footnotes</h2>
 <ol>
 
   <li class="footnote-bottom">
     <span id="footnote-1">Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href="#rastegari2016xnornet">XNOR-Net</a> is a good
-paper for getting an overview of this kind of work.</span> <a href="#footnote-1-inline">↩</a>
+paper for getting an overview of this kind of work.</span> <a class="footnote-return" href="#footnote-1-inline">↩</a>
   </li>
 
   <li class="footnote-bottom">
@@ -2728,7 +2732,7 @@ where <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width
 </g>
 </svg></span> is an indicator function and the last equality holds because
 the equality condition partitions the bits.
-</span> <a href="#footnote-2-inline">↩</a>
+</span> <a class="footnote-return" href="#footnote-2-inline">↩</a>
   </li>
 
   <li class="footnote-bottom">
@@ -2737,7 +2741,7 @@ binarized weights is computed with standard backpropagation, and that gradient
 is applied to the floating-point weights as an approximation to the true gradient.
 You could think of this as the
 <a href="https://arxiv.org/abs/1308.3432">straight-through gradient estimator</a>
-for a nondifferentiable “binarize layer.”</span> <a href="#footnote-3-inline">↩</a>
+for a nondifferentiable “binarize layer.”</span> <a class="footnote-return" href="#footnote-3-inline">↩</a>
   </li>
 
   <li class="footnote-bottom">
@@ -2746,20 +2750,20 @@ high level. For dedicated explanations of the theory and popular variants of the
 recommend the excellent posts by
 <a href="https://blog.otoro.net/2017/10/29/visual-evolution-strategies/">hardmaru</a>
 and
-<a href="https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html">Lilian Weng</a>.</span> <a href="#footnote-4-inline">↩</a>
+<a href="https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html">Lilian Weng</a>.</span> <a class="footnote-return" href="#footnote-4-inline">↩</a>
   </li>
 
   <li class="footnote-bottom">
     <span id="footnote-5">I’m not actually so sure this is a good thing. While the authors argue
 that this helps reduce variance when actions have long-term consequences,
 I do think  there’s plenty of training signal available if we can figure
-out which actions lead to which consequences.</span> <a href="#footnote-5-inline">↩</a>
+out which actions lead to which consequences.</span> <a class="footnote-return" href="#footnote-5-inline">↩</a>
   </li>
 
   <li class="footnote-bottom">
     <span id="footnote-6">Intuitively, the natural gradient is like the regular gradient, but where
 the distance between two points in parameter space is measured by how much
-they change the resulting probability distribution over solutions.</span> <a href="#footnote-6-inline">↩</a>
+they change the resulting probability distribution over solutions.</span> <a class="footnote-return" href="#footnote-6-inline">↩</a>
   </li>
 
   <li class="footnote-bottom">
@@ -2777,7 +2781,7 @@ search distribution, but our original model parameterized by <span class="mjpage
  <use xlink:href="#MJMATHI-3B8" x="0" y="0"></use>
 </g>
 </svg></span> can
-still be nondifferentiable.</span> <a href="#footnote-7-inline">↩</a>
+still be nondifferentiable.</span> <a class="footnote-return" href="#footnote-7-inline">↩</a>
   </li>
 
   <li class="footnote-bottom">
@@ -2787,17 +2791,18 @@ still be nondifferentiable.</span> <a href="#footnote-7-inline">↩</a>
  <use xlink:href="#MJMATHI-3C3" x="0" y="0"></use>
 </g>
 </svg></span> for both
-the sigmoid function and standard deviation parameters.</span> <a href="#footnote-8-inline">↩</a>
+the sigmoid function and standard deviation parameters.</span> <a class="footnote-return" href="#footnote-8-inline">↩</a>
   </li>
 
 </ol>
 
 
 
-    
-    
-    <h2 id="references">References</h2>
-    <ol class="bibliography">
+
+
+<hr>
+<h2 id="references">References</h2>
+<ol class="bibliography">
 <li>
 <a class="reference" href="https://blog.openai.com/openai-five/">
 
@@ -2863,11 +2868,11 @@ the sigmoid function and standard deviation parameters.</span> <a href="#footnot
 
 </li>
 </ol>
-    
 
-    
-    <hr>
-<p>Cite as:</p>
+
+
+<hr>
+<p>BibTeX:</p>
 <div id="citation">
 <figure class="highlight"><pre><code class="language-language-plaintext" data-lang="language-plaintext">@misc{‎swope2020binaryEvolutionStrategies,
   title   = "Compute-Efficient Reinforcement Learning with Binary Evolution Strategies",
@@ -2878,7 +2883,8 @@ the sigmoid function and standard deviation parameters.</span> <a href="#footnot
 }</code></pre></figure>
 </div>
 
-    
+
+
     </div>
   </article>
 
