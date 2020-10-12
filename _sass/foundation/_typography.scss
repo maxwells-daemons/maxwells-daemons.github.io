@@ -53,6 +53,16 @@ h3 {
   margin-bottom: 0;
 }
 
+a.section-anchor:link, a.section-anchor:visited {
+  color: $color-text;
+  text-decoration: none;
+}
+
+a.section-anchor:hover, a.section-anchor:active {
+  color: $color-text;
+  border-bottom: 1px solid $color-section-link;
+}
+
 // Increase the vertical space between a paragraph and a heading
 p + h1, p + h2, ol + h1, ol + h2, ul + h1, ul + h2 {
   margin-top: 2 * $vertical-rhythm;

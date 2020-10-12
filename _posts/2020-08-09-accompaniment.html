@@ -108,7 +108,7 @@ more sophisticated latent variable models, such as
 <a href="">OpenAI's Jukebox</a> {% include cite-inline.html citation="dhariwal2020jukebox" nospace=true %}.
 </p>
 
-<h2 id="overview">Model Overview</h2>
+{% include section-h2.html title="Model Overview" %}
 <p>
 Before getting into the details, here's a brief overview of how the model works at a high level.
 </p>
@@ -132,7 +132,7 @@ Given a dataset of three-track music, we use the MusicVAE encoder to produce a l
 Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody's (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.
 </p>
 
-<h2 id="latents-and-vaes">Variational Autoencoders and Latent Space</h2>
+{% include section-h2.html title="Variational Autoencoders and Latent Space" %}
 <p>
 MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outside of the scope of this project writeup, but for an introduction I recommend <a href="https://jaan.io/what-is-variational-autoencoder-vae-tutorial/">Jaan Altosaar's tutorial</a>.
 For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler and smaller way, as a collection of latent variables.
@@ -162,7 +162,7 @@ What is most remarkable is that variational autoencoders are trained <em>unsuper
 Given a dataset of media, the encoder and decoder learn to create this very special latent space with no additional supervision.
 </p>
 
-<h2 id="predicting-latents">Predicting Latent Variables from a Melody</h2>
+{% include section-h2.html title="Predicting Latent Variables from a Melody" %}
 
 <p>
 A lot of the things we want our latent variables to capture --- what the song's genre is, when solos start and end, etc. --- are present in all three parts of the original music.
@@ -187,7 +187,7 @@ However, it has correctly inferred a swing beat for the drums, works around impo
 This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.
 </p>
 
-<h2 id="conclusion">Conclusion</h2>
+{% include section-h2.html title="Conclusion" %}
 <p>
 Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative tasks.
 However, with some impressive recent results generating high-resolution images

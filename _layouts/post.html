@@ -6,7 +6,7 @@ layout: post_wrapper
 {% capture cited_count %}{% bibliography_count --cited %}{% endcapture %}
 {% if cited_count != "0" %}
 <hr>
-<h2 id="references">References</h2>
+{% include section-h2.html title="References" %}
 {% bibliography --cited_in_order %}
 {% endif %}
 

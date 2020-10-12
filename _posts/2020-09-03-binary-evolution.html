@@ -57,7 +57,7 @@ binary models while offering its own advantages for reinforcement learning.
 </p>
 
 
-<h2 id="binary-neural-networks">Binary Neural Networks</h2>
+{% include section-h2.html title="Binary Neural Networks" %}
 
 <p>
 Binary neural networks have weights and activations constrained to values +1 or -1.{% include footnote-inline.html content="Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href='#rastegari2016xnornet'>XNOR-Net</a> is a good
@@ -78,7 +78,7 @@ SIMD instructions can operate very
 efficiently on "packed" vectors of this kind.
 </p>
 
-<h3 id="the-xnor-trick">The XNOR Trick</h3>
+{% include section-h3.html title="The XNOR Trick" %}
 
 
 <p>
@@ -123,7 +123,7 @@ up of dot products, this makes the forward pass of a binary neural network very 
 </p>
 
 
-<h3 id="training-binary-networks">Training Binary Networks</h3>
+{% include section-h3.html title="Training Binary Networks" %}
 
 <p>
 However, binary neural networks are discrete-valued, which precludes training them with gradient
@@ -148,7 +148,7 @@ directly, without gradient approximation or backpropagation. To do this, I used
 evolution strategies, a type of optimizer that does not require gradients.
 </p>
 
-<h2 id="evolution-strategies-for-binary-neural-networks">Evolution Strategies for Binary Neural Networks</h2>
+{% include section-h2.html title="Evolution Strategies for Binary Neural Networks" %}
 
 <p>
 Evolution strategies (ES) are a family of derivative-free optimizers that
@@ -210,7 +210,7 @@ still be nondifferentiable."
 and then performs gradient ascent on these parameters.
 </p>
 
-<h3 id="a-distribution-over-binary-neural-networks">A Distribution Over Binary Neural Networks</h3>
+{% include section-h3.html title="A Distribution Over Binary Neural Networks" %}
 
 <p>
 In this project, the search distribution is a distribution over the weights of binary neural networks.
@@ -272,7 +272,7 @@ P(\theta \mid \phi) =
 </span>
 </p>
 
-<h3 id="updating-the-search-distribution">Updating the Search Distribution</h3>
+{% include section-h3.html title="Updating the Search Distribution" %}
 
 <p>
 Natural ES kind of acts like a policy gradient algorithm, except the
@@ -326,7 +326,7 @@ during the forward pass and use the gradients computed at that point as
 an approximation to the true gradient.
 </p>
 
-<h3 id="the-complete-algorithm">The Complete Algorithm</h3>
+{% include section-h3.html title="The Complete Algorithm" %}
 
 <p>
 In summary, one iteration proceeds as follows:
@@ -340,9 +340,9 @@ In summary, one iteration proceeds as follows:
 </ul>
 </p>
 
-<h2 id="results">Results</h2>
+{% include section-h2.html title="Results" %}
 
-<h3 id="fast-learning-on-easy-problems">Fast Learning on Easy Problems</h3>
+{% include section-h3.html title="Fast Learning on Easy Problems" %}
 
 <p>
 I was consistently surprised by just how fast binary neural networks are in practice.
@@ -363,7 +363,7 @@ I also tried training the model from the raw binary encodings of the positions
 and velocities, but that didn't work at all.
 </p>
 
-<h3 id="failure-to-converge-on-hard-problems">Failure to Converge on Hard Problems</h3>
+{% include section-h3.html title="Failure to Converge on Hard Problems" %}
 
 <figure>
   <video controls>
@@ -383,9 +383,9 @@ for this.
 </p>
 
 
-<h2 id="limitations">Limitations</h2>
+{% include section-h2.html title="Limitations" %}
 
-<h3 id="variance-collapse">Variance Collapse</h3>
+{% include section-h3.html title="Variance Collapse" %}
 <p>
 The biggest issue I noticed was that binary weights stop exploring once they learn.
 When a parameter \( x_i \) grows large, weight \( w_i \) will be the same in
@@ -421,7 +421,7 @@ the model reliably finished training before it converged to a low-variance
 regime and stopped learning.
 </p>
 
-<h3 id="independendence-assumptions">Independence Assumptions</h3>
+{% include section-h3.html title="Independence Assumptions" %}
 <p>
 The search distribution I used makes strong independendence assumptions about
 the network parameters. The parameters definitely aren't independent,
@@ -432,7 +432,7 @@ that do consider covariance between the parameters, such as Covariance Matrix
 Adaptation ES, but they require second-order information that's intractible to compute for larger models.
 </p>
 
-<h3 id="high-dimensional-search-space">High-Dimensional Search Space</h3>
+{% include section-h3.html title="High-Dimensional Search Space" %}
 
 <p>
 High-dimensional gradients are really amazing.
@@ -453,7 +453,7 @@ in parameter space with ES becomes infeasible for the models required to solve
 some problems.
 </p>
 
-<h2 id="conclusion">Conclusion</h2>
+{% include section-h2.html title="Conclusion" %}
 <p>
 For reinforcement learning in challenging environments, massively distributed
 training across thousands of computers is currently the norm. As we begin to
@@ -485,7 +485,7 @@ please let me know!
 
 <hr>
 
-<h2 id="appendix">Appendix: Deriving the Gradient of Binary Weight Probabilities</h2>
+{% include section-h2.html title="Appendix: Deriving the Gradient of Binary Weight Probabilities" %}
 <p>
 If \( w_i = 1 \), then
 <span class="math-wide">
