@@ -217,39 +217,39 @@
       <h3 id="toc-header">Contents</h3>
       <ul id="table-of-contents">
   <li>
-<a href="#binary-neural-networks">Binary Neural Networks</a>
+<a href="#Binary%20Neural%20Networks">Binary Neural Networks</a>
     <ul>
-      <li><a href="#the-xnor-trick">The XNOR Trick</a></li>
-      <li><a href="#training-binary-networks">Training Binary Networks</a></li>
+      <li><a href="#The%20XNOR%20Trick">The XNOR Trick</a></li>
+      <li><a href="#Training%20Binary%20Networks">Training Binary Networks</a></li>
     </ul>
   </li>
   <li>
-<a href="#evolution-strategies-for-binary-neural-networks">Evolution Strategies for Binary Neural Networks</a>
+<a href="#Evolution%20Strategies%20for%20Binary%20Neural%20Networks">Evolution Strategies for Binary Neural Networks</a>
     <ul>
-      <li><a href="#a-distribution-over-binary-neural-networks">A Distribution Over Binary Neural Networks</a></li>
-      <li><a href="#updating-the-search-distribution">Updating the Search Distribution</a></li>
-      <li><a href="#the-complete-algorithm">The Complete Algorithm</a></li>
+      <li><a href="#A%20Distribution%20Over%20Binary%20Neural%20Networks">A Distribution Over Binary Neural Networks</a></li>
+      <li><a href="#Updating%20the%20Search%20Distribution">Updating the Search Distribution</a></li>
+      <li><a href="#The%20Complete%20Algorithm">The Complete Algorithm</a></li>
     </ul>
   </li>
   <li>
-<a href="#results">Results</a>
+<a href="#Results">Results</a>
     <ul>
-      <li><a href="#fast-learning-on-easy-problems">Fast Learning on Easy Problems</a></li>
-      <li><a href="#failure-to-converge-on-hard-problems">Failure to Converge on Hard Problems</a></li>
+      <li><a href="#Fast%20Learning%20on%20Easy%20Problems">Fast Learning on Easy Problems</a></li>
+      <li><a href="#Failure%20to%20Converge%20on%20Hard%20Problems">Failure to Converge on Hard Problems</a></li>
     </ul>
   </li>
   <li>
-<a href="#limitations">Limitations</a>
+<a href="#Limitations">Limitations</a>
     <ul>
-      <li><a href="#variance-collapse">Variance Collapse</a></li>
-      <li><a href="#independendence-assumptions">Independence Assumptions</a></li>
-      <li><a href="#high-dimensional-search-space">High-Dimensional Search Space</a></li>
+      <li><a href="#Variance%20Collapse">Variance Collapse</a></li>
+      <li><a href="#Independence%20Assumptions">Independence Assumptions</a></li>
+      <li><a href="#High-Dimensional%20Search%20Space">High-Dimensional Search Space</a></li>
     </ul>
   </li>
-  <li><a href="#conclusion">Conclusion</a></li>
-  <li><a href="#appendix">Appendix: Deriving the Gradient of Binary Weight Probabilities</a></li>
-  <li><a href="#footnotes">Footnotes</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#Conclusion">Conclusion</a></li>
+  <li><a href="#Appendix:%20Deriving%20the%20Gradient%20of%20Binary%20Weight%20Probabilities">Appendix: Deriving the Gradient of Binary Weight Probabilities</a></li>
+  <li><a href="#Footnotes">Footnotes</a></li>
+  <li><a href="#References">References</a></li>
 </ul>
 
     </nav>
@@ -292,7 +292,9 @@ binary models while offering its own advantages for reinforcement learning.
 </p>
 
 
-<h2 id="binary-neural-networks">Binary Neural Networks</h2>
+
+<h2 id="Binary%20Neural%20Networks"><a class="section-anchor" href="#Binary%20Neural%20Networks">Binary Neural Networks</a></h2>
+
 
 <p>
 Binary neural networks have weights and activations constrained to values +1 or -1.<span class="footnote" id="footnote-1-inline"><a href="#footnote-1"><sup>1</sup></a><span class="footnote-inner">Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. <a href="#rastegari2016xnornet">XNOR-Net</a> is a good
@@ -354,7 +356,9 @@ SIMD instructions can operate very
 efficiently on “packed” vectors of this kind.
 </p>
 
-<h3 id="the-xnor-trick">The XNOR Trick</h3>
+
+<h3 id="The%20XNOR%20Trick"><a class="section-anchor" href="#The%20XNOR%20Trick">The XNOR Trick</a></h3>
+
 
 
 <p>
@@ -700,7 +704,9 @@ up of dot products, this makes the forward pass of a binary neural network very 
 </p>
 
 
-<h3 id="training-binary-networks">Training Binary Networks</h3>
+
+<h3 id="Training%20Binary%20Networks"><a class="section-anchor" href="#Training%20Binary%20Networks">Training Binary Networks</a></h3>
+
 
 <p>
 However, binary neural networks are discrete-valued, which precludes training them with gradient
@@ -724,7 +730,9 @@ directly, without gradient approximation or backpropagation. To do this, I used
 evolution strategies, a type of optimizer that does not require gradients.
 </p>
 
-<h2 id="evolution-strategies-for-binary-neural-networks">Evolution Strategies for Binary Neural Networks</h2>
+
+<h2 id="Evolution%20Strategies%20for%20Binary%20Neural%20Networks"><a class="section-anchor" href="#Evolution%20Strategies%20for%20Binary%20Neural%20Networks">Evolution Strategies for Binary Neural Networks</a></h2>
+
 
 <p>
 Evolution strategies (ES) are a family of derivative-free optimizers that
@@ -793,7 +801,9 @@ still be nondifferentiable.</span></span>
 and then performs gradient ascent on these parameters.
 </p>
 
-<h3 id="a-distribution-over-binary-neural-networks">A Distribution Over Binary Neural Networks</h3>
+
+<h3 id="A%20Distribution%20Over%20Binary%20Neural%20Networks"><a class="section-anchor" href="#A%20Distribution%20Over%20Binary%20Neural%20Networks">A Distribution Over Binary Neural Networks</a></h3>
+
 
 <p>
 In this project, the search distribution is a distribution over the weights of binary neural networks.
@@ -1288,7 +1298,9 @@ P(\theta \mid \phi) =
 </span>
 </p>
 
-<h3 id="updating-the-search-distribution">Updating the Search Distribution</h3>
+
+<h3 id="Updating%20the%20Search%20Distribution"><a class="section-anchor" href="#Updating%20the%20Search%20Distribution">Updating the Search Distribution</a></h3>
+
 
 <p>
 Natural ES kind of acts like a policy gradient algorithm, except the
@@ -1671,7 +1683,9 @@ during the forward pass and use the gradients computed at that point as
 an approximation to the true gradient.
 </p>
 
-<h3 id="the-complete-algorithm">The Complete Algorithm</h3>
+
+<h3 id="The%20Complete%20Algorithm"><a class="section-anchor" href="#The%20Complete%20Algorithm">The Complete Algorithm</a></h3>
+
 
 <p>
 In summary, one iteration proceeds as follows:
@@ -1791,9 +1805,13 @@ In summary, one iteration proceeds as follows:
 </ul>
 <p></p>
 
-<h2 id="results">Results</h2>
 
-<h3 id="fast-learning-on-easy-problems">Fast Learning on Easy Problems</h3>
+<h2 id="Results"><a class="section-anchor" href="#Results">Results</a></h2>
+
+
+
+<h3 id="Fast%20Learning%20on%20Easy%20Problems"><a class="section-anchor" href="#Fast%20Learning%20on%20Easy%20Problems">Fast Learning on Easy Problems</a></h3>
+
 
 <p>
 I was consistently surprised by just how fast binary neural networks are in practice.
@@ -1814,7 +1832,9 @@ I also tried training the model from the raw binary encodings of the positions
 and velocities, but that didn’t work at all.
 </p>
 
-<h3 id="failure-to-converge-on-hard-problems">Failure to Converge on Hard Problems</h3>
+
+<h3 id="Failure%20to%20Converge%20on%20Hard%20Problems"><a class="section-anchor" href="#Failure%20to%20Converge%20on%20Hard%20Problems">Failure to Converge on Hard Problems</a></h3>
+
 
 <figure>
   <video controls="">
@@ -1834,9 +1854,13 @@ for this.
 </p>
 
 
-<h2 id="limitations">Limitations</h2>
 
-<h3 id="variance-collapse">Variance Collapse</h3>
+<h2 id="Limitations"><a class="section-anchor" href="#Limitations">Limitations</a></h2>
+
+
+
+<h3 id="Variance%20Collapse"><a class="section-anchor" href="#Variance%20Collapse">Variance Collapse</a></h3>
+
 <p>
 The biggest issue I noticed was that binary weights stop exploring once they learn.
 When a parameter <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="2.129ex" height="2.009ex" viewbox="0 -576.1 916.8 865.1" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-49-Title" class=" mathjax-inline-f2702d65ab5f1fc9">
@@ -1896,7 +1920,9 @@ the model reliably finished training before it converged to a low-variance
 regime and stopped learning.
 </p>
 
-<h3 id="independendence-assumptions">Independence Assumptions</h3>
+
+<h3 id="Independence%20Assumptions"><a class="section-anchor" href="#Independence%20Assumptions">Independence Assumptions</a></h3>
+
 <p>
 The search distribution I used makes strong independendence assumptions about
 the network parameters. The parameters definitely aren’t independent,
@@ -1907,7 +1933,9 @@ that do consider covariance between the parameters, such as Covariance Matrix
 Adaptation ES, but they require second-order information that’s intractible to compute for larger models.
 </p>
 
-<h3 id="high-dimensional-search-space">High-Dimensional Search Space</h3>
+
+<h3 id="High-Dimensional%20Search%20Space"><a class="section-anchor" href="#High-Dimensional%20Search%20Space">High-Dimensional Search Space</a></h3>
+
 
 <p>
 High-dimensional gradients are really amazing.
@@ -1928,7 +1956,9 @@ in parameter space with ES becomes infeasible for the models required to solve
 some problems.
 </p>
 
-<h2 id="conclusion">Conclusion</h2>
+
+<h2 id="Conclusion"><a class="section-anchor" href="#Conclusion">Conclusion</a></h2>
+
 <p>
 For reinforcement learning in challenging environments, massively distributed
 training across thousands of computers is currently the norm. As we begin to
@@ -1961,7 +1991,9 @@ please let me know!
 
 <hr>
 
-<h2 id="appendix">Appendix: Deriving the Gradient of Binary Weight Probabilities</h2>
+
+<h2 id="Appendix:%20Deriving%20the%20Gradient%20of%20Binary%20Weight%20Probabilities"><a class="section-anchor" href="#Appendix:%20Deriving%20the%20Gradient%20of%20Binary%20Weight%20Probabilities">Appendix: Deriving the Gradient of Binary Weight Probabilities</a></h2>
+
 <p>
 If <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="6.725ex" height="2.509ex" viewbox="0 -791.3 2895.4 1080.4" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" aria-labelledby="MathJax-SVG-54-Title" class=" mathjax-inline-f2702d65ab5f1fc9">
 <title id="MathJax-SVG-54-Title"> w_i = 1 </title>
@@ -2555,7 +2587,9 @@ So, we can write <span class="mjpage"><svg xmlns:xlink="http://www.w3.org/1999/x
 </p>
 
 <hr>
-<h2 id="footnotes">Footnotes</h2>
+
+<h2 id="Footnotes"><a class="section-anchor" href="#Footnotes">Footnotes</a></h2>
+
 <ol>
 
   <li class="footnote-bottom">
@@ -2801,7 +2835,9 @@ the sigmoid function and standard deviation parameters.</span> <a class="footnot
 
 
 <hr>
-<h2 id="references">References</h2>
+
+<h2 id="References"><a class="section-anchor" href="#References">References</a></h2>
+
 <ol class="bibliography">
 <li>
 <a class="reference" href="https://blog.openai.com/openai-five/">

@@ -140,12 +140,12 @@
     <nav id="toc-nav">
       <h3 id="toc-header">Contents</h3>
       <ul id="table-of-contents">
-  <li><a href="#overview">Model Overview</a></li>
-  <li><a href="#latents-and-vaes">Variational Autoencoders and Latent Space</a></li>
-  <li><a href="#predicting-latents">Predicting Latent Variables from a Melody</a></li>
-  <li><a href="#conclusion">Conclusion</a></li>
-  <li><a href="#footnotes">Footnotes</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#Model%20Overview">Model Overview</a></li>
+  <li><a href="#Variational%20Autoencoders%20and%20Latent%20Space">Variational Autoencoders and Latent Space</a></li>
+  <li><a href="#Predicting%20Latent%20Variables%20from%20a%20Melody">Predicting Latent Variables from a Melody</a></li>
+  <li><a href="#Conclusion">Conclusion</a></li>
+  <li><a href="#Footnotes">Footnotes</a></li>
+  <li><a href="#References">References</a></li>
 </ul>
 
     </nav>
@@ -247,7 +247,9 @@ more sophisticated latent variable models, such as
 .
 </p>
 
-<h2 id="overview">Model Overview</h2>
+
+<h2 id="Model%20Overview"><a class="section-anchor" href="#Model%20Overview">Model Overview</a></h2>
+
 <p>
 Before getting into the details, here&#8217;s a brief overview of how the model works at a high level.
 </p>
@@ -277,7 +279,9 @@ Given a dataset of three-track music, we use the MusicVAE encoder to produce a l
 Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody&#8217;s (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.
 </p>
 
-<h2 id="latents-and-vaes">Variational Autoencoders and Latent Space</h2>
+
+<h2 id="Variational%20Autoencoders%20and%20Latent%20Space"><a class="section-anchor" href="#Variational%20Autoencoders%20and%20Latent%20Space">Variational Autoencoders and Latent Space</a></h2>
+
 <p>
 MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outside of the scope of this project writeup, but for an introduction I recommend <a href="https://jaan.io/what-is-variational-autoencoder-vae-tutorial/">Jaan Altosaar&#8217;s tutorial</a>.
 For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler and smaller way, as a collection of latent variables.
@@ -309,7 +313,9 @@ What is most remarkable is that variational autoencoders are trained <em>unsuper
 Given a dataset of media, the encoder and decoder learn to create this very special latent space with no additional supervision.
 </p>
 
-<h2 id="predicting-latents">Predicting Latent Variables from a Melody</h2>
+
+<h2 id="Predicting%20Latent%20Variables%20from%20a%20Melody"><a class="section-anchor" href="#Predicting%20Latent%20Variables%20from%20a%20Melody">Predicting Latent Variables from a Melody</a></h2>
+
 
 <p>
 A lot of the things we want our latent variables to capture &#8212; what the song&#8217;s genre is, when solos start and end, etc. &#8212; are present in all three parts of the original music.
@@ -334,7 +340,9 @@ However, it has correctly inferred a swing beat for the drums, works around impo
 This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.
 </p>
 
-<h2 id="conclusion">Conclusion</h2>
+
+<h2 id="Conclusion"><a class="section-anchor" href="#Conclusion">Conclusion</a></h2>
+
 <p>
 Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative tasks.
 However, with some impressive recent results generating high-resolution images
@@ -357,7 +365,9 @@ And if you find any mistakes, errors, or points of confusion, please let me know
 </p>
 
 <hr>
-<h2 id="footnotes">Footnotes</h2>
+
+<h2 id="Footnotes"><a class="section-anchor" href="#Footnotes">Footnotes</a></h2>
+
 <ol>
 
   <li class="footnote-bottom">
@@ -379,7 +389,9 @@ And if you find any mistakes, errors, or points of confusion, please let me know
 
 
 <hr>
-<h2 id="references">References</h2>
+
+<h2 id="References"><a class="section-anchor" href="#References">References</a></h2>
+
 <ol class="bibliography"><li>
 <a class="reference" href="https://distill.pub/2017/aia/">
 

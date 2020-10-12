@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://aidanswope.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://aidanswope.com/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-10-11T04:06:15-07:00</updated><id>https://aidanswope.com/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Why Neural Networks are Bad at Math</title><link href="https://aidanswope.com/compositionality" rel="alternate" type="text/html" title="Why Neural Networks are Bad at Math" /><published>2020-10-07T00:00:00-07:00</published><updated>2020-10-07T00:00:00-07:00</updated><id>https://aidanswope.com/compositionality</id><content type="html" xml:base="https://aidanswope.com/compositionality">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://aidanswope.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://aidanswope.com/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-10-11T19:27:58-07:00</updated><id>https://aidanswope.com/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Why Neural Networks are Bad at Math</title><link href="https://aidanswope.com/compositionality" rel="alternate" type="text/html" title="Why Neural Networks are Bad at Math" /><published>2020-10-07T00:00:00-07:00</published><updated>2020-10-07T00:00:00-07:00</updated><id>https://aidanswope.com/compositionality</id><content type="html" xml:base="https://aidanswope.com/compositionality">&lt;blockquote&gt;
   &lt;p style=&quot;margin-bottom: 0&quot;&gt;
   The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three:
   &lt;/p&gt;
@@ -227,7 +227,9 @@ binary models while offering its own advantages for reinforcement learning.
 &lt;/p&gt;
 
 
-&lt;h2 id=&quot;binary-neural-networks&quot;&gt;Binary Neural Networks&lt;/h2&gt;
+
+&lt;h2 id=&quot;Binary%20Neural%20Networks&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Binary%20Neural%20Networks&quot;&gt;Binary Neural Networks&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 Binary neural networks have weights and activations constrained to values +1 or -1.&lt;span class=&quot;footnote&quot; id=&quot;footnote-1-inline&quot;&gt;&lt;a href=&quot;#footnote-1&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;span class=&quot;footnote-inner&quot;&gt;Research in this field has explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. &lt;a href='#rastegari2016xnornet'&gt;XNOR-Net&lt;/a&gt; is a good
@@ -249,7 +251,9 @@ SIMD instructions can operate very
 efficiently on &quot;packed&quot; vectors of this kind.
 &lt;/p&gt;
 
-&lt;h3 id=&quot;the-xnor-trick&quot;&gt;The XNOR Trick&lt;/h3&gt;
+
+&lt;h3 id=&quot;The%20XNOR%20Trick&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#The%20XNOR%20Trick&quot;&gt;The XNOR Trick&lt;/a&gt;&lt;/h2&gt;
+
 
 
 &lt;p&gt;
@@ -296,7 +300,9 @@ up of dot products, this makes the forward pass of a binary neural network very 
 &lt;/p&gt;
 
 
-&lt;h3 id=&quot;training-binary-networks&quot;&gt;Training Binary Networks&lt;/h3&gt;
+
+&lt;h3 id=&quot;Training%20Binary%20Networks&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Training%20Binary%20Networks&quot;&gt;Training Binary Networks&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 However, binary neural networks are discrete-valued, which precludes training them with gradient
@@ -324,7 +330,9 @@ directly, without gradient approximation or backpropagation. To do this, I used
 evolution strategies, a type of optimizer that does not require gradients.
 &lt;/p&gt;
 
-&lt;h2 id=&quot;evolution-strategies-for-binary-neural-networks&quot;&gt;Evolution Strategies for Binary Neural Networks&lt;/h2&gt;
+
+&lt;h2 id=&quot;Evolution%20Strategies%20for%20Binary%20Neural%20Networks&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Evolution%20Strategies%20for%20Binary%20Neural%20Networks&quot;&gt;Evolution Strategies for Binary Neural Networks&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 Evolution strategies (ES) are a family of derivative-free optimizers that
@@ -393,7 +401,9 @@ still be nondifferentiable.&lt;/span&gt;&lt;/span&gt;
 and then performs gradient ascent on these parameters.
 &lt;/p&gt;
 
-&lt;h3 id=&quot;a-distribution-over-binary-neural-networks&quot;&gt;A Distribution Over Binary Neural Networks&lt;/h3&gt;
+
+&lt;h3 id=&quot;A%20Distribution%20Over%20Binary%20Neural%20Networks&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#A%20Distribution%20Over%20Binary%20Neural%20Networks&quot;&gt;A Distribution Over Binary Neural Networks&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 In this project, the search distribution is a distribution over the weights of binary neural networks.
@@ -456,7 +466,9 @@ P(\theta \mid \phi) =
 &lt;/span&gt;
 &lt;/p&gt;
 
-&lt;h3 id=&quot;updating-the-search-distribution&quot;&gt;Updating the Search Distribution&lt;/h3&gt;
+
+&lt;h3 id=&quot;Updating%20the%20Search%20Distribution&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Updating%20the%20Search%20Distribution&quot;&gt;Updating the Search Distribution&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 Natural ES kind of acts like a policy gradient algorithm, except the
@@ -520,7 +532,9 @@ during the forward pass and use the gradients computed at that point as
 an approximation to the true gradient.
 &lt;/p&gt;
 
-&lt;h3 id=&quot;the-complete-algorithm&quot;&gt;The Complete Algorithm&lt;/h3&gt;
+
+&lt;h3 id=&quot;The%20Complete%20Algorithm&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#The%20Complete%20Algorithm&quot;&gt;The Complete Algorithm&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 In summary, one iteration proceeds as follows:
@@ -534,9 +548,13 @@ In summary, one iteration proceeds as follows:
 &lt;/ul&gt;
 &lt;/p&gt;
 
-&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
 
-&lt;h3 id=&quot;fast-learning-on-easy-problems&quot;&gt;Fast Learning on Easy Problems&lt;/h3&gt;
+&lt;h2 id=&quot;Results&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Results&quot;&gt;Results&lt;/a&gt;&lt;/h2&gt;
+
+
+
+&lt;h3 id=&quot;Fast%20Learning%20on%20Easy%20Problems&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Fast%20Learning%20on%20Easy%20Problems&quot;&gt;Fast Learning on Easy Problems&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 I was consistently surprised by just how fast binary neural networks are in practice.
@@ -557,7 +575,9 @@ I also tried training the model from the raw binary encodings of the positions
 and velocities, but that didn't work at all.
 &lt;/p&gt;
 
-&lt;h3 id=&quot;failure-to-converge-on-hard-problems&quot;&gt;Failure to Converge on Hard Problems&lt;/h3&gt;
+
+&lt;h3 id=&quot;Failure%20to%20Converge%20on%20Hard%20Problems&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Failure%20to%20Converge%20on%20Hard%20Problems&quot;&gt;Failure to Converge on Hard Problems&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;figure&gt;
   &lt;video controls&gt;
@@ -577,9 +597,13 @@ for this.
 &lt;/p&gt;
 
 
-&lt;h2 id=&quot;limitations&quot;&gt;Limitations&lt;/h2&gt;
 
-&lt;h3 id=&quot;variance-collapse&quot;&gt;Variance Collapse&lt;/h3&gt;
+&lt;h2 id=&quot;Limitations&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Limitations&quot;&gt;Limitations&lt;/a&gt;&lt;/h2&gt;
+
+
+
+&lt;h3 id=&quot;Variance%20Collapse&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Variance%20Collapse&quot;&gt;Variance Collapse&lt;/a&gt;&lt;/h2&gt;
+
 &lt;p&gt;
 The biggest issue I noticed was that binary weights stop exploring once they learn.
 When a parameter \( x_i \) grows large, weight \( w_i \) will be the same in
@@ -615,7 +639,9 @@ the model reliably finished training before it converged to a low-variance
 regime and stopped learning.
 &lt;/p&gt;
 
-&lt;h3 id=&quot;independendence-assumptions&quot;&gt;Independence Assumptions&lt;/h3&gt;
+
+&lt;h3 id=&quot;Independence%20Assumptions&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Independence%20Assumptions&quot;&gt;Independence Assumptions&lt;/a&gt;&lt;/h2&gt;
+
 &lt;p&gt;
 The search distribution I used makes strong independendence assumptions about
 the network parameters. The parameters definitely aren't independent,
@@ -626,7 +652,9 @@ that do consider covariance between the parameters, such as Covariance Matrix
 Adaptation ES, but they require second-order information that's intractible to compute for larger models.
 &lt;/p&gt;
 
-&lt;h3 id=&quot;high-dimensional-search-space&quot;&gt;High-Dimensional Search Space&lt;/h3&gt;
+
+&lt;h3 id=&quot;High-Dimensional%20Search%20Space&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#High-Dimensional%20Search%20Space&quot;&gt;High-Dimensional Search Space&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 High-dimensional gradients are really amazing.
@@ -647,7 +675,9 @@ in parameter space with ES becomes infeasible for the models required to solve
 some problems.
 &lt;/p&gt;
 
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;h2 id=&quot;Conclusion&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/h2&gt;
+
 &lt;p&gt;
 For reinforcement learning in challenging environments, massively distributed
 training across thousands of computers is currently the norm. As we begin to
@@ -684,7 +714,9 @@ please let me know!
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;appendix&quot;&gt;Appendix: Deriving the Gradient of Binary Weight Probabilities&lt;/h2&gt;
+
+&lt;h2 id=&quot;Appendix:%20Deriving%20the%20Gradient%20of%20Binary%20Weight%20Probabilities&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Appendix:%20Deriving%20the%20Gradient%20of%20Binary%20Weight%20Probabilities&quot;&gt;Appendix: Deriving the Gradient of Binary Weight Probabilities&lt;/a&gt;&lt;/h2&gt;
+
 &lt;p&gt;
 If \( w_i = 1 \), then
 &lt;span class=&quot;math-wide&quot;&gt;
@@ -732,7 +764,9 @@ So, we can write \( \frac{\partial}{\partial x_i} \log P(w_i \mid x_i ) = w_i - 
 &lt;/p&gt;
 
 &lt;hr&gt;
-&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
+
+&lt;h2 id=&quot;Footnotes&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Footnotes&quot;&gt;Footnotes&lt;/a&gt;&lt;/h2&gt;
+
 &lt;ol&gt;
 
   &lt;li class=&quot;footnote-bottom&quot;&gt;
@@ -896,7 +930,9 @@ more sophisticated latent variable models, such as
 .
 &lt;/p&gt;
 
-&lt;h2 id=&quot;overview&quot;&gt;Model Overview&lt;/h2&gt;
+
+&lt;h2 id=&quot;Model%20Overview&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Model%20Overview&quot;&gt;Model Overview&lt;/a&gt;&lt;/h2&gt;
+
 &lt;p&gt;
 Before getting into the details, here's a brief overview of how the model works at a high level.
 &lt;/p&gt;
@@ -926,7 +962,9 @@ Given a dataset of three-track music, we use the MusicVAE encoder to produce a l
 Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody's (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.
 &lt;/p&gt;
 
-&lt;h2 id=&quot;latents-and-vaes&quot;&gt;Variational Autoencoders and Latent Space&lt;/h2&gt;
+
+&lt;h2 id=&quot;Variational%20Autoencoders%20and%20Latent%20Space&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Variational%20Autoencoders%20and%20Latent%20Space&quot;&gt;Variational Autoencoders and Latent Space&lt;/a&gt;&lt;/h2&gt;
+
 &lt;p&gt;
 MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outside of the scope of this project writeup, but for an introduction I recommend &lt;a href=&quot;https://jaan.io/what-is-variational-autoencoder-vae-tutorial/&quot;&gt;Jaan Altosaar's tutorial&lt;/a&gt;.
 For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler and smaller way, as a collection of latent variables.
@@ -958,7 +996,9 @@ What is most remarkable is that variational autoencoders are trained &lt;em&gt;u
 Given a dataset of media, the encoder and decoder learn to create this very special latent space with no additional supervision.
 &lt;/p&gt;
 
-&lt;h2 id=&quot;predicting-latents&quot;&gt;Predicting Latent Variables from a Melody&lt;/h2&gt;
+
+&lt;h2 id=&quot;Predicting%20Latent%20Variables%20from%20a%20Melody&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Predicting%20Latent%20Variables%20from%20a%20Melody&quot;&gt;Predicting Latent Variables from a Melody&lt;/a&gt;&lt;/h2&gt;
+
 
 &lt;p&gt;
 A lot of the things we want our latent variables to capture --- what the song's genre is, when solos start and end, etc. --- are present in all three parts of the original music.
@@ -983,7 +1023,9 @@ However, it has correctly inferred a swing beat for the drums, works around impo
 This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.
 &lt;/p&gt;
 
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;h2 id=&quot;Conclusion&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/h2&gt;
+
 &lt;p&gt;
 Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative tasks.
 However, with some impressive recent results generating high-resolution images
@@ -1006,7 +1048,9 @@ And if you find any mistakes, errors, or points of confusion, please let me know
 &lt;/p&gt;
 
 &lt;hr&gt;
-&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
+
+&lt;h2 id=&quot;Footnotes&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Footnotes&quot;&gt;Footnotes&lt;/a&gt;&lt;/h2&gt;
+
 &lt;ol&gt;
 
   &lt;li class=&quot;footnote-bottom&quot;&gt;
