@@ -1,4 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://aidanswope.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://aidanswope.com/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-10-11T19:27:58-07:00</updated><id>https://aidanswope.com/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Why Neural Networks are Bad at Math</title><link href="https://aidanswope.com/compositionality" rel="alternate" type="text/html" title="Why Neural Networks are Bad at Math" /><published>2020-10-07T00:00:00-07:00</published><updated>2020-10-07T00:00:00-07:00</updated><id>https://aidanswope.com/compositionality</id><content type="html" xml:base="https://aidanswope.com/compositionality">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://aidanswope.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://aidanswope.com/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2020-11-30T00:24:08-08:00</updated><id>https://aidanswope.com/feed.xml</id><title type="html">Aidan’s Research Blog</title><subtitle>A machine learning research blog with projects and long-form articles.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Self-Consistent Beliefs are Overrated</title><link href="https://aidanswope.com/consistent-beliefs" rel="alternate" type="text/html" title="Self-Consistent Beliefs are Overrated" /><published>2020-11-28T00:00:00-08:00</published><updated>2020-11-28T00:00:00-08:00</updated><id>https://aidanswope.com/consistent-beliefs</id><content type="html" xml:base="https://aidanswope.com/consistent-beliefs">&lt;div id=&quot;visualization&quot;&gt;&lt;/div&gt;
+
+&lt;p&gt;
+TODO: content
+&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;Footnotes&quot;&gt;&lt;a class=&quot;section-anchor&quot; href=&quot;#Footnotes&quot;&gt;Footnotes&lt;/a&gt;&lt;/h2&gt;
+
+&lt;ol&gt;
+
+&lt;/ol&gt;</content><author><name>Aidan Swope</name></author><category term="TODO" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://aidanswope.com/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" /><media:content medium="image" url="https://aidanswope.com/assets/pages/posts/binary-evolution/binary-evolution-teaser.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Why Neural Networks are Bad at Math</title><link href="https://aidanswope.com/compositionality" rel="alternate" type="text/html" title="Why Neural Networks are Bad at Math" /><published>2020-10-07T00:00:00-07:00</published><updated>2020-10-07T00:00:00-07:00</updated><id>https://aidanswope.com/compositionality</id><content type="html" xml:base="https://aidanswope.com/compositionality">&lt;blockquote&gt;
   &lt;p style=&quot;margin-bottom: 0&quot;&gt;
   The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three:
   &lt;/p&gt;
