@@ -1,11 +1,10 @@
 const TOP_MARGIN = 40;
+const BOTTOM_MARGIN = 60;
 const FRAME_SIZE = 500;
 const FRAME_WIDTH = 1;
 const POINT_SIZE = 5;
 
 const [NUM_UL, NUM_UR, NUM_LL, NUM_LR] = [50, 10, 10, 10];
-
-// TODO: better mobile experience
 
 // From:
 // https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve
@@ -27,7 +26,7 @@ function resampled_normal(mean, variance, min, max) {
 
 const svg = d3.select('#visualization').append('svg')
   .attr('width', FRAME_SIZE + 2 * FRAME_WIDTH)
-  .attr('height', FRAME_SIZE + 2 * FRAME_WIDTH + TOP_MARGIN);
+  .attr('height', FRAME_SIZE + 2 * FRAME_WIDTH + TOP_MARGIN + BOTTOM_MARGIN);
 
 const background = svg.append('rect')
   .attr('x', FRAME_WIDTH).attr('y', FRAME_WIDTH + TOP_MARGIN)
@@ -104,7 +103,6 @@ function updatePoints() {
         .call(setCenter),
       update => update.call(u => setCenter(u.transition())));
 }
-svg.on('click', updatePoints);
 updatePoints();
 
 const mouseLine = d3.lineRadial();
@@ -141,6 +139,27 @@ const topBar = svg.append('rect')
   .attr('height', TOP_MARGIN - 5)
   .style('fill', 'white');
 
+
+const bottomFiller = svg.append('rect')
+  .attr('x', 0).attr('y', FRAME_SIZE + FRAME_WIDTH + TOP_MARGIN)
+  .attr('width', FRAME_SIZE + 2 * FRAME_WIDTH)
+  .attr('height', BOTTOM_MARGIN + 1)
+  .style('fill', '#f5f5f5');
+
+const resampleButton = svg.append("rect")
+  .attr('x', FRAME_SIZE + FRAME_WIDTH - 85).attr('y', FRAME_SIZE + TOP_MARGIN + 5)
+  .attr('width', 85).attr('height', 35)
+  .style('fill', 'white')
+  .style('stroke', 'black')
+  .style('stroke-width', 1)
+  .attr('rx', 2)
+  .attr('ry', 2);
+const resampleText = svg.append("text")
+  .attr("x", FRAME_SIZE + FRAME_WIDTH - 80).attr("y", FRAME_SIZE + TOP_MARGIN + BOTTOM_MARGIN / 2 - 1)
+  .text("Resample")
+  .attr("pointer-events", "none");
+resampleButton.on('click', updatePoints);
+
 const lossScale = d3.scaleLinear().domain([0, 0.5]).range([0, FRAME_SIZE]);
 const lossBar = svg.append('rect')
   .attr('x', 0).attr('y', 0)
@@ -148,7 +167,8 @@ const lossBar = svg.append('rect')
   .style('fill', '#90caf9');
 const lossText = svg.append('text')
   .attr('x', 10).attr('y', TOP_MARGIN / 2 + 5)
-  .attr('font-size', 20);
+  .attr('font-size', 20)
+  .attr("pointer-events", "none");
 
 const diffPairs = NUM_UL * (NUM_UR + NUM_LL + NUM_LR) + NUM_UR * (NUM_LL + NUM_LR) + NUM_LL * NUM_LR;
 function computeLoss() {
@@ -186,4 +206,4 @@ function mouseHandler() {
   drawMouse(mouseX, mouseY);
 }
 drawMouse(scaleX.invert(1), scaleY.invert(1));
-svg.on('mousemove', mouseHandler);
+background.on('mousemove', mouseHandler);
