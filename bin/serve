@@ -1,0 +1,6 @@
+#!/bin/bash
+docker run --rm -it \
+    --volume="$PWD:/srv/jekyll" \
+    --network=host \
+    aidanswope-dot-com:latest \
+    bundle exec jekyll serve --drafts
