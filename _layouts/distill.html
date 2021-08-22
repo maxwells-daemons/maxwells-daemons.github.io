@@ -13,6 +13,7 @@
     {% endif %}
   </head>
 
+  <!-- Metadata -->
   <d-front-matter>
     <script async type="text/json">{
       "title": "{{ page.title }}",
@@ -49,7 +50,7 @@
     }</script>
   </d-front-matter>
 
-  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
+  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}" font-size-base="1">
 
     <!-- Header -->
 
@@ -64,7 +65,8 @@
         <p>{{ page.description }}</p>
       </d-title>
 
-      <d-byline></d-byline>
+      <!-- HACK: Removing the byline breaks appendix & citations, so just hide it -->
+      <d-byline style="display: none"></d-byline>
 
       <d-article>
         {{ content }}
@@ -96,12 +98,10 @@
     </div>
 
     <!-- Footer -->
-
     {% include footer.html %}
 
   </body>
 
   <d-bibliography src="{{ page.bibliography | prepend: '/assets/bibliography/' | relative_url }}">
   </d-bibliography>
-
 </html>

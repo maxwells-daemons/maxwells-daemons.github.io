@@ -90,6 +90,11 @@ defaults:
     values:
       layout: "distill"
       comments: true
+      authors:
+        - name: Aidan Swope
+          url: "https://aidanswope.com/"
+          affiliations:
+            name: NVIDIA
 
 # -----------------------------------------------------------------------------
 # Jekyll settings
