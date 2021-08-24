@@ -94,7 +94,7 @@ defaults:
         - name: Aidan Swope
           url: "https://aidanswope.com/"
           affiliations:
-            name: NVIDIA
+            name:
 
 # -----------------------------------------------------------------------------
 # Jekyll settings

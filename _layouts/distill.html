@@ -65,14 +65,51 @@
         <p>{{ page.description }}</p>
       </d-title>
 
-      <!-- HACK: Removing the byline breaks appendix & citations, so just hide it -->
+      <!-- HACK: Hide the default byline to remove authors & affiliations -->
       <d-byline style="display: none"></d-byline>
+
+      <!-- Add our own custom byline -->
+      <d-byline>
+        <div class="byline grid">
+          <div>
+            <h3>Published</h3>
+            <p>{{ page.date | date: '%B %-d, %Y' }}</p>
+          </div>
+
+          {% if page.tags != empty %}
+          <div>
+            <h3>Tags</h3>
+            {% for tag in page.tags %}
+            {% capture tag_url %}/tags#{{ tag | uri_escape }}{% endcapture %}
+            <p><a href="{{ tag_url | relative_url}}">{{ tag }}</a></p>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if page.paper or page.poster or page.code %}
+          <div>
+            <h3>Resources</h3>
+            {% if page.paper %}
+              <p><a href="{{ page.paper }}"><i class="far fa-file"></i> Paper</a></p>
+            {% endif %}
+            {% if page.poster %}
+              <p><a href="{{ page.poster }}"><i class="far fa-chart-bar"></i> Poster</a></p>
+            {% endif %}
+            {% if page.code %}
+              <p><a href="{{ page.code }}"><i class="fab fa-github"></i> Code</a></p>
+            {% endif %}
+          </div>
+          {% endif %}
+
+        </div>
+      </d-byline>
 
       <d-article>
         {{ content }}
       </d-article>
 
-      <d-appendix>
+      <d-appendix id="appendix">
+        {{ page.appendix }}
         <d-footnote-list></d-footnote-list>
         <d-citation-list></d-citation-list>
       </d-appendix>
@@ -99,9 +136,11 @@
 
     <!-- Footer -->
     {% include footer.html %}
-
   </body>
 
-  <d-bibliography src="{{ page.bibliography | prepend: '/assets/bibliography/' | relative_url }}">
+  <d-bibliography src="{{ page.bibliography }}">
   </d-bibliography>
+
+  {% include scripts/misc.html %}
+
 </html>

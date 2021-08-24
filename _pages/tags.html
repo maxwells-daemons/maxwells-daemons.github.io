@@ -1,0 +1,26 @@
+---
+layout: default
+permalink: /tags
+title: Tags
+nav: true
+---
+
+<!-- TODO: style better -->
+
+<h1 class="display-2">Tags</h1>
+
+{% for tag in site.tags %}
+  <h2 id="{{ tag[0] | uri_escape }}" class="display-4">
+    {{ tag[0] }}
+  </h2>
+  <ul class="post-list">
+    {% for post in tag[1] %}
+      <li>
+        <h3><a class="post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
+        <p class="post-meta">{{ post.date | date: '%B %-d, %Y' }}</p>
+        <p>{{ post.description }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endfor %}
+</ul>

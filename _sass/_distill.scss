@@ -2,6 +2,7 @@
  * Style overrides for distill blog posts.
  ******************************************************************************/
 
+// Byline
 d-byline {
   border-top-color: $grey-color-light !important;
 }
@@ -15,8 +16,10 @@ d-byline a, d-article d-byline a {
   &:hover {
     color: var(--global-hover-color) !important;
   }
+  border-bottom: 1px solid $grey-color-underline !important;
 }
 
+// Article
 d-article {
   border-top-color: #e8e8e8 !important;
   p, li, table {
@@ -26,17 +29,19 @@ d-article {
     color: var(--global-text-color) !important;
   }
   a, h1, h2 {
-    border-bottom-color: #999999 !important;
+    border-bottom-color: $grey-color-underline !important;
   }
   a:hover {
+    color: var(--global-hover-color) !important;
     border-bottom-color: var(--global-hover-color) !important;
   }
 }
 
+// Appendix
 d-appendix {
   border-top-color: $grey-color-light !important;
   color: var(--global-distill-app-color) !important;
-  h3, li, span {
+  h3, li, span, p {
     color: var(--global-distill-app-color) !important;
   }
   a, a.footnote-backlink {
@@ -47,6 +52,20 @@ d-appendix {
   }
 }
 
-d-cite, d-footnote {
-  font-family: "Roboto", sans-serif;
+// Footnotes and citations
+d-cite, d-footnote, .note {
+  font-family: Roboto, sans-serif;
+}
+
+// Fine-tune spacing for footnotes
+d-footnote {
+  margin-left: -0.25rem;
+  margin-right: 0.25rem;
+}
+
+// By default, images should fill their container.
+// Fill clear backgrounds with BG color.
+img {
+  width: 100%;
+  background-color: var(--global-bg-color)
 }

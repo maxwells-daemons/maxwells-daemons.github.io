@@ -1,23 +1,9 @@
 ---
 layout: distill
-title: a distill-style blog post
-description: an example of a distill-style blog post and main elements
+title: A distill-style blog post
+description: An example of a distill-style blog post and main elements.
 
-authors:
-  - name: Albert Einstein
-    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
-    affiliations:
-      name: IAS, Princeton
-  - name: Boris Podolsky
-    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
-    affiliations:
-      name: IAS, Princeton
-  - name: Nathan Rosen
-    url: "https://en.wikipedia.org/wiki/Nathan_Rosen"
-    affiliations:
-      name: IAS, Princeton
-
-bibliography: 2018-12-22-distill.bib
+bibliography: /assets/posts/distill/citations.bib
 
 # Below is an example of injecting additional post-specific styles.
 # If you use this post as a template, delete this _styles block.
@@ -57,7 +43,7 @@ $$
 \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
 $$
 
-Note that MathJax 3 is [a major re-write of MathJax](https://docs.mathjax.org/en/latest/upgrading/whats-new-3.0.html){:target="\_blank"} that brought a significant improvement to the loading and rendering speed, which is now [on par with KaTeX](http://www.intmath.com/cg5/katex-mathjax-comparison.php){:target="\_blank"}.
+Note that MathJax 3 is [a major re-write of MathJax](https://docs.mathjax.org/en/latest/upgrading/whats-new-3.0.html) that brought a significant improvement to the loading and rendering speed, which is now [on par with KaTeX](http://www.intmath.com/cg5/katex-mathjax-comparison.php){:target="\_blank"}.
 
 
 ***
@@ -87,7 +73,11 @@ The number of the footnote will be automatically generated.<d-footnote>This will
 
 Syntax highlighting is provided within `<d-code>` tags.
 An example of inline code snippets: `<d-code language="html">let x = 10;</d-code>`.
+
+For example: <d-code language="javascript">let x = 10;</d-code>
+
 For larger blocks of code, add a `block` attribute:
+
 
 <d-code block language="javascript">
   var x = 25;
@@ -173,15 +163,15 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 1. First ordered list item
 2. Another item
   * Unordered sub-list.
-1. Actual numbers don't matter, just that it's a number
-⋅⋅1. Ordered sub-list
+3. Actual numbers don't matter, just that it's a number
+    1. Ordered sub-list
 4. And another item.
 
-⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+   You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
 
-⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
+   To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
+   Note that this line is separate, but within the same paragraph.⋅⋅
+   (This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
 
 * Unordered list can use asterisks
 - Or minuses
