@@ -1,6 +1,6 @@
 ---
-title: Compute-Efficient Reinforcement Learning with Binary Evolution Strategies
-description: Binary neural networks dramatically speed up inference, a key bottleneck in reinforcement learning, but are not differentiable. This project explores using evolution strategies to train binary networks directly, without approximating backpropagated gradients, for faster reinforcement learning.
+title: Lightweight Reinforcement Learning by Evolving Binary Networks
+description: Binary neural networks can gather hundreds of thousands of frames of training data per second on a single CPU, and evolutionary algorithms make training these nondifferentiable models possible.
 bibliography: /assets/posts/binary-evolution/citations.bib
 image: /assets/posts/binary-evolution/thumbnail.jpg
 
@@ -50,7 +50,7 @@ appendix: >
     </video>
   </div>
   <figcaption class="figure-caption">
-    This neural network is 600 bytes and runs at 500,000 forward passes per second on a laptop CPU.
+    This neural network is 600 bytes and runs at 500,000 forward passes per second on my laptop&rsquo;s CPU.
   </figcaption>
 </figure>
 
