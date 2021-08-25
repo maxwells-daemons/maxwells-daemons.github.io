@@ -13,6 +13,18 @@ pagination:
     before: 1 # The number of links before the current page
     after: 3  # The number of links after the current page
 ---
+<!-- TODO: normalize CSS -->
+<style>
+body div.container {
+  max-width: 1000px !important;
+}
+
+.header-bar {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  margin-top: -3rem;
+}
+</style>
 
 <div class="post">
 
@@ -26,13 +38,15 @@ pagination:
     <li class="container px-0">
       <div class="row">
         <div class="col-sm-7">
-          <h3><a class="post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
+          <h3><a class="post-title" href="{{ post.url }}">{{ post.title }}</a></h3>
           <p class="post-meta">{{ post.date | date: '%B %-d, %Y' }}</p>
           <p>{{ post.description }}</p>
         </div>
 
         <div class="col-sm">
-          <img src="{{ post.image }}" class="img-fluid img-thumbnail z-depth-1 ml-1 mt-1">
+          <a href="{{ post.url }}">
+            <img src="{{ post.image }}" class="img-fluid img-thumbnail">
+          </a>
         </div>
       </div>
     </li>
