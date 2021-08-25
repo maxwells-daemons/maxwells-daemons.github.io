@@ -2,6 +2,7 @@
 title: Compute-Efficient Reinforcement Learning with Binary Evolution Strategies
 description: Binary neural networks dramatically speed up inference, a key bottleneck in reinforcement learning, but are not differentiable. This project explores using evolution strategies to train binary networks directly, without approximating backpropagated gradients, for faster reinforcement learning.
 bibliography: /assets/posts/binary-evolution/citations.bib
+image: /assets/posts/binary-evolution/thumbnail.jpg
 
 tags:
  - Project

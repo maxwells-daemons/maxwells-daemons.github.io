@@ -23,12 +23,19 @@ pagination:
 
   <ul class="post-list">
     {% for post in site.posts %}
-      <li>
-        <h3><a class="post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
-        <p class="post-meta">{{ post.date | date: '%B %-d, %Y' }}</p>
-        <p>{{ post.description }}</p>
-      </li>
+    <li class="container px-0">
+      <div class="row">
+        <div class="col-sm-7">
+          <h3><a class="post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
+          <p class="post-meta">{{ post.date | date: '%B %-d, %Y' }}</p>
+          <p>{{ post.description }}</p>
+        </div>
+
+        <div class="col-sm">
+          <img src="{{ post.image }}" class="img-fluid img-thumbnail z-depth-1 ml-1 mt-1">
+        </div>
+      </div>
+    </li>
     {% endfor %}
   </ul>
-
 </div>

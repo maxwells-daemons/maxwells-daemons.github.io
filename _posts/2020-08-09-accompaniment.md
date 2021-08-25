@@ -2,6 +2,7 @@
 title: Generating Musical Accompaniment with a Variational Autoencoder
 description: With a model trained to compress multi-instrument music into latent codes, and a second model that predicts these codes given just one instrument, we can add drums and bass to any melody.
 bibliography: /assets/posts/accompaniment/citations.bib
+image: /assets/posts/accompaniment/thumbnail.jpg
 
 tags:
  - Project

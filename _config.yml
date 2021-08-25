@@ -7,7 +7,7 @@ first_name: Aidan
 middle_name: Maxwell
 last_name: Swope
 email: aidanswope@gmail.com
-description: Taming big, wiggly functions through optimization.
+description: Taming wiggly functions through optimization.
 
 # Empty url & baseurl for Github Pages integration
 url:  # the base hostname & protocol for your site
