@@ -55,8 +55,8 @@ appendix: >
 </figure>
 
 <p class="note note-warning">
-  Heads up: this post has some long equations which don't render well on narrow displays.
-  You might want to consider switching to landscape mode or a different device
+  <strong>Heads up:</strong> this post has some long equations which don't display well on narrow displays.
+  You might want to switch to landscape mode or a different device
   to view the equations properly.
 </p>
 
