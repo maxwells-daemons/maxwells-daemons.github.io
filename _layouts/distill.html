@@ -50,16 +50,13 @@
     }</script>
   </d-front-matter>
 
-  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}" font-size-base="1">
+  <body font-size-base="1">
 
     <!-- Header -->
-
     {% include header.html %}
 
     <!-- Content -->
-
     <div class="post distill">
-
       <d-title>
         <h1>{{ page.title }}</h1>
         <p>{{ page.description }}</p>
@@ -115,32 +112,30 @@
       </d-appendix>
     </div>
 
-
+    {% if site.disqus_shortname and page.comments %}
+    <!-- Comments -->
     <div class="container">
-      <!-- Comments -->
-      {% if site.disqus_shortname and page.comments %}
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-          var disqus_shortname  = '{{ site.disqus_shortname }}';
-          var disqus_identifier = '{{ page.id }}';
-          var disqus_title      = {{ page.title | jsonify }};
-          (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-      {% endif %}
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = '{{ site.disqus_shortname }}';
+        var disqus_identifier = '{{ page.id }}';
+        var disqus_title      = {{ page.title | jsonify }};
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </div>
+    {% endif %}
 
     <!-- Footer -->
     {% include footer.html %}
   </body>
 
-  <d-bibliography src="{{ page.bibliography }}">
-  </d-bibliography>
+  <d-bibliography src="{{ page.bibliography }}"/>
 
-  {% include scripts/misc.html %}
-
+  {% include scripts/bootstrap.html %}
+  {% include scripts/medium_zoom.html %}
 </html>

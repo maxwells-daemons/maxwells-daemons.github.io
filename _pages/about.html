@@ -4,59 +4,54 @@ permalink: /about
 title: About
 nav: true
 ---
+<header>
+  <h1>
+    Hello! I'm Aidan.
+  </h1>
+</header>
 
-<div class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      Hello! I'm Aidan.
-    </h1>
-  </header>
+<article>
+  <div class="float-right" id="about-picture">
+    <img class="img-fluid z-depth-1 rounded m-3" src="/assets/misc/portrait.jpg">
+  </div>
 
-  <article>
-    <div class="profile float-right">
-      <img class="img-fluid z-depth-1 rounded m-3" src="/assets/pages/about/portrait.jpg">
-    </div>
+  <div class="clearfix">
+    <p>
+      I&rsquo;m a machine learning researcher working towards artificial agents
+      that can reason like humans. I am interested in developing neural networks
+      capable of system-2 or cognitive processing in order to generalize better
+      than current models can.
+    </p>
 
-    <div class="clearfix">
-      <p>
-        I&rsquo;m a machine learning researcher working towards artificial agents
-        that can reason like humans. I am interested in developing neural networks
-        capable of system-2 or cognitive processing in order to generalize better
-        than current models can.
-      </p>
+    <p>
+      My research is focused on what I see as the most direct paths to system-2 deep learning:
+      reinforcement learning for discrete search,
+      compositional representation learning,
+      and emergent abilities of large language models.
+    </p>
 
-      <p>
-        My research is focused on what I see as the most direct paths to system-2 deep learning:
-        reinforcement learning for discrete search,
-        compositional representation learning,
-        and emergent abilities of large language models.
-      </p>
+    <p>
+      Right now, I work at <a href="https://nv-adlr.github.io/">NVIDIA</a>
+      on automated theorem proving with reinforcement learning, big transformers,
+      and the <a href="https://leanprover.github.io/">Lean theorem prover</a>.
+      In the past, I&rsquo;ve worked in
+      <a href="http://tensorlab.cms.caltech.edu/users/anima/">Anima Anandkumar&rsquo;s</a>
+      lab at Caltech studying the differences between how transformers and tree-structured neural networks
+      learn representations.
+      Before that, I was at <a href="https://www.descarteslabs.com/">Descartes Labs</a>
+      building <a href="https://arxiv.org/abs/2108.05094">better unsupervised learning algorithms for satellite imagery</a>
+      and <a href="https://medium.com/descarteslabs-team/descartes-labs-urban-trees-tree-canopy-mapping-3b6c85c5c9cc">finding trees</a>.
+      I recently graduated from Caltech, where I taught
+      <a href="https://github.com/maxwells-daemons/caltech-cs11-tensorflow">a class on deep learning</a>.
+    </p>
 
-      <p>
-        Right now, I work at <a href="https://nv-adlr.github.io/">NVIDIA</a>
-        on automated theorem proving with reinforcement learning, big transformers,
-        and the <a href="https://leanprover.github.io/">Lean theorem prover</a>.
-        In the past, I&rsquo;ve worked in
-        <a href="http://tensorlab.cms.caltech.edu/users/anima/">Anima Anandkumar&rsquo;s</a>
-        lab at Caltech studying the differences between how transformers and tree-structured neural networks
-        learn representations.
-        Before that, I was at <a href="https://www.descarteslabs.com/">Descartes Labs</a>
-        building <a href="https://arxiv.org/abs/2108.05094">better unsupervised learning algorithms for satellite imagery</a>
-        and <a href="https://medium.com/descarteslabs-team/descartes-labs-urban-trees-tree-canopy-mapping-3b6c85c5c9cc">finding trees</a>.
-        I recently graduated from Caltech, where I taught
-        <a href="https://github.com/maxwells-daemons/caltech-cs11-tensorflow">a class on deep learning</a>.
-      </p>
+    <p>
+      For more on my background, you can check out
+      <a href="assets/misc/resume-aidan-swope.pdf">my resume</a>.
+    </p>
+  </div>
 
-      <p>
-        For more on my background, you can check out
-        <a href="assets/pages/about/resume-aidan-swope.pdf">my resume</a>.
-      </p>
-    </div>
-
-    <div class="social">
-      <div class="contact-icons">
-        {% include social.html %}
-      </div>
-    </div>
-  </article>
-</div>
+  <div id="about-social">
+    {% include social.html %}
+  </div>
+</article>

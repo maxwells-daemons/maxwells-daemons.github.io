@@ -23,7 +23,7 @@ d-byline a, d-article d-byline a {
 d-article {
   border-top-color: #e8e8e8 !important;
   p, li, table {
-    font-family: "Roboto Slab", serif;
+    font-family: $fonts-serif;
   }
   a, p, h1, h2, h3, h4, h5, h6, li, table {
     color: var(--global-text-color) !important;
@@ -45,6 +45,7 @@ d-appendix {
     color: var(--global-distill-app-color) !important;
   }
   a, a.footnote-backlink {
+    border: none !important;
     color: var(--global-distill-app-color) !important;
     &:hover {
       color: var(--global-hover-color) !important;
@@ -54,7 +55,7 @@ d-appendix {
 
 // Footnotes and citations
 d-cite, d-footnote, .note {
-  font-family: Roboto, sans-serif;
+  font-family: $fonts-sans-serif;
 }
 
 // Fine-tune spacing for footnotes

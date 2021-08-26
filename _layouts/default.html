@@ -1,30 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     {% include head.html %}
     {% include scripts/mathjax.html %}
   </head>
 
-  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
-
+  <body>
     <!-- Header -->
-
     {% include header.html %}
 
     <!-- Content -->
-
-    <div class="container mt-5">
+    <div
+      class="container mt-5"
+      id="{% if page.title != "index" %}content-container{% else %}index-container{% endif %}">
       {{ content }}
     </div>
 
     <!-- Footer -->
-
     {% include footer.html %}
-
   </body>
 
   {% include scripts/bootstrap.html %}
-  {% include scripts/misc.html %}
-
+  {% include scripts/medium_zoom.html %}
 </html>

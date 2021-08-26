@@ -3,22 +3,23 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <title>
+{% if page.title != "index" %}
+  {{ page.title }} |
 {{ site.title }}
-{% if page.url != "/index.html" %}
-  | {{ page.title }}
 {% endif %}
 </title>
 <meta name="description" content="{{ site.description }}">
 
-{% if site.serve_og_meta %}
 <!-- Open Graph -->
 <meta property="og:site_name" content="{{ site.description }}" />
 <meta property="og:type" content="object" />
 <meta property="og:title" content="{{ site.name }}" />
 <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}" />
 <meta property="og:description" content="{{ page.title }}" />
-<meta property="og:image" content="{%- if page.og_image -%}{{ page.og_image }}{%- else -%}{{ site.og_image }}{%- endif -%}" />
-{% endif %}
+<meta property="og:image" content="{%- if page.image -%}{{ page.image }}{%- else -%}{{ site.og_image }}{%- endif -%}" />
+
+<!-- Feed -->
+{% feed_meta %}
 
 <!-- Bootstrap & MDB -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/{{ site.bootstrap.version }}/css/bootstrap.min.css" rel="stylesheet" integrity="{{ site.bootstrap.integrity.css }}" crossorigin="anonymous">
@@ -27,7 +28,7 @@
 <!-- Fonts & Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/{{ site.fontawesome.version }}/css/all.min.css"  integrity="{{ site.fontawesome.integrity }}" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/{{ site.academicons.version }}/css/academicons.min.css" integrity="{{ site.academicons.integrity }}" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons|Crimson+Pro:100,300,400,500,700">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
 
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png">
@@ -36,7 +37,6 @@
 <link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg" color="#5bbad5">
 
 <!-- Code Syntax Highlighting -->
-<!-- TODO: monitor https://github.com/alshedivat/al-folio/issues/367 -->
 <link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/{{ site.highlight_theme }}.css" />
 
 <!-- Styles -->
@@ -46,7 +46,6 @@
 <!-- JQuery -->
 {% include scripts/jquery.html %}
 
-{% if site.enable_google_analytics %}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
 <script>
@@ -56,4 +55,3 @@
 
   gtag('config', '{{ site.google_analytics }}');
 </script>
-{% endif %}
