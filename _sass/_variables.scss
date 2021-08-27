@@ -6,32 +6,19 @@
 $max-index-width: 1000px;
 $max-content-width: 800px;
 $footer-height: 50px;
+$comments-height: 425px; // Prevent disqus from reflowing into footer
 
 // Fonts
 $fonts-sans-serif: Roboto, sans-serif;
 $fonts-serif: "Roboto Slab", serif;
 
 // Colors
-$purple-color:        #6610f2;
-$grey-color:          #828282 !default;
-$grey-color-light:    lighten($grey-color, 30%);
-$grey-color-dark:     darken($grey-color, 25%);
-$grey-color-underline: #999999;
-$white-color: #ffffff !default;
-$black-color: #000000 !default;
-
-$code-bg-color-light:     rgba($purple-color, 0.05);
-$code-bg-color-dark:      #2c3237 !default;
-
 :root {
-  --global-bg-color: #{$white-color};
-  --global-code-bg-color: #{$code-bg-color-light};
-  --global-text-color: #{$black-color};
-  --global-text-color-light: #{$grey-color};
-  --global-theme-color: #{$purple_color};
-  --global-hover-color: #{$purple_color};
-  --global-footer-bg-color: #{$grey-color-dark};
-  --global-footer-text-color: #{$grey-color-light};
-  --global-footer-link-color: #{$white-color};
-  --global-distill-app-color: #{$grey-color};
+  --global-bg-color:            #ffffff;
+  --global-code-bg-color:       #fff8e1;
+  --global-text-color:          #000000;
+  --global-text-color-light:    #424242;
+  --global-theme-color:         #304ffe;
+  --global-hover-color:         #0026ca;
+  --global-line-color:          #cfd8dc;
 }

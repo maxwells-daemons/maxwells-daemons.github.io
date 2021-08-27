@@ -62,7 +62,6 @@ appendix: >
 
 Today, reinforcement learning is slow and expensive. Poor sample efficiency, stemming from issues like high-variance gradient estimates and the difficulty of credit assignment, means that agents can require years of experience in an environment to match human performance.
 
-
 As a result, gathering experience is a key computational bottleneck in reinforcement learning. For each frame of experience,
 we must run a forward pass through the model. In real-world problems, this leads to large, expensive, and energy-inefficient
 systems for generating rollouts---[OpenAI Five](https://openai.com/blog/openai-five/) used 128,000 CPU cores for gathering experience in the environment and running

@@ -5,18 +5,17 @@ title: Tags
 nav: true
 ---
 
-<!-- TODO: style better -->
-
 <h1>Tags</h1>
 
 {% for tag in site.tags %}
-  <h2 id="{{ tag[0] | uri_escape }}">
+  <h3 id="{{ tag[0] | uri_escape }}">
     {{ tag[0] }}
-  </h2>
+  </h3>
   <ul>
     {% for post in tag[1] %}
       <li>
-        <p><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></p>
+        <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        <span class="text-muted">({{ post.date | date: '%B %-d, %Y'}})</span>
       </li>
     {% endfor %}
   </ul>

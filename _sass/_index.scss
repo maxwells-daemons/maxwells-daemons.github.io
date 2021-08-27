@@ -3,7 +3,7 @@
  ******************************************************************************/
 
 .header-bar {
-  border-bottom: 1px solid $grey-color-light;
+  border-bottom: 1px solid var(--global-line-color);
   text-align: center;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -19,12 +19,11 @@
   margin-bottom: 40px;
   padding: 0;
   li {
-    border-bottom: 1px solid $grey-color-light;
+    border-bottom: 1px solid var(--global-line-color);
     list-style: none;
     padding-top: 2rem;
     padding-bottom: 2rem;
     .post-meta {
-      color: var(--global-text-color-light);
       font-size: 0.875rem;
       margin-bottom: 0;
     }

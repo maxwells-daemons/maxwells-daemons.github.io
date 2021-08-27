@@ -4,7 +4,7 @@
 
 // Byline
 d-byline {
-  border-top-color: $grey-color-light !important;
+  border-top-color: var(--global-line-color) !important;
 }
 
 d-byline h3 {
@@ -16,12 +16,12 @@ d-byline a, d-article d-byline a {
   &:hover {
     color: var(--global-hover-color) !important;
   }
-  border-bottom: 1px solid $grey-color-underline !important;
+  border-bottom: 1px solid var(--global-text-color) !important;
 }
 
 // Article
 d-article {
-  border-top-color: #e8e8e8 !important;
+  border-top-color: var(--global-line-color) !important;
   p, li, table {
     font-family: $fonts-serif;
   }
@@ -29,7 +29,7 @@ d-article {
     color: var(--global-text-color) !important;
   }
   a, h1, h2 {
-    border-bottom-color: $grey-color-underline !important;
+    border-bottom-color: var(--global-text-color) !important;
   }
   a:hover {
     color: var(--global-hover-color) !important;
@@ -39,14 +39,14 @@ d-article {
 
 // Appendix
 d-appendix {
-  border-top-color: $grey-color-light !important;
-  color: var(--global-distill-app-color) !important;
+  border-top-color: var(--global-line-color) !important;
+  color: var(--global-text-color-light) !important;
   h3, li, span, p {
-    color: var(--global-distill-app-color) !important;
+    color: var(--global-text-color-light) !important;
   }
   a, a.footnote-backlink {
     border: none !important;
-    color: var(--global-distill-app-color) !important;
+    color: var(--global-text-color-light) !important;
     &:hover {
       color: var(--global-hover-color) !important;
     }
