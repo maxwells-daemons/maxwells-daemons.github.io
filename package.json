@@ -1,0 +1,18 @@
+{
+  "name": "aidanswope.com",
+  "author": "Aidan Swope",
+  "scripts": {
+    "build-image": "docker build -t aidanswope-dot-com:latest .",
+    "develop": "npm-run-all --race --parallel serve watch-esbuild",
+    "serve": "docker run --rm -it --volume=\"$PWD:/srv/jekyll\" --network=host aidanswope-dot-com:latest bundle exec jekyll serve --drafts",
+    "watch-esbuild": "onchange 'assets/posts/*/main.js' -- esbuild {{file}} --bundle --outfile={{fileDir}}/bundle.js"
+  },
+  "dependencies": {
+    "d3": "^7.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.12.24",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.1.0"
+  }
+}
