@@ -112,7 +112,7 @@
       </d-appendix>
     </div>
 
-    {% if site.disqus_shortname and page.comments %}
+    {% if site.disqus_shortname and page.comments and jekyll.environment == "deploy" %}
     <!-- Comments -->
     <div class="container">
       <div id="disqus_thread"></div>
