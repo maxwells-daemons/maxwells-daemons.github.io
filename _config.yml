@@ -8,8 +8,7 @@ last_name: Swope
 email: aidanswope@gmail.com
 description: Taming wiggly functions through optimization.
 
-# Empty url & baseurl for Github Pages integration
-url:
+url: https://aidanswope.com
 baseurl:
 
 google_analytics: UA-173593414
