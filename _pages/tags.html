@@ -8,9 +8,9 @@ nav: true
 <h1>Tags</h1>
 
 {% for tag in site.tags %}
-  <h3 id="{{ tag[0] | uri_escape }}">
+  <h2 id="{{ tag[0] | uri_escape }}">
     {{ tag[0] }}
-  </h3>
+  </h2>
   <ul>
     {% for post in tag[1] %}
       <li>
