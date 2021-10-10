@@ -2,13 +2,13 @@
   "name": "aidanswope.com",
   "author": "Aidan Swope",
   "scripts": {
-    "build-image": "docker build -t aidanswope-dot-com:latest .",
     "develop": "npm-run-all --race --parallel serve watch-esbuild",
-    "serve": "docker run --rm -it --volume=\"$PWD:/srv/jekyll\" --network=host aidanswope-dot-com:latest bundle exec jekyll serve --drafts",
-    "watch-esbuild": "onchange 'assets/posts/*/main.js' -- esbuild {{file}} --bundle --outfile={{fileDir}}/bundle.js"
+    "serve": "bundle exec jekyll serve --drafts --config _config.yml,_config_dev.yml",
+    "watch-esbuild": "onchange 'assets/posts/*/main.js' -- esbuild {{file}} --bundle --sourcemap --outfile={{fileDir}}/bundle.js"
   },
   "dependencies": {
-    "d3": "^7.0.1"
+    "d3": "^7.0.1",
+    "graph-scroll": "^1.0.2"
   },
   "devDependencies": {
     "esbuild": "^0.12.24",

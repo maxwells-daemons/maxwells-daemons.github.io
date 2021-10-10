@@ -73,6 +73,7 @@ exclude:
   - package-lock.json
   - Dockerfile
   - vendor
+  - _config_def.yml
 keep_files:
   - CNAME
   - .nojekyll
