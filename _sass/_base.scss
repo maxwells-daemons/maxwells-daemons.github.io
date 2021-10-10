@@ -7,6 +7,10 @@
   max-width: $max-content-width;
 }
 
+#content-container {
+  padding-bottom: 10px;
+}
+
 html {
   position: relative;
   min-height: 100%;
