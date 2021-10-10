@@ -48,7 +48,6 @@ dblp_url:
 # Blog
 # -----------------------------------------------------------------------------
 permalink: /:year/:title/
-disqus_shortname: aidans-research-blog
 
 # -----------------------------------------------------------------------------
 # Collections
@@ -64,7 +63,6 @@ defaults:
       type: "posts"
     values:
       layout: "distill"
-      comments: true
 
 # -----------------------------------------------------------------------------
 # Jekyll settings

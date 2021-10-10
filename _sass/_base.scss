@@ -18,13 +18,24 @@ body {
   background-color: var(--global-bg-color);
 }
 
-
 // Typography
-a, p, h1, h2, h3, h4, h5, h6, em, div, span, strong {
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+em,
+div,
+span,
+strong {
   color: var(--global-text-color);
 }
 
-a, table.table a {
+a,
+table.table a {
   text-decoration: none;
   border-bottom: 1px solid var(--global-text-color);
 
@@ -41,7 +52,8 @@ a, table.table a {
   background-color: var(--global-bg-color);
   opacity: 0.95;
 
-  .navbar-brand, .navbar-nav .nav-item .nav-link {
+  .navbar-brand,
+  .navbar-nav .nav-item .nav-link {
     color: var(--global-text-color);
     border: none;
 
@@ -49,13 +61,13 @@ a, table.table a {
       color: var(--global-hover-color);
     }
   }
-  .navbar-nav .nav-item.active>.nav-link {
-      background-color: inherit;
-      font-weight: bolder;
-      color: var(--global-theme-color);
-      &:hover {
-        color: var(--global-hover-color);
-      }
+  .navbar-nav .nav-item.active > .nav-link {
+    background-color: inherit;
+    font-weight: bolder;
+    color: var(--global-theme-color);
+    &:hover {
+      color: var(--global-hover-color);
+    }
   }
 }
 
@@ -104,11 +116,6 @@ footer {
   line-height: $footer-height;
 }
 
-// Comments
-#disqus_thread {
-  min-height: $comments-height;
-}
-
 // Math
 .equation {
   margin-bottom: 1rem;
@@ -124,7 +131,8 @@ pre {
   background-color: var(--global-code-bg-color);
   border-radius: 6px;
   padding: 6px 12px;
-  pre, code {
+  pre,
+  code {
     background-color: transparent;
     border-radius: 0;
     padding: 0;
