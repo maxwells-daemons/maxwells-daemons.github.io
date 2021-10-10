@@ -3,6 +3,7 @@ title: Generating Musical Accompaniment in Latent Space
 description: By predicting the latent code for a whole song given just the melody, we can synthesize drums and bass for any MIDI.
 bibliography: /assets/posts/accompaniment/citations.bib
 image: /assets/posts/accompaniment/thumbnail.jpg
+thumbnail_alt: musical notes predicted by a variational autoencoder
 
 tags:
  - Project

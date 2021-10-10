@@ -3,6 +3,7 @@ title: Lightweight Reinforcement Learning by Evolving Binary Networks
 description: Binary neural networks can gather hundreds of thousands of frames of training data per second on a single CPU, and evolutionary algorithms make training these nondifferentiable models possible.
 bibliography: /assets/posts/binary-evolution/citations.bib
 image: /assets/posts/binary-evolution/thumbnail.jpg
+thumbnail_alt: a blue histogram of binary neural network weights becoming bimodal over time
 
 tags:
  - Project
