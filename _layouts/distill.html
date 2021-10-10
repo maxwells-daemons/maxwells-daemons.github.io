@@ -134,7 +134,9 @@
     {% include footer.html %}
   </body>
 
-  <d-bibliography src="{{ page.bibliography }}"/>
+  {% if page.bibliography %}
+  <d-bibliography src="{{ page.bibliography }}"></d-bibliography>
+  {% endif %}
 
   {% include scripts/bootstrap.html %}
   {% include scripts/medium_zoom.html %}

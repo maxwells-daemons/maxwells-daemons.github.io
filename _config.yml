@@ -60,8 +60,7 @@ collections:
 # Defaults
 # -----------------------------------------------------------------------------
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
       type: "posts"
     values:
@@ -75,11 +74,11 @@ defaults:
 # Markdown and syntax highlight
 markdown: kramdown
 highlighter: rouge
-highlight_theme: github  # https://github.com/jwarby/jekyll-pygments-themes
+highlight_theme: github # https://github.com/jwarby/jekyll-pygments-themes
 kramdown:
   input: GFM
   syntax_highlighter_opts:
-    css_class: 'highlight'
+    css_class: "highlight"
     span:
       line_numbers: false
     block:
@@ -87,11 +86,13 @@ kramdown:
       start_line: 1
 
 # Includes & excludes
-include: ['_pages']
+include: ["_pages"]
 exclude:
   - bin
   - Gemfile
   - Gemfile.lock
+  - package.json
+  - package-lock.json
   - Dockerfile
   - vendor
 keep_files:

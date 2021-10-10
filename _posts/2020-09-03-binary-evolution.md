@@ -65,7 +65,7 @@ Today, reinforcement learning is slow and expensive. Poor sample efficiency, ste
 As a result, gathering experience is a key computational bottleneck in reinforcement learning. For each frame of experience,
 we must run a forward pass through the model. In real-world problems, this leads to large, expensive, and energy-inefficient
 systems for generating rollouts---[OpenAI Five](https://openai.com/blog/openai-five/) used 128,000 CPU cores for gathering experience in the environment and running
-evaluation, and 256 GPUs for optimization <d-cite key="OpenAI_dota"/>.
+evaluation, and 256 GPUs for optimization <d-cite key="OpenAI_dota">.</d-cite>
 
 Because inference is such a important part of RL, efficiency improvements to the forward pass directly translate to RL models that are easier, faster, and cheaper to train. In this project, I combine binary neural networks, which are very fast but not differentiable, with evolution strategies, a type of gradient-free optimizer that neatly sidesteps the difficulties of training binary models while offering its own advantages for reinforcement learning.
 
@@ -73,7 +73,7 @@ Because inference is such a important part of RL, efficiency improvements to the
 
 Binary neural networks have weights and activations constrained to values +1 or -1.<d-footnote>Research in this field has
 explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. XNOR-Net <d-cite
-key="rastegari2016xnornet"/> is a good paper for getting an overview of this kind of work.</d-footnote>
+key="rastegari2016xnornet"></d-cite> is a good paper for getting an overview of this kind of work.</d-footnote>
 Each layer uses the sign function as its activation and computes the function $$f(x; W, b) = \text{sign}(Wx + b)$$, where
 $$x$$ is a binary vector of inputs, $$W$$ is a binary matrix of weights, and $$b$$ is a vector of _integer_ biases.
 
@@ -82,7 +82,7 @@ The weights, inputs, and outputs of a layer are binary in the sense of having tw
 
 ### The XNOR Trick
 
-There's a clever trick <d-cite key="courbariaux2016binarized"/> that enables much faster and more power-efficient
+There's a clever trick <d-cite key="courbariaux2016binarized"></d-cite> that enables much faster and more power-efficient
 neural networks by performing almost all of the required computation with bitwise operations. Let’s say we want to take the
 dot product of two $$N$$-bit binary vectors, $$\vec{a} \cdot \vec{b} = \sum_i^N a_i b_i$$.
 Since each $$a_i$$ and $$b_i$$ are ±1, their product is 1 if $$a_i = b_i$$ and -1 otherwise.
@@ -117,7 +117,7 @@ One solution, used by approaches like XNOR-Net <d-cite key="rastegari2016xnornet
 floating-point weights that are binarized during the forward pass.<d-footnote>During the backward pass, the gradient of the
 loss with respect to the binarized weights is computed with standard backpropagation, and that gradient is applied to the
 floating-point weights as an approximation to the true gradient. You could think of this as the straight-through gradient
-estimator <d-cite key="DBLP:journals/corr/BengioLC13"/> for a nondifferentiable "binarize layer."</d-footnote>
+estimator <d-cite key="DBLP:journals/corr/BengioLC13"></d-cite> for a nondifferentiable "binarize layer."</d-footnote>
 
 In this project, I took a different approach: training binary neural networks directly, without gradient approximation or backpropagation. To do this, I used evolution strategies, a type of optimizer that does not require gradients.
 
@@ -130,16 +130,16 @@ level. For dedicated explanations of the theory and popular variants of the algo
 <a href="https://blog.otoro.net/2017/10/29/visual-evolution-strategies/">hardmaru</a> and <a
 href="https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html">Lilian Weng</a>.</d-footnote> ES improves the search distribution over time by repeatedly sampling some candidate solutions, then trying out each candidate to see how well it works, and finally updating the search distribution towards samples that did well. Unlike the typical approach of training neural networks by gradient descent, this does not require backpropagation, so we’re free to use nondifferentiable models like binary neural networks.
 
-ES has a number of other appealing properties in RL <d-cite key="salimans2017evolution"/>.
+ES has a number of other appealing properties in RL <d-cite key="salimans2017evolution"></d-cite>.
 It does not require assigning credit to individual actions, but rather attributes the total reward for an episode directly to
 the model parameters.<d-footnote>I’m not actually so sure this is a good thing. While the authors argue that this helps
 reduce variance when actions have long-term consequences, I do think there’s plenty of training signal available if we can
 figure out which actions lead to which consequences.</d-footnote>
 Additionally, by sharing a table of random numbers across multiple worker machines, <d-cite
-key="salimans2017evolution"/> were able to train ES in a distributed setting while only synchronizing rewards across machines instead of full parameter vectors.
+key="salimans2017evolution"></d-cite> were able to train ES in a distributed setting while only synchronizing rewards across machines instead of full parameter vectors.
 This trick makes ES very parallelizable, and when scaled up it can achieve much faster wall-clock times than modern RL algorithms. While this post focuses on single-machine performance, it’s worth noting that distributed RL and efficient inference are a particularly potent combination.
 
-In this project, I used natural evolution strategies <d-cite key="wierstra14a"/>, a variant of ES which tries to maximize the expected value of return for samples drawn from the search distribution.
+In this project, I used natural evolution strategies <d-cite key="wierstra14a"></d-cite>, a variant of ES which tries to maximize the expected value of return for samples drawn from the search distribution.
 To do this, it estimates the natural gradient  <d-footnote>Intuitively, the natural gradient is like the regular gradient, but
 where the distance between two points in parameter space is measured by how much they change the resulting probability
 distribution over solutions.</d-footnote>
@@ -162,7 +162,7 @@ few schemes for initializing these parameters, but in general the best solution 
 For the biases, which are integers, I used a factorized Gaussian distribution, with parameters
 $$\mu_i$$ and $$\sigma_i$$ for the mean and standard deviation of the $$i$$-th bias.<d-footnote> Beware one possible point of
 confusion: I’m using $\sigma$ for both the sigmoid function and standard deviation parameters.</d-footnote>
-This produces real-valued samples, so I rounded to the nearest integer and used the straight-through gradient estimator <d-cite key="DBLP:journals/corr/BengioLC13"/> (basically, ignoring the rounding operation when computing gradients).
+This produces real-valued samples, so I rounded to the nearest integer and used the straight-through gradient estimator <d-cite key="DBLP:journals/corr/BengioLC13"></d-cite> (basically, ignoring the rounding operation when computing gradients).
 I initialized all of the bias means $$\mu_i$$ to 0, and the standard deviations $$\sigma_i$$ to 1.
 
 So, our binary neural networks will have weights and biases
@@ -189,7 +189,7 @@ it takes are parameter vectors $$\theta$$ for a model we try in the environment.
 of $$R(\theta)$$, a function which accepts the parameters of an agent as input, runs that agent in the environment, and
 returns the total reward the agent achieved. It performs this maximization by updating $$\phi$$ through gradient ascent.
 
-This idea is often called Parameter-exploring Policy Gradients <d-cite key="SEHNKE2010551"/>.
+This idea is often called Parameter-exploring Policy Gradients <d-cite key="SEHNKE2010551"></d-cite>.
 To perform the update, we’ll write
 
 $$
@@ -200,7 +200,7 @@ $$
 using the [log-derivative trick](https://andrewcharlesjones.github.io/posts/2020/02/log-derivative/), and estimate this
 expectation with a finite Monte Carlo sample of models from the search distribution. If this looks almost identical to
 REINFORCE, that’s because it is---the idea of updating a search distribution like this was proposed in the original REINFORCE
-paper <d-cite key="williams_1992"/>.
+paper <d-cite key="williams_1992"></d-cite>.
 
 Because the search distribution is totally separable, we can compute each parameter gradient separately. So, the gradients we need are the following:
 
@@ -297,4 +297,4 @@ One reason that ES has seen some success in reinforcement learning is that the t
 
 For reinforcement learning in challenging environments, massively distributed training across thousands of computers is currently the norm. As we begin to tackle new and harder problems, we can only expect the computational requirements to grow. However, evolution strategies and binary neural networks may provide a more computationally-tractable way of training RL agents.
 
-Building on prior work that investigates scaling ES in a distributed setting <d-cite key="salimans2017evolution"/>, this project takes a complementary approach: improving the efficiency of each experience-gathering agent. I used the derivative-free nature of ES to train binary neural networks without approximating backpropagated gradients. While I've only been able to solve easy RL problems with this approach so far, being able to train these tiny, fast neural networks is pretty cool. I'm excited to see what future work that combines this efficiency with ES’s parallelizability could do!
+Building on prior work that investigates scaling ES in a distributed setting <d-cite key="salimans2017evolution"></d-cite>, this project takes a complementary approach: improving the efficiency of each experience-gathering agent. I used the derivative-free nature of ES to train binary neural networks without approximating backpropagated gradients. While I've only been able to solve easy RL problems with this approach so far, being able to train these tiny, fast neural networks is pretty cool. I'm excited to see what future work that combines this efficiency with ES’s parallelizability could do!
