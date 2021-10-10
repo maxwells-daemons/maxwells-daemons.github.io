@@ -26,25 +26,6 @@ author:
 og_image: assets/icon/android-chrome-192x192.png
 
 # -----------------------------------------------------------------------------
-# Social integration
-# -----------------------------------------------------------------------------
-github_username: maxwells-daemons
-gitlab_username:
-twitter_username:
-linkedin_username: aidan-swope
-scholar_userid: vVzI7uwAAAAJ
-orcid_id:
-medium_username:
-quora_username:
-publons_id:
-research_gate_profile:
-blogger_url:
-work_url:
-keybase_username:
-wikidata_id:
-dblp_url:
-
-# -----------------------------------------------------------------------------
 # Blog
 # -----------------------------------------------------------------------------
 permalink: /:year/:title/

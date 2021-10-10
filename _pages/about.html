@@ -12,7 +12,7 @@ nav: true
 
 <article>
   <div class="float-right" id="about-picture">
-    <img class="img-fluid z-depth-1 rounded m-3" src="/assets/misc/portrait.jpg">
+    <img class="img-fluid z-depth-1 rounded m-3" src="/assets/misc/portrait.jpg" alt="a portrait photo of Aidan Swope">
   </div>
 
   <div class="clearfix">
@@ -52,6 +52,9 @@ nav: true
   </div>
 
   <div id="about-social">
-    {% include social.html %}
+    <a href="mailto:{{ site.email | encode_email }}"><i class="fas fa-envelope"></i><span class="sr-only">email</span></a>
+    <a href="https://scholar.google.com/citations?user=vVzI7uwAAAAJ" title="Google Scholar"><i class="ai ai-google-scholar"></i><span class="sr-only">google scholar</span></a>
+    <a href="https://github.com/maxwells-daemons" title="GitHub"><i class="fab fa-github"></i><span class="sr-only">github</span></a>
+    <a href="https://www.linkedin.com/in/aidan-swope" title="LinkedIn"><i class="fab fa-linkedin"></i><span class="sr-only">linkedin</span></a>
   </div>
 </article>
