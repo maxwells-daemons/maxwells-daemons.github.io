@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Generating Musical Accompaniment in Latent Space</title>
+<meta name="description" content="Taming wiggly functions through optimization.">
+
+
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="Taming wiggly functions through optimization." />
+<meta property="og:type" content="object" />
+<meta property="og:title" content="" />
+<meta property="og:url" content="https://aidanswope.com/2020/accompaniment/" />
+<meta property="og:description" content="Generating Musical Accompaniment in Latent Space" />
+<meta property="og:image" content="/assets/posts/accompaniment/thumbnail.jpg" />
+
+<!-- Feed -->
+<link type="application/atom+xml" rel="alternate" href="https://aidanswope.com/feed.xml" title="Aidan&apos;s Blog" />
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png">
+<link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg" color="#5bbad5">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="canonical" href="https://aidanswope.com/2020/accompaniment/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-173593414"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-173593414');
+  </script>
+
+
+    <!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    <script src="/assets/js/distillpub/template.v2.js"></script>
+    <script src="/assets/js/distillpub/transforms.v2.js"></script>
+    <script src="/assets/js/distillpub/overrides.js"></script>
+    
+    <style type="text/css">
+      audio {
+  max-width: 100%;
+} .audio-caption {
+  font-family: Roboto,sans-serif;
+}
+
+    </style>
+    
+  </head>
+
+  <!-- Metadata -->
+  <d-front-matter>
+    <script async type="text/json">{
+      "title": "Generating Musical Accompaniment in Latent Space",
+      "description": "By predicting the latent code for a whole song given just the melody, we can synthesize drums and bass for any MIDI.",
+      "published": "August 9, 2020",
+      "authors": [
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script>
+  </d-front-matter>
+
+  <body font-size-base="1">
+
+    <!-- Header -->
+    <header>
+  <!-- Nav Bar -->
+  <nav id="navbar" class="navbar navbar-expand-sm sticky-top">
+    <div class="container">
+
+      <!-- Title link -->
+      
+      <a class="navbar-brand font-weight-lighter" href="https://aidanswope.com/">
+       Aidan's Blog
+      </a>
+      
+
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <!-- Pages -->
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/about">
+                About
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/tags">
+                Tags
+                
+              </a>
+          </li>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+    <!-- Content -->
+    <div class="post distill">
+      <d-title>
+        <h1>Generating Musical Accompaniment in Latent Space</h1>
+        <p>By predicting the latent code for a whole song given just the melody, we can synthesize drums and bass for any MIDI.</p>
+      </d-title>
+
+      <!-- HACK: Hide the default byline to remove authors & affiliations -->
+      <d-byline style="display: none"></d-byline>
+
+      <!-- Add our own custom byline -->
+      <d-byline>
+        <div class="byline grid">
+          <div>
+            <h3>Published</h3>
+            <p>August 9, 2020</p>
+          </div>
+
+          
+          <div>
+            <h3>Tags</h3>
+            
+            
+            <p><a href="/tags#Project">Project</a></p>
+            
+            
+            <p><a href="/tags#Generative%20models">Generative models</a></p>
+            
+          </div>
+          
+
+          
+          <div>
+            <h3>Resources</h3>
+            
+            
+              <p><a href="https://drive.google.com/file/d/1SYW0uhId39YXQMXmvfQQf49A6d1J4ooF/view?usp=sharing"><i class="far fa-chart-bar"></i> Poster</a></p>
+            
+            
+              <p><a href="https://github.com/maxwells-daemons/accompany-music-vae"><i class="fab fa-github"></i> Code</a></p>
+            
+          </div>
+          
+
+        </div>
+      </d-byline>
+
+      <d-article>
+        <p class="note note-secondary">
+This was the final project for
+<a href="https://sites.google.com/view/cs-159-spring-2019">an undergraduate class on deep probabilistic models</a>,
+and was built with
+<a href="https://www.linkedin.com/in/brendan-hollaway">Brendan Hollaway</a>,
+<a href="https://www.linkedin.com/in/anthonybao">Anthony Bao</a>,
+and <a href="https://github.com/HSQ8">Hongsen Qin</a>.
+</p>
+
+<p>Generative machine learning models have famously been used to create new media from scratch,
+but an even more exciting possibility involves humans collaborating with algorithms
+throughout the creative process <d-cite key="carter2017using"></d-cite>.
+While generative models are increasingly able to generate convincing images, audio, and text,
+human input is valuable to choose properties we want the final result to have and to incorporate
+parts of the human experience we haven’t (yet) been able to train our models to understand.</p>
+
+<p>This project explores co-composing music with a neural network that automatically generates drums and bass for a human-written melody.</p>
+
+<div class="card mt-3 mb-4 l-body-outset"><div class="card-body pb-1">
+<h3 class="card-title mt-0">Accompaniments generated by our model</h3>
+<div class="container-fluid">
+  <div class="row"><div class="col"><h4 class="text-center mt-3 text-strong">Tetris Theme</h4></div></div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm col-sm-auto text-center">
+      <audio controls="" preload="auto">
+        <source src="/assets/posts/accompaniment/tetris-accompaniment.mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      <p class="mt-n2 audio-caption">Generated</p>
+    </div>
+    <div class="col-sm col-sm-auto text-center">
+      <audio controls="" preload="auto">
+        <source src="/assets/posts/accompaniment/tetris-original.mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      <p class="mt-n2 audio-caption">Original</p>
+    </div>
+  </div>
+
+  <div class="row"><div class="col"><h4 class="text-center mt-3">Nyan Cat</h4></div></div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm col-sm-auto text-center">
+      <audio controls="" preload="auto">
+        <source src="/assets/posts/accompaniment/nyan-cat-accompaniment.mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      <p class="mt-n2 audio-caption">Generated</p>
+    </div>
+    <div class="col-sm col-sm-auto text-center">
+      <audio controls="" preload="auto">
+        <source src="/assets/posts/accompaniment/nyan-cat-original.mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      <p class="mt-n2 audio-caption">Original</p>
+    </div>
+  </div>
+
+  <div class="row"><div class="col"><h4 class="text-center mt-3">In the Hall of the Mountain King</h4></div></div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm col-sm-auto text-center">
+      <audio controls="" preload="auto">
+        <source src="/assets/posts/accompaniment/in-the-hall-of-the-mountain-king-accompaniment.mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      <p class="mt-n2 audio-caption">Generated</p>
+    </div>
+    <div class="col-sm col-sm-auto text-center">
+      <audio controls="" preload="auto">
+        <source src="/assets/posts/accompaniment/in-the-hall-of-the-mountain-king-original.mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      <p class="mt-n2 audio-caption">Original</p>
+    </div>
+  </div>
+</div>
+</div></div>
+
+<p>While this project uses a restricted subset of MIDI
+(which is itself very restricted relative to all of what’s possible with music),
+and the samples therefore always sound a little elevator‑music‑y, we believe that this approach would scale well to larger,
+more sophisticated latent variable models,
+such as OpenAI’s Jukebox <d-cite key="dhariwal2020jukebox"></d-cite>.</p>
+
+<h2 id="model-overview">Model Overview</h2>
+
+<p>Before getting into the details, here’s a brief overview of how the model works at a high level.</p>
+
+<div class="l-body-outset text-center mb-4">
+<img src="/assets/posts/accompaniment/accompany-training.svg" class="img-fluid medium-zoom-image" alt="A diagram of the training and inference procedure" data-zoomable="" />
+</div>
+
+<p>The core of the model is MusicVAE <d-cite key="roberts2019hierarchical"></d-cite>, a pretrained model created by <a href="https://magenta.tensorflow.org/">Google’s Magenta team</a>.
+MusicVAE consists of an encoder, which transforms pieces of music into latent variables which capture properties of that music in a simpler compressed form,
+and a decoder which transforms latent variables back into music. Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums,
+and bass, with extra features like time signature changes stripped.<d-footnote>As a result, the model doesn’t work very well on music using these features. You might notice this in "In the Hall of the Mountain King" above.</d-footnote></p>
+
+<p>Because we want to generate the accompaniment given a new melody, we train a “surrogate encoder” to mimic the original MusicVAE encoder, while only having access to the melody. Given a dataset of three-track music, we use the MusicVAE encoder to produce a latent representation for each song, then strip out the drums and bass and train the surrogate encoder to predict the latent variables from the melody alone. Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody’s (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.</p>
+
+<h2 id="variational-autoencoders-and-latent-space">Variational Autoencoders and Latent Space</h2>
+
+<p>MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outside of the scope of this project writeup,
+but for an introduction I recommend <a href="https://jaan.io/what-is-variational-autoencoder-vae-tutorial/">Jaan Altosaar’s tutorial</a>.
+For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler
+and smaller way, as a collection of latent variables. In our case, a MIDI song might take 20 KB to store, but its latent
+representation is a vector of 512 floating-point numbers, a compression ratio of ten. Despite being much smaller, the latent
+variables are expected to capture most of the high-level properties of the music, like genre, key, time, and timings for
+particular events. This is possible because music has patterns that enable it to be described succinctly—you could get a passable reconstruction of some drum parts by just asking a drummer to “play a swing beat.”</p>
+
+<p>Furthermore, latent representations are presumed to live in some “latent space,” about which we make some very strong assumptions.
+The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent
+two songs that sound very similar.<d-footnote>The two songs may not have any notes in common, though! Distances and
+directions are more meaningful in latent space than they are in data space.</d-footnote>
+Directions are often meaningful in latent space; the authors of MusicVAE found that <a href="https://magenta.tensorflow.org/music-vae#long-term-structure">they could move songs in an “add note density” direction</a> to maintain the character of a song but with more notes.</p>
+
+<p>Most importantly, the latent space has a squished and twisted shape (relative to the data’s shape) such that real music
+appears Gaussian-distributed in this space.<d-footnote>This is actually an oversimplification. While ours is Gaussian, VAEs
+often use other distributions for the latent space.</d-footnote>
+This means that when you sample latent vectors from a Gaussian, they likely correspond to songs that sound reasonable, and conversely real songs frequently map to vectors near the origin.
+If you were to pick any direction in latent space, find the latent vector corresponding to every popular song and project those vectors onto this direction, then plot a histogram of the resulting values, that histogram should form a standard normal bell curve.</p>
+
+<p>Latent space is very simple (it’s just a multivariate Gaussian), but it’s supposed to represent the full distribution of
+music, which is complex and multimodal in its common representations (MIDI, MP3, FLAC, etc.). To accomplish this, a
+variational autoencoder employs two powerful neural networks to translate between data space and latent space. The encoder
+maps data points into latent variables that represent them, and the decoder maps latent variables back into data space. By
+randomly sampling points in latent space and pushing them through a good decoder, we can generate endless music, or images,
+or whatever else the VAE was trained on. What is most remarkable is that variational autoencoders are trained <em>unsupervised</em>. Given a dataset of media, the encoder and decoder learn to create this very special latent space with no additional supervision.</p>
+
+<h2 id="predicting-latent-variables-from-a-melody">Predicting Latent Variables from a Melody</h2>
+
+<p>A lot of the things we want our latent variables to capture—what the song’s genre is, when solos start and end, etc.—are present in all three parts of the original music.
+When a bass solo starts, the drummer might play a simpler pattern and the melody might stop playing altogether.
+When it ends, the drummer doesn’t need to know much about the details of the solo to play an appropriate fill.
+In this sense, the original music is an <em>overcomplete representation</em>, which is why we’re able to compress it so much in the latent space.</p>
+
+<p><img src="/assets/posts/accompaniment/new-york-new-york.jpg" class="img-fluid medium-zoom-image" alt="A graph of the notes in Frank Sinatra's 'New York, New York' and its reconstruction from the melody alone" data-zoomable="" /></p>
+
+<p>That also means that many properties of a full song’s latent representation can be inferred from just one of the parts. In
+the plot above, the surrogate encoder and MusicVAE decoder try to reconstruct the theme from “New York, New York” from just
+Frank Sinatra’s part. Red bars are the melody, blue are the bass, and brown are drums. The model certainly can’t predict the
+original accompaniment, and it doesn’t even recreate the melody (which the surrogate encoder has access to)—that’s why we stitch the original melody back in as the last step. However, it has correctly inferred a swing beat for the drums, works around important timings in the song, and plays the bass in key. This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative
+tasks. However, with some impressive recent results generating high-resolution images <d-cite key="razavi2019generating"></d-cite> and raw audio <d-cite key="dhariwal2020jukebox"></d-cite>
+with more sophisticated VAEs, variational methods are making something of a comeback. Hopefully this post illustrates some of the cool things you can do with an explicit and controllable latent space.</p>
+
+<p>If you like, check out the code and some additional samples on the <a href="https://github.com/maxwells-daemons/accompany-music-vae">GitHub repo</a>. And if you find any mistakes, errors, or points of confusion, please let me know!</p>
+
+      </d-article>
+
+      <d-appendix id="appendix">
+        
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <p class="text-muted">
+      &copy; 2023 Aidan Maxwell Swope
+    </span>
+  </div>
+</footer>
+
+  </body>
+
+  
+  <d-bibliography src="/assets/posts/accompaniment/citations.bib"></d-bibliography>
+  
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  <!-- Medium Zoom JS -->
+<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/assets/js/zoom.js"></script>
+
+</html>

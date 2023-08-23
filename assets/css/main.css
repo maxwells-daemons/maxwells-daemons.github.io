@@ -1,0 +1,114 @@
+/******************************************************************************* Themes */
+:root { --global-bg-color: #ffffff; --global-code-bg-color: #fff8e1; --global-text-color: #000000; --global-text-color-light: #424242; --global-theme-color: #304ffe; --global-hover-color: #0026ca; --global-line-color: #cfd8dc; }
+
+/******************************************************************************* Styles for the base elements of the theme. */
+.container { max-width: 800px; }
+
+#content-container { padding-bottom: 10px; }
+
+html { position: relative; min-height: 100%; }
+
+body { margin-bottom: 50px; color: var(--global-text-color); background-color: var(--global-bg-color); }
+
+a, p, h1, h2, h3, h4, h5, h6, em, div, span, strong { color: var(--global-text-color); }
+
+a, table.table a { text-decoration: none; border-bottom: 1px solid var(--global-text-color); }
+
+a:hover, table.table a:hover { color: var(--global-hover-color); border-bottom-color: var(--global-hover-color) !important; }
+
+.navbar { box-shadow: none; border-bottom: 1px solid var(--global-line-color); background-color: var(--global-bg-color); opacity: 0.95; }
+
+.navbar .navbar-brand, .navbar .navbar-nav .nav-item .nav-link { color: var(--global-text-color); border: none; }
+
+.navbar .navbar-brand:hover, .navbar .navbar-nav .nav-item .nav-link:hover { color: var(--global-hover-color); }
+
+.navbar .navbar-nav .nav-item.active > .nav-link { background-color: inherit; font-weight: bolder; color: var(--global-theme-color); }
+
+.navbar .navbar-nav .nav-item.active > .nav-link:hover { color: var(--global-hover-color); }
+
+.navbar-toggler .icon-bar { display: block; width: 22px; height: 2px; background-color: var(--global-text-color); border-radius: 1px; margin-bottom: 4px; transition: all 0.2s; }
+
+.navbar-toggler .top-bar { transform: rotate(45deg); transform-origin: 10% 10%; }
+
+.navbar-toggler .middle-bar { opacity: 0; }
+
+.navbar-toggler .bottom-bar { transform: rotate(-45deg); transform-origin: 10% 90%; }
+
+.navbar-toggler.collapsed .top-bar { transform: rotate(0); }
+
+.navbar-toggler.collapsed .middle-bar { opacity: 1; }
+
+.navbar-toggler.collapsed .bottom-bar { transform: rotate(0); }
+
+footer { border-top: 1px solid var(--global-line-color); position: absolute; bottom: 1px; width: 100%; height: 50px; line-height: 50px; }
+
+.equation { margin-bottom: 1rem; text-align: center; }
+
+figure.highlight { margin: 0 0 1rem; }
+
+pre { background-color: var(--global-code-bg-color); border-radius: 6px; padding: 6px 12px; }
+
+pre pre, pre code { background-color: transparent; border-radius: 0; padding: 0; }
+
+code { background-color: var(--global-code-bg-color); border-radius: 3px; padding: 3px 3px; }
+
+blockquote { background: var(--global-bg-color); border-left: 2px solid var(--global-theme-color); margin: 1.5em 10px; padding: 0.5em 10px; font-size: 1.2rem; }
+
+/******************************************************************************* Style overrides for distill blog posts. */
+d-byline { border-top-color: var(--global-line-color) !important; }
+
+d-byline h3 { color: var(--global-text-color) !important; }
+
+d-byline a, d-article d-byline a { color: var(--global-text-color) !important; border-bottom: 1px solid var(--global-text-color) !important; }
+
+d-byline a:hover, d-article d-byline a:hover { color: var(--global-hover-color) !important; }
+
+d-article { border-top-color: var(--global-line-color) !important; }
+
+d-article p, d-article li, d-article table { font-family: "Roboto Slab", serif; }
+
+d-article a, d-article p, d-article h1, d-article h2, d-article h3, d-article h4, d-article h5, d-article h6, d-article li, d-article table { color: var(--global-text-color) !important; }
+
+d-article a, d-article h1, d-article h2 { border-bottom-color: var(--global-text-color) !important; }
+
+d-article a:hover { color: var(--global-hover-color) !important; border-bottom-color: var(--global-hover-color) !important; }
+
+d-appendix { border-top-color: var(--global-line-color) !important; color: var(--global-text-color-light) !important; }
+
+d-appendix h3, d-appendix li, d-appendix span, d-appendix p { color: var(--global-text-color-light) !important; }
+
+d-appendix a, d-appendix a.footnote-backlink { border: none !important; color: var(--global-text-color-light) !important; }
+
+d-appendix a:hover, d-appendix a.footnote-backlink:hover { color: var(--global-hover-color) !important; }
+
+d-cite, d-footnote, .note { font-family: Roboto, sans-serif; }
+
+d-footnote { margin-left: -0.25rem; margin-right: 0.25rem; }
+
+img { width: 100%; background-color: var(--global-bg-color); }
+
+/******************************************************************************* Styles for the index page. */
+.header-bar { border-bottom: 1px solid var(--global-line-color); text-align: center; padding-top: 1rem; padding-bottom: 1rem; margin-top: -3rem; }
+
+.header-bar h1 { color: var(--global-theme-color); font-size: 5rem; }
+
+.post-list { margin: 0; margin-bottom: 40px; padding: 0; }
+
+.post-list li { border-bottom: 1px solid var(--global-line-color); list-style: none; padding-top: 2rem; padding-bottom: 2rem; }
+
+.post-list li .post-meta { font-size: 0.875rem; margin-bottom: 0; }
+
+.post-list li a { border: none; }
+
+#index-container { max-width: 1000px !important; }
+
+/******************************************************************************* Styles for the about page. */
+#about-picture { margin-left: 1rem; margin-right: 1rem; width: 100%; }
+
+@media (min-width: 576px) { #about-picture { width: 33%; } }
+
+#about-social { text-align: center; font-size: 3rem; }
+
+#about-social a { border: none !important; }
+
+/*# sourceMappingURL=main.css.map */

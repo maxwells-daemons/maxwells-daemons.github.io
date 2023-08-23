@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://aidanswope.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://aidanswope.com/" rel="alternate" type="text/html" /><updated>2023-08-22T18:49:27-07:00</updated><id>https://aidanswope.com/feed.xml</id><title type="html">Aidan’s Blog</title><subtitle>Taming wiggly functions through optimization.</subtitle><author><name>Aidan Swope</name></author><entry><title type="html">Lightweight Reinforcement Learning by Evolving Binary Networks</title><link href="https://aidanswope.com/2020/binary-evolution/" rel="alternate" type="text/html" title="Lightweight Reinforcement Learning by Evolving Binary Networks" /><published>2020-09-03T00:00:00-07:00</published><updated>2020-09-03T00:00:00-07:00</updated><id>https://aidanswope.com/2020/binary-evolution</id><content type="html" xml:base="https://aidanswope.com/2020/binary-evolution/">&lt;figure class=&quot;figure&quot;&gt;
+  &lt;div class=&quot;embed-responsive embed-responsive-4by3 mb-2&quot;&gt;
+    &lt;video class=&quot;border rounded&quot; controls=&quot;&quot; autoplay=&quot;&quot; loop=&quot;&quot;&gt;
+      &lt;source src=&quot;/assets/posts/binary-evolution/cartpole.mp4&quot; type=&quot;video/mp4&quot; /&gt;&amp;lt;/source&amp;gt;
+    &lt;/video&gt;
+  &lt;/div&gt;
+  &lt;figcaption class=&quot;figure-caption&quot;&gt;
+    This neural network is 600 bytes and runs at 500,000 forward passes per second on my laptop&amp;rsquo;s CPU.
+  &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p class=&quot;note note-warning&quot;&gt;
+  &lt;strong&gt;Heads up:&lt;/strong&gt; this post has some long equations which don&apos;t display well on narrow displays.
+  You might want to switch to landscape mode or a different device
+  to view the equations properly.
+&lt;/p&gt;
+
+&lt;p&gt;Today, reinforcement learning is slow and expensive. Poor sample efficiency, stemming from issues like high-variance gradient estimates and the difficulty of credit assignment, means that agents can require years of experience in an environment to match human performance.&lt;/p&gt;
+
+&lt;p&gt;As a result, gathering experience is a key computational bottleneck in reinforcement learning. For each frame of experience,
+we must run a forward pass through the model. In real-world problems, this leads to large, expensive, and energy-inefficient
+systems for generating rollouts—&lt;a href=&quot;https://openai.com/blog/openai-five/&quot;&gt;OpenAI Five&lt;/a&gt; used 128,000 CPU cores for gathering experience in the environment and running
+evaluation, and 256 GPUs for optimization &lt;d-cite key=&quot;OpenAI_dota&quot;&gt;.&lt;/d-cite&gt;&lt;/p&gt;
+
+&lt;p&gt;Because inference is such a important part of RL, efficiency improvements to the forward pass directly translate to RL models that are easier, faster, and cheaper to train. In this project, I combine binary neural networks, which are very fast but not differentiable, with evolution strategies, a type of gradient-free optimizer that neatly sidesteps the difficulties of training binary models while offering its own advantages for reinforcement learning.&lt;/p&gt;
+
+&lt;h2 id=&quot;binary-neural-networks&quot;&gt;Binary Neural Networks&lt;/h2&gt;
+
+&lt;p&gt;Binary neural networks have weights and activations constrained to values +1 or -1.&lt;d-footnote&gt;Research in this field has
+explored a bunch of variants, such as just binarizing the weights, or scaling activations by a learned constant. XNOR-Net &lt;d-cite key=&quot;rastegari2016xnornet&quot;&gt;&lt;/d-cite&gt; is a good paper for getting an overview of this kind of work.&lt;/d-footnote&gt;
+Each layer uses the sign function as its activation and computes the function \(f(x; W, b) = \text{sign}(Wx + b)\), where
+\(x\) is a binary vector of inputs, \(W\) is a binary matrix of weights, and \(b\) is a vector of &lt;em&gt;integer&lt;/em&gt; biases.&lt;/p&gt;
+
+&lt;p&gt;The weights, inputs, and outputs of a layer are binary in the sense of having two possible values, ±1, but to run the model on standard computing hardware we encode them as the more familiar 0/1 binary numbers by representing -1 as 0 (and 1 as itself). With this encoding, we can fit an entire 64-vector into a single 64-bit quadword. SIMD instructions can operate very efficiently on “packed” vectors of this kind.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-xnor-trick&quot;&gt;The XNOR Trick&lt;/h3&gt;
+
+&lt;p&gt;There’s a clever trick &lt;d-cite key=&quot;courbariaux2016binarized&quot;&gt;&lt;/d-cite&gt; that enables much faster and more power-efficient
+neural networks by performing almost all of the required computation with bitwise operations. Let’s say we want to take the
+dot product of two \(N\)-bit binary vectors, \(\vec{a} \cdot \vec{b} = \sum_i^N a_i b_i\).
+Since each \(a_i\) and \(b_i\) are ±1, their product is 1 if \(a_i = b_i\) and -1 otherwise.
+So the dot product is the total count of how many bit places match, minus how many places don’t. Because the two counts must
+sum to \(N\), we have \(\vec{a} \cdot \vec{b} = 2 \left(\text{# places where a = b}\right) - N\).&lt;d-footnote&gt;In notation:
+$$
+\begin{align*}
+\vec{a} \cdot \vec{b}
+&amp;amp;= \sum_{i=1}^N a_i b_i \\\\
+&amp;amp;= \sum_{i=1}^N \mathbf{1}_{a_i = b_i} + -\mathbf{1}_{a_1 \neq b_i} \\\\
+&amp;amp;= \sum_{i=1}^N \mathbf{1}_{a_i = b_i} -\sum_{i=1}^N \mathbf{1}_{a_1 \neq b_i} \\\\
+&amp;amp;= 2 \sum_{i=1}^N \mathbf{1}_{a_i = b_i} - N,
+\end{align*}$$
+where $\mathbf{1}$ is an indicator function and the last equality holds because
+the equality condition partitions the bits.
+&lt;/d-footnote&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/binary-evolution/xnor-trick.svg&quot; class=&quot;img-fluid medium-zoom-image my-4&quot; alt=&quot;An example of the XNOR trick computing the dot product of [1, 1, -1, -1] and [1, 1, 1, -1], demonstrating that the arithmetic is the same in both cases.&quot; data-zoomable=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Since we’re encoding these vectors as 0/1 bit vectors, \(a \text{ XNOR } b\) is precisely 1 where \(a\) matches \(b\) and 0 where it doesn’t, so we can compute the dot product as
+\(a \cdot b = 2 \text{ popcount}\left(a\text{ XNOR } b\right) - N\).
+This takes just a few instructions and is very SIMD-friendly. Since matrix multiplication, convolution, and most other important operations for neural networks are made up of dot products, this makes the forward pass of a binary neural network very fast overall.&lt;/p&gt;
+
+&lt;h3 id=&quot;training-binary-networks&quot;&gt;Training Binary Networks&lt;/h3&gt;
+
+&lt;p&gt;However, binary neural networks are discrete-valued, which precludes training them with gradient descent and backpropagation.
+One solution, used by approaches like XNOR-Net &lt;d-cite key=&quot;rastegari2016xnornet&quot;&gt;&lt;/d-cite&gt;, is to train a model with
+floating-point weights that are binarized during the forward pass.&lt;d-footnote&gt;During the backward pass, the gradient of the
+loss with respect to the binarized weights is computed with standard backpropagation, and that gradient is applied to the
+floating-point weights as an approximation to the true gradient. You could think of this as the straight-through gradient
+estimator &lt;d-cite key=&quot;DBLP:journals/corr/BengioLC13&quot;&gt;&lt;/d-cite&gt; for a nondifferentiable &quot;binarize layer.&quot;&lt;/d-footnote&gt;&lt;/p&gt;
+
+&lt;p&gt;In this project, I took a different approach: training binary neural networks directly, without gradient approximation or backpropagation. To do this, I used evolution strategies, a type of optimizer that does not require gradients.&lt;/p&gt;
+
+&lt;h2 id=&quot;evolution-strategies-for-binary-neural-networks&quot;&gt;Evolution Strategies for Binary Neural Networks&lt;/h2&gt;
+
+&lt;p&gt;Evolution strategies (ES) are a family of derivative-free optimizers that maintain a &lt;em&gt;search distribution&lt;/em&gt;: a probability
+distribution over possible solutions.&lt;d-footnote&gt;This section only briefly covers how evolution strategies work at a high
+level. For dedicated explanations of the theory and popular variants of the algorithm, I recommend the excellent posts by
+&lt;a href=&quot;https://blog.otoro.net/2017/10/29/visual-evolution-strategies/&quot;&gt;hardmaru&lt;/a&gt; and &lt;a href=&quot;https://lilianweng.github.io/lil-log/2019/09/05/evolution-strategies.html&quot;&gt;Lilian Weng&lt;/a&gt;.&lt;/d-footnote&gt; ES improves the search distribution over time by repeatedly sampling some candidate solutions, then trying out each candidate to see how well it works, and finally updating the search distribution towards samples that did well. Unlike the typical approach of training neural networks by gradient descent, this does not require backpropagation, so we’re free to use nondifferentiable models like binary neural networks.&lt;/p&gt;
+
+&lt;p&gt;ES has a number of other appealing properties in RL &lt;d-cite key=&quot;salimans2017evolution&quot;&gt;&lt;/d-cite&gt;.
+It does not require assigning credit to individual actions, but rather attributes the total reward for an episode directly to
+the model parameters.&lt;d-footnote&gt;I’m not actually so sure this is a good thing. While the authors argue that this helps
+reduce variance when actions have long-term consequences, I do think there’s plenty of training signal available if we can
+figure out which actions lead to which consequences.&lt;/d-footnote&gt;
+Additionally, by sharing a table of random numbers across multiple worker machines, &lt;d-cite key=&quot;salimans2017evolution&quot;&gt;&lt;/d-cite&gt; were able to train ES in a distributed setting while only synchronizing rewards across machines instead of full parameter vectors.
+This trick makes ES very parallelizable, and when scaled up it can achieve much faster wall-clock times than modern RL algorithms. While this post focuses on single-machine performance, it’s worth noting that distributed RL and efficient inference are a particularly potent combination.&lt;/p&gt;
+
+&lt;p&gt;In this project, I used natural evolution strategies &lt;d-cite key=&quot;wierstra14a&quot;&gt;&lt;/d-cite&gt;, a variant of ES which tries to maximize the expected value of return for samples drawn from the search distribution.
+To do this, it estimates the natural gradient  &lt;d-footnote&gt;Intuitively, the natural gradient is like the regular gradient, but
+where the distance between two points in parameter space is measured by how much they change the resulting probability
+distribution over solutions.&lt;/d-footnote&gt;
+of expected return with respect to the parameters of the search distribution,&lt;d-footnote&gt;Note that these are parameters that
+define the distribution, &lt;em&gt;not&lt;/em&gt; parameters of a neural network (which we sample from that distribution). We’ll be taking
+gradients with respect to $\phi$, the parameters of the search distribution, but our original model parameterized by
+$\theta$ can still be
+nondifferentiable.&lt;/d-footnote&gt; and then performs gradient ascent on these parameters.&lt;/p&gt;
+
+&lt;h3 id=&quot;a-distribution-over-binary-neural-networks&quot;&gt;A Distribution Over Binary Neural Networks&lt;/h3&gt;
+
+&lt;p&gt;In this project, the search distribution is a distribution over the weights of binary neural networks. To keep things simple,
+I modeled each binary weight as an independent Bernoulli random variable. That is, for each weight \(i\) in the binary
+network we maintain a parameter \(p_i\), the probability of that weight being 1.&lt;/p&gt;
+
+&lt;p&gt;To ensure that these probabilities remain valid \(\left(0 \leq p_i \leq 1\right)\) as the parameters are adjusted by the optimization algorithm, I reparameterized them as
+\(p_i = \sigma(x_i)\), where \(\sigma\) is the sigmoid function and the parameters \(x_i\) may be any real number. I tried a
+few schemes for initializing these parameters, but in general the best solution was to initialize each \(x_i\) such that every bit is initially 0 or 1 with equal probability.&lt;/p&gt;
+
+&lt;p&gt;For the biases, which are integers, I used a factorized Gaussian distribution, with parameters
+\(\mu_i\) and \(\sigma_i\) for the mean and standard deviation of the \(i\)-th bias.&lt;d-footnote&gt; Beware one possible point of
+confusion: I’m using $\sigma$ for both the sigmoid function and standard deviation parameters.&lt;/d-footnote&gt;
+This produces real-valued samples, so I rounded to the nearest integer and used the straight-through gradient estimator &lt;d-cite key=&quot;DBLP:journals/corr/BengioLC13&quot;&gt;&lt;/d-cite&gt; (basically, ignoring the rounding operation when computing gradients).
+I initialized all of the bias means \(\mu_i\) to 0, and the standard deviations \(\sigma_i\) to 1.&lt;/p&gt;
+
+&lt;p&gt;So, our binary neural networks will have weights and biases&lt;/p&gt;
+
+\[\theta = \left[ w_1, \ldots, w_N, b_1, \ldots, b_M \right],\]
+
+&lt;p&gt;which are sampled from the search distribution. The complete parameter vector defining the search distribution is&lt;/p&gt;
+
+\[\phi =
+\left[ x_1, \ldots, x_N, \mu_1, \ldots, \mu_M, \sigma_1, \ldots, \sigma_M  \right],\]
+
+&lt;p&gt;and the probability density for the search distribution is&lt;/p&gt;
+
+&lt;p&gt;\(P(\theta \mid \phi) =
+\left( \prod_{i=1}^N \sigma(x_i)^{w_i} (1 - \sigma(x_i))^{1 - w_i} \right)
+\left( \prod_{i=1}^M \frac{1}{\sigma_i \sqrt{2 \pi}} \exp \left( -\frac{1}{2} \left( \frac{b_i - \mu_i}{\sigma_i} \right)^2 \right) \right)
+.\)&lt;/p&gt;
+&lt;h3 id=&quot;updating-the-search-distribution&quot;&gt;Updating the Search Distribution&lt;/h3&gt;
+
+&lt;p&gt;Natural ES kind of acts like a policy gradient algorithm, except the “policy” is the search distribution, and the “actions”
+it takes are parameter vectors \(\theta\) for a model we try in the environment. The goal is to maximize the expected value
+of \(R(\theta)\), a function which accepts the parameters of an agent as input, runs that agent in the environment, and
+returns the total reward the agent achieved. It performs this maximization by updating \(\phi\) through gradient ascent.&lt;/p&gt;
+
+&lt;p&gt;This idea is often called Parameter-exploring Policy Gradients &lt;d-cite key=&quot;SEHNKE2010551&quot;&gt;&lt;/d-cite&gt;.
+To perform the update, we’ll write&lt;/p&gt;
+
+\[\nabla_\phi \mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta)\right] =
+\mathbb{E}_{\theta \sim P(\cdot \mid \phi )}\left[R(\theta ) \nabla_\phi \log P(\theta \mid \phi )\right]\]
+
+&lt;p&gt;using the &lt;a href=&quot;https://andrewcharlesjones.github.io/posts/2020/02/log-derivative/&quot;&gt;log-derivative trick&lt;/a&gt;, and estimate this
+expectation with a finite Monte Carlo sample of models from the search distribution. If this looks almost identical to
+REINFORCE, that’s because it is—the idea of updating a search distribution like this was proposed in the original REINFORCE
+paper &lt;d-cite key=&quot;williams_1992&quot;&gt;&lt;/d-cite&gt;.&lt;/p&gt;
+
+&lt;p&gt;Because the search distribution is totally separable, we can compute each parameter gradient separately. So, the gradients we need are the following:&lt;/p&gt;
+
+\[\begin{equation}
+\frac{\partial}{\partial \mu_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{b_i - \mu_i}{\sigma_i^2}
+\end{equation}\]
+
+\[\begin{equation}
+\frac{\partial}{\partial \sigma_i} \log \mathcal{N}(b_i \mid \mu_i, \sigma_i) = \frac{(b_i - \mu_i)^2 - \sigma_i^2}{\sigma_i^3}
+\end{equation}\]
+
+\[\begin{equation}
+\frac{\partial}{\partial x_i} \log P(w_i \mid x_i) = w_i - \sigma(x_i).
+\label{eqn:3}
+\end{equation}\]
+
+&lt;p&gt;The first two are derived in the REINFORCE paper, and I derive \(\eqref{eqn:3}\) in &lt;a href=&quot;#appendix&quot;&gt;the appendix&lt;/a&gt;. As I mentioned above, the biases must be integers, so I round them during the forward pass and use the gradients computed at that point as an approximation to the true gradient.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-complete-algorithm&quot;&gt;The Complete Algorithm&lt;/h3&gt;
+
+&lt;p&gt;In summary, one iteration proceeds as follows:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Sample a population of binary neural networks, \(\theta_1 \ldots \theta_T\),
+from \(P( \theta \mid \phi\)).&lt;/li&gt;
+  &lt;li&gt;Run each agent in the environment using binary encoding and the XNOR trick,
+and record the total return it achieves, \(R(\theta_i )\).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;li&gt;Estimate the gradient: \( \nabla_\phi \mathbb{E}_{\theta \sim P(\cdot \mid \phi)}[R(\theta)] \approx \) \( \frac{1}{T} \sum_{i=1}^T R(\theta_i) \nabla_\phi \log P(\theta_i \mid \phi) \).&lt;/li&gt;
+&lt;li&gt;Update \( \phi \) using the estimated gradient, increasing the probability the search distribution assigns to high-performing binary networks.&lt;/li&gt;
+
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
+
+&lt;h3 id=&quot;fast-learning-on-easy-problems&quot;&gt;Fast Learning on Easy Problems&lt;/h3&gt;
+
+&lt;p&gt;I was consistently surprised by just how fast binary neural networks are in practice. A two-layer, 64-unit-wide binary
+network clocked in at 500,000 forward passes per second on my laptop’s CPU, 25 times faster than an equivalent model in
+PyTorch. Training on easy problems like CartPole was quick too—the model at the start of this article trained in under one minute on CPU.&lt;/p&gt;
+
+&lt;p&gt;For fast learning, I found it essential to represent the observations from the environment in a good way. This was particularly tricky because the model only accepts binary vectors as input. For CartPole, it was sufficient to put objects’ positions and velocities into one of several “bins,” but making progress on other environments required more careful feature engineering. I also tried training the model from the raw binary encodings of the positions and velocities, but that didn’t work at all.&lt;/p&gt;
+
+&lt;h3 id=&quot;failure-to-converge-on-hard-problems&quot;&gt;Failure to Converge on Hard Problems&lt;/h3&gt;
+
+&lt;figure class=&quot;figure&quot;&gt;
+  &lt;div class=&quot;embed-responsive embed-responsive-4by3 mb-2&quot;&gt;
+    &lt;video class=&quot;border rounded&quot; controls=&quot;&quot;&gt;
+      &lt;source src=&quot;/assets/posts/binary-evolution/lunar-lander.mp4&quot; type=&quot;video/mp4&quot; /&gt;&amp;lt;/source&amp;gt;
+    &lt;/video&gt;
+  &lt;/div&gt;
+  &lt;figcaption class=&quot;figure-caption&quot;&gt;
+    Let&apos;s not let it fly the spaceships quite yet.
+  &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;However, although this approach made some progress on all of the environments I tried it on, it wasn’t able to completely solve any environment harder than CartPole. Below, I discuss some problems that I think are responsible for this.&lt;/p&gt;
+
+&lt;h2 id=&quot;limitations&quot;&gt;Limitations&lt;/h2&gt;
+
+&lt;h3 id=&quot;variance-collapse&quot;&gt;Variance Collapse&lt;/h3&gt;
+
+&lt;p&gt;The biggest issue I noticed was that binary weights stop exploring once they learn. When a parameter \(x_i\) grows
+large, weight \(w_i\) will be the same in almost every sample. As training progresses and the search distribution gains confidence in which bits should be active, the algorithm as a whole stops exploring, and performance stops improving beyond a point.&lt;/p&gt;
+
+&lt;figure class=&quot;figure mt-0&quot;&gt;
+  &lt;img src=&quot;/assets/posts/binary-evolution/weight-logit-histogram.jpg&quot; class=&quot;figure-img img-fluid&quot; alt=&quot;A histogram of the binary weight logits over time, demonstrating that the distribution becomes bimodal late in training.&quot; /&gt;
+  &lt;figcaption class=&quot;figure-caption&quot;&gt;
+A histogram of the binary weight logits $x_i$ over time, with later episodes closer. As the search distribution learns, the distribution of weight logits becomes bimodal and most weights in the binary network assume a fixed value.
+  &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;I’ve tried a few things to combat this tendency. Shrinking the bit probabilities towards 0.5 (or equivalently, weight decay
+on the \(w\) parameters)
+did a good job extending the time before learning plateaued, as did lowering the learning rate. I also experimented with
+holding the variance of the bias distribution constant instead of adjusting \(\sigma_i\), similar to OpenAI’s work with ES. Ultimately, though, CartPole was the only environment where the model reliably finished training before it converged to a low-variance regime and stopped learning.&lt;/p&gt;
+
+&lt;h3 id=&quot;independence-assumptions&quot;&gt;Independence Assumptions&lt;/h3&gt;
+
+&lt;p&gt;The search distribution I used makes strong independendence assumptions about the network parameters. The parameters definitely aren’t independent, though, leaving information on the table that the search distribution might be able to use to search more efficiently. There are other variants of evolution strategies that do consider covariance between the parameters, such as Covariance Matrix Adaptation ES, but they require second-order information that’s intractible to compute for larger models.&lt;/p&gt;
+
+&lt;h3 id=&quot;high-dimensional-search-space&quot;&gt;High-Dimensional Search Space&lt;/h3&gt;
+
+&lt;p&gt;High-dimensional gradients are really amazing. Part of deep learning’s success is that even for models with millions of parameters, the gradient tells each of them how to change and coordinate. Evolution strategies don’t share this scalability, though — they explore parameter space by testing a few random directions around the current solution. This leads to high-variance gradient estimates as the dimensionality of the search space grows.&lt;/p&gt;
+
+&lt;p&gt;One reason that ES has seen some success in reinforcement learning is that the true gradient of performance is not available, and must be estimated even for approaches using backpropagation. However, given the success of very large models in other domains, it may be the case that exploring directly in parameter space with ES becomes infeasible for the models required to solve some problems.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;For reinforcement learning in challenging environments, massively distributed training across thousands of computers is currently the norm. As we begin to tackle new and harder problems, we can only expect the computational requirements to grow. However, evolution strategies and binary neural networks may provide a more computationally-tractable way of training RL agents.&lt;/p&gt;
+
+&lt;p&gt;Building on prior work that investigates scaling ES in a distributed setting &lt;d-cite key=&quot;salimans2017evolution&quot;&gt;&lt;/d-cite&gt;, this project takes a complementary approach: improving the efficiency of each experience-gathering agent. I used the derivative-free nature of ES to train binary neural networks without approximating backpropagated gradients. While I’ve only been able to solve easy RL problems with this approach so far, being able to train these tiny, fast neural networks is pretty cool. I’m excited to see what future work that combines this efficiency with ES’s parallelizability could do!&lt;/p&gt;</content><author><name>Aidan Swope</name></author><category term="Project" /><category term="Reinforcement learning" /><category term="Efficient machine learning" /><summary type="html">&amp;lt;/source&amp;gt; This neural network is 600 bytes and runs at 500,000 forward passes per second on my laptop&amp;rsquo;s CPU.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://aidanswope.com/assets/posts/binary-evolution/thumbnail.jpg" /><media:content medium="image" url="https://aidanswope.com/assets/posts/binary-evolution/thumbnail.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Generating Musical Accompaniment in Latent Space</title><link href="https://aidanswope.com/2020/accompaniment/" rel="alternate" type="text/html" title="Generating Musical Accompaniment in Latent Space" /><published>2020-08-09T00:00:00-07:00</published><updated>2020-08-09T00:00:00-07:00</updated><id>https://aidanswope.com/2020/accompaniment</id><content type="html" xml:base="https://aidanswope.com/2020/accompaniment/">&lt;p class=&quot;note note-secondary&quot;&gt;
+This was the final project for
+&lt;a href=&quot;https://sites.google.com/view/cs-159-spring-2019&quot;&gt;an undergraduate class on deep probabilistic models&lt;/a&gt;,
+and was built with
+&lt;a href=&quot;https://www.linkedin.com/in/brendan-hollaway&quot;&gt;Brendan Hollaway&lt;/a&gt;,
+&lt;a href=&quot;https://www.linkedin.com/in/anthonybao&quot;&gt;Anthony Bao&lt;/a&gt;,
+and &lt;a href=&quot;https://github.com/HSQ8&quot;&gt;Hongsen Qin&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;Generative machine learning models have famously been used to create new media from scratch,
+but an even more exciting possibility involves humans collaborating with algorithms
+throughout the creative process &lt;d-cite key=&quot;carter2017using&quot;&gt;&lt;/d-cite&gt;.
+While generative models are increasingly able to generate convincing images, audio, and text,
+human input is valuable to choose properties we want the final result to have and to incorporate
+parts of the human experience we haven’t (yet) been able to train our models to understand.&lt;/p&gt;
+
+&lt;p&gt;This project explores co-composing music with a neural network that automatically generates drums and bass for a human-written melody.&lt;/p&gt;
+
+&lt;div class=&quot;card mt-3 mb-4 l-body-outset&quot;&gt;&lt;div class=&quot;card-body pb-1&quot;&gt;
+&lt;h3 class=&quot;card-title mt-0&quot;&gt;Accompaniments generated by our model&lt;/h3&gt;
+&lt;div class=&quot;container-fluid&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;div class=&quot;col&quot;&gt;&lt;h4 class=&quot;text-center mt-3 text-strong&quot;&gt;Tetris Theme&lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;row d-flex justify-content-center&quot;&gt;
+    &lt;div class=&quot;col-sm col-sm-auto text-center&quot;&gt;
+      &lt;audio controls=&quot;&quot; preload=&quot;auto&quot;&gt;
+        &lt;source src=&quot;/assets/posts/accompaniment/tetris-accompaniment.mp3&quot; /&gt;
+        Your browser does not support the audio element.
+      &lt;/audio&gt;
+      &lt;p class=&quot;mt-n2 audio-caption&quot;&gt;Generated&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-sm col-sm-auto text-center&quot;&gt;
+      &lt;audio controls=&quot;&quot; preload=&quot;auto&quot;&gt;
+        &lt;source src=&quot;/assets/posts/accompaniment/tetris-original.mp3&quot; /&gt;
+        Your browser does not support the audio element.
+      &lt;/audio&gt;
+      &lt;p class=&quot;mt-n2 audio-caption&quot;&gt;Original&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;row&quot;&gt;&lt;div class=&quot;col&quot;&gt;&lt;h4 class=&quot;text-center mt-3&quot;&gt;Nyan Cat&lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;row d-flex justify-content-center&quot;&gt;
+    &lt;div class=&quot;col-sm col-sm-auto text-center&quot;&gt;
+      &lt;audio controls=&quot;&quot; preload=&quot;auto&quot;&gt;
+        &lt;source src=&quot;/assets/posts/accompaniment/nyan-cat-accompaniment.mp3&quot; /&gt;
+        Your browser does not support the audio element.
+      &lt;/audio&gt;
+      &lt;p class=&quot;mt-n2 audio-caption&quot;&gt;Generated&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-sm col-sm-auto text-center&quot;&gt;
+      &lt;audio controls=&quot;&quot; preload=&quot;auto&quot;&gt;
+        &lt;source src=&quot;/assets/posts/accompaniment/nyan-cat-original.mp3&quot; /&gt;
+        Your browser does not support the audio element.
+      &lt;/audio&gt;
+      &lt;p class=&quot;mt-n2 audio-caption&quot;&gt;Original&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;row&quot;&gt;&lt;div class=&quot;col&quot;&gt;&lt;h4 class=&quot;text-center mt-3&quot;&gt;In the Hall of the Mountain King&lt;/h4&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;row d-flex justify-content-center&quot;&gt;
+    &lt;div class=&quot;col-sm col-sm-auto text-center&quot;&gt;
+      &lt;audio controls=&quot;&quot; preload=&quot;auto&quot;&gt;
+        &lt;source src=&quot;/assets/posts/accompaniment/in-the-hall-of-the-mountain-king-accompaniment.mp3&quot; /&gt;
+        Your browser does not support the audio element.
+      &lt;/audio&gt;
+      &lt;p class=&quot;mt-n2 audio-caption&quot;&gt;Generated&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-sm col-sm-auto text-center&quot;&gt;
+      &lt;audio controls=&quot;&quot; preload=&quot;auto&quot;&gt;
+        &lt;source src=&quot;/assets/posts/accompaniment/in-the-hall-of-the-mountain-king-original.mp3&quot; /&gt;
+        Your browser does not support the audio element.
+      &lt;/audio&gt;
+      &lt;p class=&quot;mt-n2 audio-caption&quot;&gt;Original&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;While this project uses a restricted subset of MIDI
+(which is itself very restricted relative to all of what’s possible with music),
+and the samples therefore always sound a little elevator‑music‑y, we believe that this approach would scale well to larger,
+more sophisticated latent variable models,
+such as OpenAI’s Jukebox &lt;d-cite key=&quot;dhariwal2020jukebox&quot;&gt;&lt;/d-cite&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;model-overview&quot;&gt;Model Overview&lt;/h2&gt;
+
+&lt;p&gt;Before getting into the details, here’s a brief overview of how the model works at a high level.&lt;/p&gt;
+
+&lt;div class=&quot;l-body-outset text-center mb-4&quot;&gt;
+&lt;img src=&quot;/assets/posts/accompaniment/accompany-training.svg&quot; class=&quot;img-fluid medium-zoom-image&quot; alt=&quot;A diagram of the training and inference procedure&quot; data-zoomable=&quot;&quot; /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The core of the model is MusicVAE &lt;d-cite key=&quot;roberts2019hierarchical&quot;&gt;&lt;/d-cite&gt;, a pretrained model created by &lt;a href=&quot;https://magenta.tensorflow.org/&quot;&gt;Google’s Magenta team&lt;/a&gt;.
+MusicVAE consists of an encoder, which transforms pieces of music into latent variables which capture properties of that music in a simpler compressed form,
+and a decoder which transforms latent variables back into music. Both the encoder and the decoder are trained on three-track MIDI consisting of melody, drums,
+and bass, with extra features like time signature changes stripped.&lt;d-footnote&gt;As a result, the model doesn’t work very well on music using these features. You might notice this in &quot;In the Hall of the Mountain King&quot; above.&lt;/d-footnote&gt;&lt;/p&gt;
+
+&lt;p&gt;Because we want to generate the accompaniment given a new melody, we train a “surrogate encoder” to mimic the original MusicVAE encoder, while only having access to the melody. Given a dataset of three-track music, we use the MusicVAE encoder to produce a latent representation for each song, then strip out the drums and bass and train the surrogate encoder to predict the latent variables from the melody alone. Finally, given a new melody, we use the surrogate encoder to guess what the latent variables might be for the melody’s (nonexistant!) three-track song, pass those latent variables to the MusicVAE decoder to turn into three-track MIDI, and stitch the original melody back in.&lt;/p&gt;
+
+&lt;h2 id=&quot;variational-autoencoders-and-latent-space&quot;&gt;Variational Autoencoders and Latent Space&lt;/h2&gt;
+
+&lt;p&gt;MusicVAE is a variational autoencoder (or VAE). A full tutorial on VAEs is outside of the scope of this project writeup,
+but for an introduction I recommend &lt;a href=&quot;https://jaan.io/what-is-variational-autoencoder-vae-tutorial/&quot;&gt;Jaan Altosaar’s tutorial&lt;/a&gt;.
+For the purposes of this project, you can think of a variational autoencoder as a way of representing your data in a simpler
+and smaller way, as a collection of latent variables. In our case, a MIDI song might take 20 KB to store, but its latent
+representation is a vector of 512 floating-point numbers, a compression ratio of ten. Despite being much smaller, the latent
+variables are expected to capture most of the high-level properties of the music, like genre, key, time, and timings for
+particular events. This is possible because music has patterns that enable it to be described succinctly—you could get a passable reconstruction of some drum parts by just asking a drummer to “play a swing beat.”&lt;/p&gt;
+
+&lt;p&gt;Furthermore, latent representations are presumed to live in some “latent space,” about which we make some very strong assumptions.
+The latent space is expected to be smooth, in the sense that two nearby (512-dimensional) points are expected to represent
+two songs that sound very similar.&lt;d-footnote&gt;The two songs may not have any notes in common, though! Distances and
+directions are more meaningful in latent space than they are in data space.&lt;/d-footnote&gt;
+Directions are often meaningful in latent space; the authors of MusicVAE found that &lt;a href=&quot;https://magenta.tensorflow.org/music-vae#long-term-structure&quot;&gt;they could move songs in an “add note density” direction&lt;/a&gt; to maintain the character of a song but with more notes.&lt;/p&gt;
+
+&lt;p&gt;Most importantly, the latent space has a squished and twisted shape (relative to the data’s shape) such that real music
+appears Gaussian-distributed in this space.&lt;d-footnote&gt;This is actually an oversimplification. While ours is Gaussian, VAEs
+often use other distributions for the latent space.&lt;/d-footnote&gt;
+This means that when you sample latent vectors from a Gaussian, they likely correspond to songs that sound reasonable, and conversely real songs frequently map to vectors near the origin.
+If you were to pick any direction in latent space, find the latent vector corresponding to every popular song and project those vectors onto this direction, then plot a histogram of the resulting values, that histogram should form a standard normal bell curve.&lt;/p&gt;
+
+&lt;p&gt;Latent space is very simple (it’s just a multivariate Gaussian), but it’s supposed to represent the full distribution of
+music, which is complex and multimodal in its common representations (MIDI, MP3, FLAC, etc.). To accomplish this, a
+variational autoencoder employs two powerful neural networks to translate between data space and latent space. The encoder
+maps data points into latent variables that represent them, and the decoder maps latent variables back into data space. By
+randomly sampling points in latent space and pushing them through a good decoder, we can generate endless music, or images,
+or whatever else the VAE was trained on. What is most remarkable is that variational autoencoders are trained &lt;em&gt;unsupervised&lt;/em&gt;. Given a dataset of media, the encoder and decoder learn to create this very special latent space with no additional supervision.&lt;/p&gt;
+
+&lt;h2 id=&quot;predicting-latent-variables-from-a-melody&quot;&gt;Predicting Latent Variables from a Melody&lt;/h2&gt;
+
+&lt;p&gt;A lot of the things we want our latent variables to capture—what the song’s genre is, when solos start and end, etc.—are present in all three parts of the original music.
+When a bass solo starts, the drummer might play a simpler pattern and the melody might stop playing altogether.
+When it ends, the drummer doesn’t need to know much about the details of the solo to play an appropriate fill.
+In this sense, the original music is an &lt;em&gt;overcomplete representation&lt;/em&gt;, which is why we’re able to compress it so much in the latent space.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/accompaniment/new-york-new-york.jpg&quot; class=&quot;img-fluid medium-zoom-image&quot; alt=&quot;A graph of the notes in Frank Sinatra&apos;s &apos;New York, New York&apos; and its reconstruction from the melody alone&quot; data-zoomable=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That also means that many properties of a full song’s latent representation can be inferred from just one of the parts. In
+the plot above, the surrogate encoder and MusicVAE decoder try to reconstruct the theme from “New York, New York” from just
+Frank Sinatra’s part. Red bars are the melody, blue are the bass, and brown are drums. The model certainly can’t predict the
+original accompaniment, and it doesn’t even recreate the melody (which the surrogate encoder has access to)—that’s why we stitch the original melody back in as the last step. However, it has correctly inferred a swing beat for the drums, works around important timings in the song, and plays the bass in key. This means that the original MusicVAE encoder learned to encode properties like drum style in the latent space in a simple way, and our surrogate encoder was able to map from the melody to the latent variables that MusicVAE used to represent these properties.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Variational autoencoders have been pretty unpopular recently, due to the dominance of GANs on many of the same generative
+tasks. However, with some impressive recent results generating high-resolution images &lt;d-cite key=&quot;razavi2019generating&quot;&gt;&lt;/d-cite&gt; and raw audio &lt;d-cite key=&quot;dhariwal2020jukebox&quot;&gt;&lt;/d-cite&gt;
+with more sophisticated VAEs, variational methods are making something of a comeback. Hopefully this post illustrates some of the cool things you can do with an explicit and controllable latent space.&lt;/p&gt;
+
+&lt;p&gt;If you like, check out the code and some additional samples on the &lt;a href=&quot;https://github.com/maxwells-daemons/accompany-music-vae&quot;&gt;GitHub repo&lt;/a&gt;. And if you find any mistakes, errors, or points of confusion, please let me know!&lt;/p&gt;</content><author><name>Aidan Swope</name></author><category term="Project" /><category term="Generative models" /><summary type="html">This was the final project for an undergraduate class on deep probabilistic models, and was built with Brendan Hollaway, Anthony Bao, and Hongsen Qin.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://aidanswope.com/assets/posts/accompaniment/thumbnail.jpg" /><media:content medium="image" url="https://aidanswope.com/assets/posts/accompaniment/thumbnail.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
